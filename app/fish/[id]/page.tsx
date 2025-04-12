@@ -12,7 +12,7 @@ import FAQ from '@/app/components/FishDetails/FAQ';
 import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 import BreederInfo from '@/app/components/FishDetails/BreederInfo';
 
-export default function FishDetailPage() {
+export default function Page() {
 
   const fish = fishData;
 

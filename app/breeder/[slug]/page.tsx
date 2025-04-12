@@ -2,9 +2,6 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Search, Bell, Bookmark, ChevronRight } from 'lucide-react';
 import Header from '@/app/components/Header/Header';
 import Footer from '@/app/components/Footer/Footer';
 import BackButton from '@/app/components/BackButton/BackButton';
@@ -13,7 +10,7 @@ import About from '@/app/components/BreedersPage/About';
 import BreedersProfile from '@/app/components/BreedersPage/BreedersProfile';
 import NavigationTab from '@/app/components/BreedersPage/NavigationTab';
 
-export default function BreederStore() {
+const BreederStore = () => {
     const [activeTab, setActiveTab] = useState('listings');
 
     return (
@@ -37,3 +34,5 @@ export default function BreederStore() {
         </div>
     );
 }
+
+export default BreederStore
