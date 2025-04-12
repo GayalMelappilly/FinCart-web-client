@@ -46,9 +46,11 @@ const Header = (props: Props) => {
                         <button className="py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-6">
                             Sell
                         </button>
-                        <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 font-medium transition-colors rounded-full p-2">
-                            <Heart size={20} />
-                        </button>
+                        <Link href={'/wishlist'}>
+                            <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 font-medium transition-colors rounded-full p-2">
+                                <Heart size={20} />
+                            </button>
+                        </Link>
                         <Link href={'/cart'}>
                             <button className="bg-gray-100 hover:bg-amber-50 hover:text-amber-600 text-gray-800 font-medium transition-colors rounded-full p-2">
                                 <ShoppingCart size={20} />

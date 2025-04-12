@@ -1,4 +1,4 @@
-import { OrderDetailsType } from '@/app/types/formdata'
+import { OrderDetailsType } from '@/app/types/types'
 import React, { FC } from 'react'
 
 type Props = {

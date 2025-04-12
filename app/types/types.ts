@@ -25,3 +25,15 @@ type OrderDetailsItemsType = {
     quantity: number,
     image: string
 }
+
+
+// Wish list items interface
+export interface WishlistItemInterface {
+    id: number;
+    name: string;
+    image: string;
+    price: number;
+    species: string;
+    size: string;
+    inStock: boolean;
+}

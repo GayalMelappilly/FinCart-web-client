@@ -1,4 +1,4 @@
-import { FormDataType } from '@/app/types/formdata'
+import { FormDataType } from '@/app/types/types'
 import React, { FC } from 'react'
 
 type Props = {

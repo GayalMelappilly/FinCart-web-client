@@ -1,6 +1,6 @@
 'use client'
 
-import { FormDataType } from '@/app/types/formdata';
+import { FormDataType } from '@/app/types/types';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { FC, useState } from 'react'
 
