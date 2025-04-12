@@ -62,7 +62,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             placeholder="Card number"
                             value={formData.cardNumber}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required
                         />
                         <input
@@ -71,7 +71,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             placeholder="MM / YY"
                             value={formData.expDate}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required
                         />
                     </div>
@@ -83,7 +83,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             placeholder="Name on card"
                             value={formData.nameOnCard}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                            className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required
                         />
                     </div>

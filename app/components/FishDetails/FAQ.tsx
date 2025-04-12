@@ -5,7 +5,7 @@ type Props = {}
 
 const FAQ = (props: Props) => {
     return (
-        <section className="mt-12 bg-white p-6 rounded-lg shadow-sm">
+        <section className="mt-12 bg-white p-6 rounded-lg shadow-sm mb-10">
             <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                 <HelpCircle size={20} className="mr-2 text-blue-500" />
                 Frequently Asked Questions

@@ -18,20 +18,20 @@ const Header = (props: Props) => {
                                 <Menu size={20} />
                             </div> */}
                             <img
-                                src="splash.png"
+                                src="/splash.png"
                                 alt="Fincart Logo"
                                 className="h-6 object-contain"
                             />
 
                         </Link>
 
-                        <nav className="hidden md:flex space-x-6 ml-5">
+                        {/* <nav className="hidden md:flex space-x-6 ml-5">
                             {categories.map((category, index) => (
                                 <Link key={index} href={`/category/${category.toLowerCase()}`} className="text-gray-600 hover:text-blue-600 transition-colors">
                                     {category}
                                 </Link>
                             ))}
-                        </nav>
+                        </nav> */}
                     </div>
 
                     <div className="flex items-center space-x-4">
@@ -39,17 +39,17 @@ const Header = (props: Props) => {
                             <input
                                 type="text"
                                 placeholder="Search"
-                                className="w-full pl-10 pr-4 py-2 bg-blue-300/20 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-blue-300/20 text-black"
+                                className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 text-black"
                             />
                             <Search className="absolute left-3 top-2.5 h-4 w-4 text-black" />
                         </div>
-                        <button className="py-2 text-black hover:text-blue-600 bg-blue-300/20 rounded-lg transition-colors font-semibold px-6">
+                        <button className="py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-6">
                             Sell
                         </button>
-                        <button className="text-black hover:text-blue-600 transition-colors bg-blue-300/20 rounded-full p-2">
+                        <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 font-medium transition-colors rounded-full p-2">
                             <Heart size={20} />
                         </button>
-                        <button className="text-black hover:text-blue-600 transition-colors bg-blue-300/20 rounded-full p-2">
+                        <button className="bg-gray-100 hover:bg-amber-50 hover:text-amber-600 text-gray-800 font-medium transition-colors rounded-full p-2">
                             <ShoppingCart size={20} />
                         </button>
                     </div>

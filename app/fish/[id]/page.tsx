@@ -10,6 +10,7 @@ import { fishData, RelatedFish } from '@/app/datasets/fishDetails';
 import FishInfo from '@/app/components/FishDetails/FishInfo';
 import FAQ from '@/app/components/FishDetails/FAQ';
 import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
+import BreederInfo from '@/app/components/FishDetails/BreederInfo';
 
 export default function FishDetailPage() {
 
@@ -21,7 +22,10 @@ export default function FishDetailPage() {
       <BackButton />
       <main className="container mx-auto px-30 py-6">
         <div className="flex flex-col lg:flex-row gap-8">
-          <Preview />
+          <div className='lg:w-1/2'>
+            <Preview />
+            <BreederInfo />
+          </div>
           <div className="lg:w-1/2">
             <FishInfo fish={fish} />
             <CareInfo fish={fish} />

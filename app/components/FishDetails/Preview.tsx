@@ -9,7 +9,7 @@ const Preview = (props: Props) => {
     const [selectedImage, setSelectedImage] = useState(0);
 
     return (
-        <div className="lg:w-1/2">
+        <div className="mb-6">
             <div className="bg-white p-4 rounded-lg shadow-sm">
                 {/* Main Image */}
                 <div className="aspect-square w-full bg-gray-100 rounded-lg mb-4 overflow-hidden">

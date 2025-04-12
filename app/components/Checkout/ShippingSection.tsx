@@ -28,7 +28,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Full name"
                         value={formData.fullName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                 </div>
@@ -40,7 +40,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Address"
                         value={formData.address}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                     <input
@@ -49,7 +49,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Apt, suite, etc. (optional)"
                         value={formData.aptSuite}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                     />
                 </div>
 
@@ -60,7 +60,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="City"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                 </div>
@@ -72,7 +72,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="State"
                         value={formData.state}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                     <input
@@ -81,7 +81,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Zip"
                         value={formData.zip}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                 </div>
@@ -93,7 +93,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                     <input
@@ -102,7 +102,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         placeholder="Phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-2 placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
                     />
                 </div>
