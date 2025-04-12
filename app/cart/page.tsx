@@ -9,7 +9,7 @@ import OrderSummary from '../components/Cart/OrderSummary';
 import RelatedProducts from '../components/Cart/RelatedProducts';
 import CartItems from '../components/Cart/CartItems';
 import CartIsEmpty from '../components/Cart/CartIsEmpty';
-import ContinueShoppingButton from '../components/Cart/ContinueShoppingButton';
+import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 
 const Page: React.FC = () => {
 

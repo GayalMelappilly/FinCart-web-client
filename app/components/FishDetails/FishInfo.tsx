@@ -105,7 +105,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
 
                 <Link
                     href={`${id}/checkout`}
-                    className="inline-flex items-center gap-2 rounded-md bg-amber-500/80 hover:bg-amber-500 px-6 py-3 text-white text-lg font-semibold transition-colors"
+                    className="gap-2 rounded-md bg-amber-500/80 hover:bg-amber-500 px-6 py-3 text-white text-lg font-semibold transition-colors flex items-center justify-center"
                 >
                     <CreditCard size={20} className="text-white" />
                     Buy Now

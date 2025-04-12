@@ -3,9 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-type Props = {}
-
-const BreederInfo = (props: Props) => {
+const BreederInfo = () => {
     return (
         <div className="bg-white p-6 rounded-lg shadow-sm relative">
             <h2 className="text-xl text-gray-800 font-semibold mb-4">About Breeder</h2>
@@ -18,7 +16,7 @@ const BreederInfo = (props: Props) => {
                     className="rounded-md object-cover mr-4"
                 />
                 <div className='flex flex-col gap-1'>
-                    <h3 className="font-semibold text-lg text-gray-600">Jon's Betta</h3>
+                    <h3 className="font-semibold text-lg text-gray-600">Jon&apos;s Betta</h3>
                     <div className="flex items-center text-gray-600 mb-1">
                         <MapPin className="h-4 w-4 mr-1" />
                         <span>Phoenix, AZ</span>

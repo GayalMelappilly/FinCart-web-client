@@ -1,15 +1,13 @@
 import React from 'react'
 
-type Props = {}
-
-const About = (props: Props) => {
+const About = () => {
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">About Tropical Fish Hobbyist</h2>
 
             <div className="space-y-4 text-gray-700">
                 <p>
-                    Welcome to my store! I'm a passionate aquarium enthusiast with over 10 years of experience breeding and caring for tropical fish.
+                    Welcome to my store! I&apos;m a passionate aquarium enthusiast with over 10 years of experience breeding and caring for tropical fish.
                 </p>
 
                 <p>

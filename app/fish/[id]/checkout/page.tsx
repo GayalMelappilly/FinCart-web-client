@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react';
-import Link from 'next/link';
 import Head from 'next/head';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Header from '@/app/components/Header/Header';
@@ -11,9 +10,8 @@ import PaymentSection from '@/app/components/Checkout/PaymentSection';
 import OrderSummary from '@/app/components/Checkout/OrderSummary';
 import Footer from '@/app/components/Footer/Footer';
 
-
 const Page = () => {
-
+    const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         address: '',
@@ -48,6 +46,10 @@ const Page = () => {
         console.log('Order submitted', { formData, orderDetails });
     };
 
+    const toggleOrderSummary = () => {
+        setIsOrderSummaryOpen(!isOrderSummaryOpen);
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Head>
@@ -59,10 +61,30 @@ const Page = () => {
             <Header />
             <BackButton />
 
-            <main className="container mx-auto px-30 py-6 mb-10">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="lg:w-2/3">
-                        <form onSubmit={handleSubmit}>
+            <main className="container mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-6 sm:mb-10">
+                {/* Mobile Order Summary Toggle */}
+                <div className="lg:hidden mb-4 bg-white rounded-lg shadow-sm p-4">
+                    <button
+                        className="w-full flex justify-between items-center"
+                        onClick={toggleOrderSummary}
+                    >
+                        <div>
+                            <span className="font-medium text-lg text-gray-500">Order Summary</span>
+                            <span className="ml-2 font-semibold text-gray-700">${orderDetails.total.toFixed(2)}</span>
+                        </div>
+                        {isOrderSummaryOpen ? <ChevronUp size={20} className='text-gray-700' /> : <ChevronDown size={20} className='text-gray-700' />}
+                    </button>
+
+                    {isOrderSummaryOpen && (
+                        <div className="mt-4 duration-300">
+                            <OrderSummary orderDetails={orderDetails} />
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+                    <div className="w-full lg:w-2/3">
+                        <form onSubmit={handleSubmit} className="space-y-6">
                             <ShippingSection formData={formData} setFormData={setFormData} />
                             <PaymentSection formData={formData} setFormData={setFormData} />
                             <button
@@ -73,7 +95,13 @@ const Page = () => {
                             </button>
                         </form>
                     </div>
-                    <OrderSummary orderDetails={orderDetails} />
+
+                    {/* Desktop Order Summary - Hidden on mobile */}
+                    <div className="hidden lg:block lg:w-1/3">
+                        <div className="sticky top-4">
+                            <OrderSummary orderDetails={orderDetails} />
+                        </div>
+                    </div>
                 </div>
             </main>
 
@@ -82,4 +110,4 @@ const Page = () => {
     );
 }
 
-export default Page
+export default Page;

@@ -23,7 +23,7 @@ const BreederStore = () => {
             <BackButton />
             <BreedersProfile />
             <NavigationTab activeTab={activeTab} setActiveTab={setActiveTab} />
-            <main className="container mx-auto py-8 px-30">
+            <main className="container mx-auto py-8 px-10">
                 {activeTab === 'listings' ? (
                     <Listings />
                 ) : (

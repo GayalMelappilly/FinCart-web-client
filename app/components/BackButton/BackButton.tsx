@@ -1,16 +1,14 @@
 import { ChevronLeft } from 'lucide-react'
 import React from 'react'
 
-type Props = {}
-
-const BackButton = (props: Props) => {
+const BackButton = () => {
 
     const handleBack = () => {
         window.history.back();
     };
 
     return (
-        <div className="container mx-auto px-30 pt-10">
+        <div className="container mx-auto pt-10 px-4 sm:px-6">
             <button
                 onClick={handleBack}
                 className="flex items-center text-gray-600 hover:text-blue-500 transition-colors"

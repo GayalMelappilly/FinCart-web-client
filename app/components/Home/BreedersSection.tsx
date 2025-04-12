@@ -2,9 +2,7 @@ import { breeders } from '@/app/datasets/breeders'
 import Link from 'next/link'
 import React from 'react'
 
-type Props = {}
-
-const BreedersSection = (props: Props) => {
+const BreedersSection = () => {
   return (
     <section className="container mx-auto px-4 py-12 mb-10">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Breeders</h2>

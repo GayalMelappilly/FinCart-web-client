@@ -2,12 +2,8 @@
 
 import React, { useState } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import { FiHeart, FiShoppingCart, FiTrash2, FiArrowLeft, FiShare2 } from 'react-icons/fi';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import Header from '../components/Header/Header';
-import ContinueShoppingButton from '../components/Cart/ContinueShoppingButton';
+import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 import Footer from '../components/Footer/Footer';
 import ShareWishlist from '../components/Wishlist/ShareWishlist';
 import WishlistItem from '../components/Wishlist/WishlistItem';
@@ -37,7 +33,7 @@ const Page: React.FC = () => {
                             <ShareWishlist wishlistItems={wishlistItems} />
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {wishlistItems.map((item) => (
-                                    <WishlistItem item={item} wishlistItems={wishlistItems} setWishlistItems={setWishlistItems} />
+                                    <WishlistItem key={item.id} item={item} wishlistItems={wishlistItems} setWishlistItems={setWishlistItems} />
                                 ))}
                             </div>
                             <DiscoverButton />

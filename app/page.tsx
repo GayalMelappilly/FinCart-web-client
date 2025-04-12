@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
       <Header />
       <Hero />
-      <div className='px-40'>
+      <div className='md:px-40'>
         <FeaturesFishSection />
         <BreedersSection />
       </div>

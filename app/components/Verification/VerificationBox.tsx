@@ -4,9 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import { FiShield } from 'react-icons/fi';
 
-type Props = {}
-
-const VerificationBox = (props: Props) => {
+const VerificationBox = () => {
 
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +153,7 @@ const VerificationBox = (props: Props) => {
                 </h3>
 
                 <div className="mb-6 text-center text-gray-600">
-                    <p>We've sent a 6-digit code to</p>
+                    <p>We&apos;ve sent a 6-digit code to</p>
                     <p className="font-medium">{phoneNumber}</p>
                 </div>
 
@@ -207,7 +205,7 @@ const VerificationBox = (props: Props) => {
 
                 <div className="text-center text-sm">
                     <p className="text-gray-600">
-                        Didn't receive the code?{' '}
+                        Didn&apos;t receive the code?{' '}
                         <button
                             type="button"
                             onClick={handleResendOtp}

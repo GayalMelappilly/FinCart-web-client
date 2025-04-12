@@ -2,9 +2,7 @@
 
 import React, { useState } from 'react'
 
-type Props = {}
-
-const Preview = (props: Props) => {
+const Preview = () => {
 
     const [selectedImage, setSelectedImage] = useState(0);
 

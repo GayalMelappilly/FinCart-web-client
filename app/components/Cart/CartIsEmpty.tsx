@@ -2,9 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
 
-type Props = {}
-
-const CartIsEmpty = (props: Props) => {
+const CartIsEmpty = () => {
     return (
         <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <div className="flex justify-center">

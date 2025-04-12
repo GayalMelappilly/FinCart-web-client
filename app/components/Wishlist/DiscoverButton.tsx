@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-type Props = {}
-
-const DiscoverButton = (props: Props) => {
+const DiscoverButton = () => {
     return (
         <div className="mt-8 flex justify-center">
             <Link

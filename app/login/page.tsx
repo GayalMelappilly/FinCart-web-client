@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Footer from '../components/Footer/Footer';
 import LoginBox from '../components/Login/LoginBox';
-import BackButton from '../components/BackButton/BackButton';
 
 const Page: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');

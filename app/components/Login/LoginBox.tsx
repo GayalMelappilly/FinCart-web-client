@@ -92,7 +92,7 @@ const LoginBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNum
                 </form>
 
                 <div className="text-center text-sm text-gray-500 mt-6">
-                    <p>By continuing, you agree to Fincart's</p>
+                    <p>By continuing, you agree to Fincart&apos;s</p>
                     <p>
                         <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> & <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
                     </p>

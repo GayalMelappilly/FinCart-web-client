@@ -2,9 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { FiHeart, FiShoppingCart } from 'react-icons/fi'
 
-type Props = {}
-
-const RecentlyViewed = (props: Props) => {
+const RecentlyViewed = () => {
     return (
         <div className="mt-12">
             <h2 className="text-xl font-medium text-gray-800 mb-6">Recently Viewed</h2>

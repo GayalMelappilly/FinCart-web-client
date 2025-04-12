@@ -63,7 +63,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
 
                         <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
                             <span className="text-lg font-semibold text-gray-800">Total</span>
-                            <span className="text-xl font-bold text-teal-600">${total.toFixed(2)}</span>
+                            <span className="text-xl font-bold text-blue-600">${total.toFixed(2)}</span>
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
                                     id="promo-code"
                                     value={promoCode}
                                     onChange={(e) => setPromoCode(e.target.value)}
-                                    className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400"
                                     placeholder="Enter code"
                                 />
                                 <button
@@ -88,7 +88,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
                                     disabled={!promoCode || loading}
                                     className={`px-4 py-2 rounded-r-md font-medium ${!promoCode || loading
                                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                        : 'bg-teal-600 text-white hover:bg-teal-700'
+                                        : 'bg-blue-600 text-white hover:bg-blue-700 ring-2 ring-blue-600'
                                         }`}
                                 >
                                     {loading ? 'Applying...' : 'Apply'}
@@ -101,7 +101,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
                     <div className="mt-6">
                         <button
                             type="button"
-                            className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors font-medium"
+                            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
                         >
                             Proceed to Checkout
                         </button>
@@ -110,7 +110,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
                     {/* Trust badges */}
                     <div className="mt-6 bg-gray-50 rounded-md p-4">
                         <div className="flex items-center text-gray-600">
-                            <HiOutlineShieldCheck className="h-5 w-5 text-teal-600 mr-2" />
+                            <HiOutlineShieldCheck className="h-5 w-5 text-blue-600 mr-2" />
                             <span className="text-sm">Secure checkout</span>
                         </div>
                         <div className="mt-2 text-xs text-gray-500">

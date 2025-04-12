@@ -2,9 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
-type Props = {}
-
-const TipsSection = (props: Props) => {
+const TipsSection = () => {
     return (
         <div className="mt-12 bg-blue-50 rounded-lg p-6">
             <div className="flex items-start">
@@ -15,7 +13,7 @@ const TipsSection = (props: Props) => {
                     <h3 className="text-lg font-medium text-gray-800">Aquarium Tips</h3>
                     <p className="mt-2 text-sm text-gray-600">
                         Before adding new fish to your aquarium, make sure your tank is properly cycled and has adequate space for your desired species.
-                        Research each fish's compatibility with your existing aquarium inhabitants.
+                        Research each fish&apos;s compatibility with your existing aquarium inhabitants.
                     </p>
                     <div className="mt-3">
                         <Link href="/care-guides" className="text-sm font-medium text-blue-600 hover:text-blue-700">

@@ -11,7 +11,7 @@ type Props = {
 
 const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
 
-    const [paymentMethod, setPaymentMethod] = useState('Credit card');
+    // const [paymentMethod, setPaymentMethod] = useState('Credit card');
     const [isPaymentExpanded, setIsPaymentExpanded] = useState(true);
     const [saveInfo, setSaveInfo] = useState(false);
 
@@ -48,7 +48,8 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                 <div className="grid gap-4">
                     <div className="relative">
                         <div className="flex justify-between items-center w-full px-4 py-3 border border-zinc-300 rounded-md text-gray-700 bg-white">
-                            <span>{paymentMethod}</span>
+                            {/* <span>{paymentMethod}</span> */}
+                            <span>Credit Card</span>
                             <div className="flex">
                                 <ChevronDown size={20} className="text-gray-500" />
                             </div>
