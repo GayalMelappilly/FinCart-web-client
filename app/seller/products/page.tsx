@@ -182,9 +182,9 @@ export default function Products() {
                         <div className="flex space-x-3">
                             <button
                                 onClick={() => handleEditProduct(selectedProduct)}
-                                className="flex items-center px-4 py-2 border border-gray-300 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+                                className="flex items-center px-4 py-2 border text-white bg-blue-600 border-gray-300 rounded-lg hover:bg-blue-700 transition-colors"
                             >
-                                <Edit className="h-5 w-5 mr-1" />
+                                <Edit className="h-5 w-5 mr-1 text-white" />
                                 Edit
                             </button>
                             <button
@@ -196,7 +196,7 @@ export default function Products() {
                         </div>
                     </div>
                     <ProductDetails product={selectedProduct} />
-                    <RelatedProducts product={selectedProduct} />
+                    <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} />
                 </div>
             )}
         </>

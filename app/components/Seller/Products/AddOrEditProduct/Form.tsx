@@ -168,8 +168,8 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                 <div>
                                     {/* Basic Info */}
                                     <div>
-                                        <h2 className="text-lg font-medium mb-4">Basic Information</h2>
-                                        <div className="space-y-4">
+                                        <h2 className="text-lg font-medium mb-4 text-gray-700">Basic Information</h2>
+                                        <div className="space-y-4 mb-6">
                                             <div>
                                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Product Name*</label>
                                                 <input
@@ -177,7 +177,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="name"
                                                     name="name"
                                                     required
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.name || ''}
                                                     onChange={handleInputChange}
                                                 />
@@ -190,7 +190,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     name="description"
                                                     rows={4}
                                                     required
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.description || ''}
                                                     onChange={handleInputChange}
                                                 />
@@ -207,7 +207,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                             min="0"
                                                             step="0.01"
                                                             required
-                                                            className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                            className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                             value={editableProduct?.price || ''}
                                                             onChange={handleInputChange}
                                                         />
@@ -223,7 +223,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                         name="stock"
                                                         min="0"
                                                         required
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                         value={editableProduct?.stock || ''}
                                                         onChange={handleInputChange}
                                                     />
@@ -236,7 +236,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="category"
                                                     name="category"
                                                     required
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.category || ''}
                                                     onChange={handleInputChange}
                                                 >
@@ -254,7 +254,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="status"
                                                     name="status"
                                                     required
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.status || ''}
                                                     onChange={handleInputChange}
                                                 >
@@ -290,7 +290,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                     {/* Specifications */}
                                     <div>
                                         <div className="flex justify-between items-center mb-4">
-                                            <h2 className="text-lg font-medium">Specifications</h2>
+                                            <h2 className="text-lg font-medium text-gray-700">Specifications</h2>
                                             <button
                                                 type="button"
                                                 onClick={handleAddSpecification}
@@ -306,14 +306,14 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     <input
                                                         type="text"
                                                         placeholder="Name"
-                                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                         value={key}
                                                         onChange={(e) => handleSpecificationChange(key, e.target.value, value)}
                                                     />
                                                     <input
                                                         type="text"
                                                         placeholder="Value"
-                                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                         value={value}
                                                         onChange={(e) => handleSpecificationChange(key, key, e.target.value)}
                                                     />
@@ -336,7 +336,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                 <div className="space-y-6">
                                     {/* Product Images */}
                                     <div>
-                                        <h2 className="text-lg font-medium mb-4">Product Images</h2>
+                                        <h2 className="text-lg font-medium mb-4 text-gray-700">Product Images</h2>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                             {/* Existing Images */}
@@ -379,7 +379,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
 
                                     {/* Additional Details */}
                                     <div>
-                                        <h2 className="text-lg font-medium mb-4">Additional Details</h2>
+                                        <h2 className="text-lg font-medium mb-4 text-gray-700">Additional Details</h2>
                                         <div className="space-y-4">
                                             <div>
                                                 <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-1">Weight</label>
@@ -388,7 +388,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="weight"
                                                     name="weight"
                                                     placeholder="e.g., 0.2 lbs"
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.weight || ''}
                                                     onChange={handleInputChange}
                                                 />
@@ -401,7 +401,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="dimensions"
                                                     name="dimensions"
                                                     placeholder="e.g., 5 × 3 × 2 inches"
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.dimensions || ''}
                                                     onChange={handleInputChange}
                                                 />
@@ -414,7 +414,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     id="tags"
                                                     name="tags"
                                                     placeholder="e.g., reef safe, beginner friendly (comma separated)"
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                     value={editableProduct?.tags.join(', ')}
                                                     onChange={handleInputChange}
                                                 />
@@ -428,7 +428,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                     {/* SEO Section */}
                                     <div>
                                         <div className="flex items-center mb-4">
-                                            <h2 className="text-lg font-medium">SEO Information</h2>
+                                            <h2 className="text-lg font-medium text-gray-700">SEO Information</h2>
                                             <div className="ml-2 group relative">
                                                 <Info className="h-4 w-4 text-gray-400 cursor-help" />
                                                 <div className="hidden group-hover:block absolute z-10 w-64 p-2 bg-gray-800 text-white text-xs rounded shadow-lg">
@@ -446,7 +446,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     name="metaTitle"
                                                     placeholder="Keep under 60 characters for best results"
                                                     maxLength={60}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                             </div>
 
@@ -458,7 +458,7 @@ const Form: FC<Props> = ({ products, setProducts, editableProduct, setEditablePr
                                                     rows={3}
                                                     placeholder="Keep under 160 characters for best results"
                                                     maxLength={160}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                             </div>
                                         </div>

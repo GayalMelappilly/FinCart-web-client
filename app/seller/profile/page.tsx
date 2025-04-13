@@ -8,7 +8,6 @@ import SecurityCard from '@/app/components/Seller/Profile/SecurityCard';
 import StoreInfoCard from '@/app/components/Seller/Profile/StoreInfoCard';
 import { useProfile } from '@/app/lib/hooks/useProfile';
 import { Save } from 'lucide-react';
-import { useState } from 'react';
 
 export default function ProfilePage() {
   const {

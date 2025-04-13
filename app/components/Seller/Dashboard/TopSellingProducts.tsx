@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = {}
-
-const TopSellingProducts = (props: Props) => {
+const TopSellingProducts = () => {
 
     const topSellingFish = [
         { id: 1, name: 'Atlantic Salmon', stock: 45, sold: 120, image: '/fish/salmon.png' },

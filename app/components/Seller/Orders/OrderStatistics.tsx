@@ -1,4 +1,3 @@
-import { ordersMockData } from '@/app/datasets/seller/ordersData';
 import { OrderCountsInterface } from '@/app/types/types';
 import React, { FC } from 'react'
 

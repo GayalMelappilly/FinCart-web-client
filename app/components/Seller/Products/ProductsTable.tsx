@@ -1,4 +1,3 @@
-import { ArrowUpDown, ChevronLeft, ChevronRight, Edit, Eye, Package, Trash2 } from 'lucide-react'
 import React, { FC } from 'react'
 import TableHead from './Table/TableHead'
 import TableProducts from './Table/TableProducts'
@@ -36,7 +35,7 @@ const ProductsTable: FC<Props> = ({ products, setProducts, sortBy, setSortBy, cu
                             </tr>
                         ) : (
                             currentItems.map((product) => (
-                                <TableProducts products={products} setProducts={setProducts} product={product} handleViewProduct={handleViewProduct} handleEditProduct={handleEditProduct} />
+                                <TableProducts key={product.id} products={products} setProducts={setProducts} product={product} handleViewProduct={handleViewProduct} handleEditProduct={handleEditProduct} />
                             ))
                         )}
                     </tbody>

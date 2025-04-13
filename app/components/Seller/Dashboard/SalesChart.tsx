@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react'
 
-type Props = {}
-
 const salesData = [
     { month: 'Jan', sales: 4000 },
     { month: 'Feb', sales: 3000 },
@@ -14,7 +12,7 @@ const salesData = [
     { month: 'Jul', sales: 7000 },
 ];
 
-const SalesChart = (props: Props) => {
+const SalesChart = () => {
 
     const [timeRange, setTimeRange] = useState('monthly');
 

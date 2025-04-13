@@ -3,10 +3,12 @@ import { Package } from 'lucide-react'
 import React, { FC } from 'react'
 
 type Props = {
-    product: Product
+    products: Product[],
+    selectedProduct: Product,
+    handleViewProduct: (product: Product) => void
 }
 
-const RelatedProducts:FC<Props> = ({ product }) => {
+const RelatedProducts:FC<Props> = ({ products, selectedProduct, handleViewProduct }) => {
 
     return (
         <div className="bg-white rounded-lg shadow p-6 mb-6">

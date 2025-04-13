@@ -45,6 +45,7 @@ export function useProfile() {
       showNotification('success', 'Profile updated successfully!');
     } catch (error) {
       showNotification('error', 'Failed to update profile. Please try again.');
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
@@ -82,6 +83,7 @@ export function useProfile() {
       showNotification('success', 'Password changed successfully!');
     } catch (error) {
       showNotification('error', 'Failed to update password. Please try again.');
+      console.log(error)
     } finally {
       setIsLoading(false);
     }

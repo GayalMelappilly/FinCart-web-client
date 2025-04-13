@@ -1,8 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import React from 'react'
 
-type Props = {}
-
 const recentOrders = [
     { id: '#ORD-7392', customer: 'John Cooper', date: '12 Apr 2025', amount: 120.50, status: 'Delivered' },
     { id: '#ORD-7393', customer: 'Emma Watson', date: '11 Apr 2025', amount: 85.25, status: 'Shipped' },
@@ -10,7 +8,7 @@ const recentOrders = [
     { id: '#ORD-7395', customer: 'Sarah Miller', date: '09 Apr 2025', amount: 45.60, status: 'Delivered' },
 ];
 
-const RecentOrders = (props: Props) => {
+const RecentOrders = () => {
     return (
         <div className="mt-6 bg-white rounded-lg shadow overflow-hidden">
             <div className="flex justify-between items-center p-6">
