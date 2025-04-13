@@ -37,3 +37,35 @@ export interface WishlistItemInterface {
     size: string;
     inStock: boolean;
 }
+
+export type OrderStatus = 'All' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+
+export interface OrderCountsInterface {
+    All: number;
+    Processing: number;
+    Shipped: number;
+    Delivered: number;
+    Cancelled: number;
+}
+  
+export interface Product {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    category: string;
+    images: string[];
+    featured: boolean;
+    status: 'active' | 'draft' | 'out_of_stock';
+    createdAt: string;
+    updatedAt: string;
+    specifications: {
+        [key: string]: string;
+    };
+    weight: string;
+    dimensions: string;
+    tags: string[];
+}
+
+export type ProductView = 'list' | 'add' | 'edit' | 'view';
