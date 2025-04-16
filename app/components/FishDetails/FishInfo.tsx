@@ -13,7 +13,7 @@ type Props = {
 const FishInfo: FC<Props> = ({ fish }) => {
 
     const params = useParams();
-    const id = params.id as string;
+    const id = params?.id as string;
 
 
     const [quantity, setQuantity] = useState(1);
