@@ -8,7 +8,7 @@ const BackButton = () => {
     };
 
     return (
-        <div className="container mx-auto pt-10 px-4 sm:px-6">
+        <div className="container mx-auto pt-10 md:px-30 px-4 sm:px-6">
             <button
                 onClick={handleBack}
                 className="flex items-center text-gray-600 hover:text-blue-500 transition-colors"

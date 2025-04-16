@@ -9,7 +9,7 @@ import OrderSummary from '../components/Cart/OrderSummary';
 import RelatedProducts from '../components/Cart/RelatedProducts';
 import CartItems from '../components/Cart/CartItems';
 import CartIsEmpty from '../components/Cart/CartIsEmpty';
-import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
+import BackButton from '../components/BackButton/BackButton';
 
 const Page: React.FC = () => {
 
@@ -24,9 +24,9 @@ const Page: React.FC = () => {
             </Head>
 
             <Header />
-            <ContinueShoppingButton />
+            <BackButton />
         
-            <main className="container mx-auto px-4 py-8 mb-10">
+            <main className="container mx-auto md:px-30 px-4 py-8 mb-10">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Cart items */}
                     <div className="w-full lg:w-8/12">

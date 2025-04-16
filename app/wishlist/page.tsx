@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Header from '../components/Header/Header';
-import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 import Footer from '../components/Footer/Footer';
 import ShareWishlist from '../components/Wishlist/ShareWishlist';
 import WishlistItem from '../components/Wishlist/WishlistItem';
@@ -13,6 +12,7 @@ import { wishlistData } from '../datasets/wishlistItems';
 import DiscoverButton from '../components/Wishlist/DiscoverButton';
 import RecentlyViewed from '../components/Wishlist/RecentlyViewed';
 import TipsSection from '../components/Wishlist/TipsSection';
+import BackButton from '../components/BackButton/BackButton';
 
 const Page: React.FC = () => {
     // Sample wishlist items
@@ -26,8 +26,8 @@ const Page: React.FC = () => {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <Header />
-                <ContinueShoppingButton />
-                <main className="container mx-auto px-4 py-8">
+                <BackButton />
+                <main className="container mx-auto md:px-30 px-4 py-8">
                     {wishlistItems.length > 0 ? (
                         <>
                             <ShareWishlist wishlistItems={wishlistItems} />

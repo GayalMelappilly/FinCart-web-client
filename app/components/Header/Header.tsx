@@ -15,7 +15,7 @@ const Header = () => {
 
     return (
         <header className="bg-white shadow-sm relative">
-            <div className="container mx-auto px-4 py-3">
+            <div className="container mx-auto px-4 md:px-30 py-3">
                 <div className="flex items-center justify-between">
                     {/* Logo and optional menu button */}
                     <div className="flex items-center space-x-4">
@@ -108,9 +108,11 @@ const Header = () => {
                                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-black" />
                             </div>
 
-                            <button className="w-full py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-6 mb-6">
-                                Sell
-                            </button>
+                            <Link href={'/seller/dashboard'}>
+                                <button className="w-full py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-6 mb-6">
+                                    Sell
+                                </button>
+                            </Link>
 
                             <nav className="flex flex-col space-y-4">
                                 <h3 className="text-lg font-semibold text-gray-800">Categories</h3>

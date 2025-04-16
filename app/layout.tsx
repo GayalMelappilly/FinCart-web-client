@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { poppins } from "./components/Fonts/Fonts";
+import PageTransition from "./components/PageTransition/PageTransition";
 
 export const metadata: Metadata = {
   title: "Fincart",
@@ -14,10 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased ${poppins.className}`}
-      >
-        {children}
+      <body className={`antialiased ${poppins.className}`}>
+        <PageTransition>
+          {children}
+        </PageTransition>
       </body>
     </html>
   );
