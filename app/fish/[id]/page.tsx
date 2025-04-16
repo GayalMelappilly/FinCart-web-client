@@ -20,7 +20,7 @@ export default function Page() {
       <div className="px-4 sm:px-6">
         <BackButton />
       </div>
-      <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+      <main className="container mx-auto px-4 sm:px-6 md:px-30 py-4 sm:py-6">
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           <div className='w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6'>
             <Preview />

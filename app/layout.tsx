@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { poppins } from "./components/Fonts/Fonts";
+import QueryProvider from "./providers/QueryProvider";
+import PageTransition from "./components/PageTransition/PageTransition";
 
 export const metadata: Metadata = {
   title: "Fincart",
@@ -17,7 +19,11 @@ export default function RootLayout({
       <body
         className={`antialiased ${poppins.className}`}
       >
-        {children}
+        <QueryProvider>
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </QueryProvider>
       </body>
     </html>
   );

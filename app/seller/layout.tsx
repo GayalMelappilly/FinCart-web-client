@@ -12,7 +12,8 @@ import {
     Menu,
     X,
     LogOut,
-    Bell
+    Bell,
+    CircleArrowLeft
 } from 'lucide-react';
 import Footer from '../components/Footer/Footer';
 import { getFormattedPathname } from '../utils/pathnameExtraction';
@@ -25,7 +26,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pathname = usePathname();
-    const title = getFormattedPathname(pathname)
+    const title = getFormattedPathname(pathname as string)
     const isActive = (path: string) => {
         return pathname === path;
     };
@@ -48,13 +49,13 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="hidden md:flex md:flex-shrink-0">
                     <div className="flex flex-col w-64">
                         <div className="flex items-center shadow-sm z-10 border-r bg-white mb-8 justify-center h-16 px-4 border-b border-gray-200">
-                            <Link href="/seller/dashboard" className="flex items-center space-x-2">
+                            <Link href="/" className="flex items-center space-x-2">
                                 <Image
                                     src="/splash.png"
                                     alt="Fincart Logo"
-                                    className="h-6 w-auto"
-                                    width={40}
-                                    height={40}
+                                    className="h-6 object-contain"
+                                    width={100}
+                                    height={100}
                                 />
                             </Link>
                         </div>
@@ -67,8 +68,8 @@ export default function Layout({ children }: LayoutProps) {
                                             key={item.name}
                                             href={item.path}
                                             className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive(item.path)
-                                                    ? 'bg-blue-50 text-blue-600'
-                                                    : 'text-gray-700 hover:bg-gray-100'
+                                                ? 'bg-blue-50 text-blue-600'
+                                                : 'text-gray-700 hover:bg-gray-100'
                                                 }`}
                                         >
                                             <Icon className="mr-3 h-5 w-5" />
@@ -123,8 +124,8 @@ export default function Layout({ children }: LayoutProps) {
                                                 key={item.name}
                                                 href={item.path}
                                                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive(item.path)
-                                                        ? 'bg-blue-50 text-blue-600'
-                                                        : 'text-gray-700 hover:bg-gray-100'
+                                                    ? 'bg-blue-50 text-blue-600'
+                                                    : 'text-gray-700 hover:bg-gray-100'
                                                     }`}
                                                 onClick={toggleSidebar}
                                             >
@@ -134,6 +135,14 @@ export default function Layout({ children }: LayoutProps) {
                                         );
                                     })}
                                 </nav>
+                                <div className="pt-4 mt-6 border-t border-gray-200">
+                                    <Link href={'/'}>
+                                        <button className="text-gray-700 p-2 rounded-lg flex items-center px-4 py-3 text-sm font-medium">
+                                            <CircleArrowLeft className="mr-3 h-5 w-5" />
+                                            Back to Shopping
+                                        </button>
+                                    </Link>
+                                </div>
                                 <div className="pt-4 mt-6 border-t border-gray-200">
                                     <button
                                         className="flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 w-full"
@@ -165,6 +174,11 @@ export default function Layout({ children }: LayoutProps) {
                                     </h1>
                                 </div>
                                 <div className="flex items-center space-x-4">
+                                    <Link href={'/'}>
+                                        <button className="bg-gray-100 hidden md:block hover:bg-blue-200 hover:text-blue-600 text-gray-800 p-2 rounded-lg relative">
+                                            Back to Shopping
+                                        </button>
+                                    </Link>
                                     <button className="text-gray-400 hover:text-gray-500 relative">
                                         <Bell className="h-6 w-6" />
                                         <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>

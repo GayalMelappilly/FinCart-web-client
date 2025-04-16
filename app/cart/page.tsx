@@ -26,7 +26,7 @@ const Page: React.FC = () => {
             <Header />
             <ContinueShoppingButton />
         
-            <main className="container mx-auto px-4 py-8 mb-10">
+            <main className="container mx-auto px-4 md:px-30 py-8 mb-10">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Cart items */}
                     <div className="w-full lg:w-8/12">

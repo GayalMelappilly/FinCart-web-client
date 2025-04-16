@@ -1,3 +1,5 @@
+import { signUpUser } from '@/pages/api/users/action'
+import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FC } from 'react'
@@ -14,17 +16,27 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
 
     const router = useRouter()
 
+    const mutation = useMutation({
+        mutationFn: signUpUser,
+        onSuccess: () => {
+            console.log('Phone number reached')
+            router.push('/signup/verification');
+        },
+        onError: (err) => {
+            console.log('Registration error : ',err)
+        }
+    })
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
         // Simulate OTP sending
         try {
-            // API call would go here
+            mutation.mutate(phoneNumber)
             setTimeout(() => {
                 // Store phone number in session storage for the verification page
                 sessionStorage.setItem('phoneNumber', phoneNumber);
-                router.push('/signup/verification');
             }, 1000);
         } catch (error) {
             console.error('Error sending OTP:', error);

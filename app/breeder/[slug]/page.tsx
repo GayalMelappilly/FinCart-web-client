@@ -21,15 +21,17 @@ const BreederStore = () => {
             </Head>
             <Header />
             <BackButton />
-            <BreedersProfile />
-            <NavigationTab activeTab={activeTab} setActiveTab={setActiveTab} />
-            <main className="container mx-auto py-8 px-10">
-                {activeTab === 'listings' ? (
-                    <Listings />
-                ) : (
-                    <About />                    
-                )}
-            </main>
+            <div className='md:px-30'>
+                <BreedersProfile />
+                <NavigationTab activeTab={activeTab} setActiveTab={setActiveTab} />
+                <main className="container mx-auto py-8 px-10">
+                    {activeTab === 'listings' ? (
+                        <Listings />
+                    ) : (
+                        <About />
+                    )}
+                </main>
+            </div>
             <Footer />
         </div>
     );

@@ -15,7 +15,7 @@ const Header = () => {
 
     return (
         <header className="bg-white shadow-sm relative">
-            <div className="container mx-auto px-4 py-3">
+            <div className="container mx-auto md:px-30 px-4 py-3">
                 <div className="flex items-center justify-between">
                     {/* Logo and optional menu button */}
                     <div className="flex items-center space-x-4">

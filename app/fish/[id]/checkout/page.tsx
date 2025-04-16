@@ -61,7 +61,7 @@ const Page = () => {
             <Header />
             <BackButton />
 
-            <main className="container mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 mb-6 sm:mb-10">
+            <main className="container mx-auto px-4 sm:px-6 md:px-30 py-4 sm:py-6 mb-6 sm:mb-10">
                 {/* Mobile Order Summary Toggle */}
                 <div className="lg:hidden mb-4 bg-white rounded-lg shadow-sm p-4">
                     <button

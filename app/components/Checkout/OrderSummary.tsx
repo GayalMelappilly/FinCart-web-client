@@ -7,7 +7,7 @@ type Props = {
 
 const OrderSummary:FC<Props> = ({orderDetails}) => {
     return (
-        <div className="lg:w-1/3 mt-8 lg:mt-0">
+        <div className="mt-8 lg:mt-0">
             <div className="bg-white border border-zinc-300 rounded-md p-6">
                 <h2 className="text-xl font-semibold mb-6 text text-gray-800">Order summary</h2>
 
