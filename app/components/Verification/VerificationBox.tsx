@@ -125,7 +125,7 @@ const VerificationBox = () => {
             setTimeout(() => {
                 // Clear session storage and redirect to dashboard or onboarding
                 sessionStorage.removeItem('phoneNumber');
-                router.push('/dashboard');
+                router.push('/create-profile');
             }, 1500);
         } catch (error) {
             console.error('Error verifying OTP:', error);
@@ -136,9 +136,9 @@ const VerificationBox = () => {
 
     return (
         <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-blue-600 py-6">
+            <div className="bg-gradient-to-r from-blue-600 to-cyan-600 py-6">
                 <h2 className="text-center text-white text-2xl font-semibold">Fincart</h2>
-                <p className="text-center text-blue-100 text-sm">Ornamental Fish Marketplace</p>
+                <p className="text-center text-blue-100 text-sm">Where fins belong</p>
             </div>
 
             <div className="p-6 sm:p-8">

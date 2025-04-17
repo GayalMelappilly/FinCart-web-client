@@ -1,16 +1,25 @@
 'use client'
 
-import { Heart, Menu, Search, ShoppingCart, X } from 'lucide-react'
+import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react'
 
-const Header = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const categories = [''];
+interface HeaderProps {
+  username?: string;
+}
 
-    const toggleMobileMenu = () => {
+const Header: React.FC<HeaderProps> = ({ username }) => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+    const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+    const categories: string[] = [''];
+
+    const toggleMobileMenu = (): void => {
         setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const toggleProfileMenu = (): void => {
+        setProfileMenuOpen(!profileMenuOpen);
     };
 
     return (
@@ -22,6 +31,7 @@ const Header = () => {
                         <button
                             className="sm:hidden text-gray-600"
                             onClick={toggleMobileMenu}
+                            aria-label="Toggle mobile menu"
                         >
                             <Menu size={20} />
                         </button>
@@ -48,7 +58,7 @@ const Header = () => {
                         </div>
 
                         {/* Search icon for mobile */}
-                        <button className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors rounded-full p-2">
+                        <button className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors rounded-full p-2" aria-label="Search">
                             <Search size={20} />
                         </button>
 
@@ -59,16 +69,64 @@ const Header = () => {
                         </Link>
 
                         <Link href={'/wishlist'}>
-                            <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 transition-colors rounded-full p-2">
+                            <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 transition-colors rounded-full p-2" aria-label="Wishlist">
                                 <Heart size={18} />
                             </button>
                         </Link>
 
                         <Link href={'/cart'}>
-                            <button className="bg-gray-100 hover:bg-amber-50 hover:text-amber-600 text-gray-800 transition-colors rounded-full p-2">
+                            <button className="bg-gray-100 hover:bg-amber-50 hover:text-amber-600 text-gray-800 transition-colors rounded-full p-2" aria-label="Cart">
                                 <ShoppingCart size={18} />
                             </button>
                         </Link>
+
+                        {/* Profile section */}
+                        <div className="relative">
+                            <button 
+                                onClick={toggleProfileMenu}
+                                className="bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full p-2"
+                                aria-label="Profile"
+                            >
+                                <User size={18} />
+                            </button>
+
+                            {/* Profile dropdown menu */}
+                            {profileMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                                    {username ? (
+                                        <>
+                                            <div className="px-4 py-2 border-b border-gray-100">
+                                                <p className="text-sm font-medium text-gray-700">Signed in as</p>
+                                                <p className="text-sm font-bold text-gray-900">{username}</p>
+                                            </div>
+                                            <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                Your Profile
+                                            </Link>
+                                            <Link href="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                Your Orders
+                                            </Link>
+                                            <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                Settings
+                                            </Link>
+                                            <div className="border-t border-gray-100">
+                                                <button className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                                    Sign out
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link href="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                Sign in
+                                            </Link>
+                                            <Link href="/signup" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                Create account
+                                            </Link>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,7 +152,7 @@ const Header = () => {
                                         height={100}
                                     />
                                 </Link>
-                                <button onClick={toggleMobileMenu}>
+                                <button onClick={toggleMobileMenu} aria-label="Close menu">
                                     <X size={20} className="text-gray-700" />
                                 </button>
                             </div>
@@ -108,6 +166,36 @@ const Header = () => {
                                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-black" />
                             </div>
 
+                            {/* Profile section in mobile menu */}
+                            {username ? (
+                                <div className="mb-6 py-3 px-2 bg-gray-50 rounded-lg">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="bg-indigo-100 p-2 rounded-full">
+                                            <User size={20} className="text-indigo-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-gray-900">{username}</p>
+                                            <Link href="/profile" className="text-sm text-indigo-600">
+                                                View Profile
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex gap-2 mb-6">
+                                    <Link href="/login" className="flex-1">
+                                        <button className="w-full py-2 bg-indigo-600 text-white rounded-lg transition-colors font-semibold">
+                                            Sign In
+                                        </button>
+                                    </Link>
+                                    <Link href="/register" className="flex-1">
+                                        <button className="w-full py-2 bg-gray-100 hover:bg-indigo-100 text-gray-800 rounded-lg transition-colors font-semibold">
+                                            Register
+                                        </button>
+                                    </Link>
+                                </div>
+                            )}
+
                             <button className="w-full py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-6 mb-6">
                                 Sell
                             </button>
@@ -119,6 +207,22 @@ const Header = () => {
                                         {category}
                                     </Link>
                                 ))}
+                                
+                                {username && (
+                                    <>
+                                        <div className="border-t border-gray-100 pt-4 mt-4">
+                                            <Link href="/orders" className="text-gray-600 hover:text-blue-600 transition-colors">
+                                                Your Orders
+                                            </Link>
+                                        </div>
+                                        <Link href="/settings" className="text-gray-600 hover:text-blue-600 transition-colors">
+                                            Settings
+                                        </Link>
+                                        <button className="text-left text-red-600 hover:text-red-700 transition-colors">
+                                            Sign out
+                                        </button>
+                                    </>
+                                )}
                             </nav>
                         </div>
                     </div>

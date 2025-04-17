@@ -47,7 +47,7 @@ export interface OrderCountsInterface {
     Delivered: number;
     Cancelled: number;
 }
-  
+
 export interface Product {
     id: string;
     name: string;
@@ -69,3 +69,28 @@ export interface Product {
 }
 
 export type ProductView = 'list' | 'add' | 'edit' | 'view';
+
+
+// set-profile
+
+export type ProfileFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  profileImage: string | null;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    pincode: string;
+    landmark: string;
+    country: string;
+  };
+  preferences: {
+    newsletter: boolean;
+    sms: boolean;
+    priorityDelivery: boolean;
+  };
+}

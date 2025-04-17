@@ -24,3 +24,42 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* Main */
+
+@layer base {
+  :root {
+    --color-gold: #D4AF37;
+  }
+  
+  body {
+    @apply antialiased text-gray-100;
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    color: var(--color-gold);
+  }
+  
+  .bg-gold {
+    background-color: var(--color-gold);
+  }
+  
+  .border-gold {
+    border-color: var(--color-gold);
+  }
+  
+  .ring-gold {
+    --tw-ring-color: var(--color-gold);
+  }
+  
+  .from-gold {
+    --tw-gradient-from: var(--color-gold);
+  }
+  
+  .to-gold {
+    --tw-gradient-to: var(--color-gold);
+  }
+}
