@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = {}
-
-const PageHeader = (props: Props) => {
+const PageHeader = () => {
     return (
         <div className="flex mb-8 items-center">
             <div>

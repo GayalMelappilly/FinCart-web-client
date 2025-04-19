@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -5,11 +6,17 @@ const Footer = () => {
     const categories = ['Tropical', 'Freshwater', 'Saltwater', 'Pond', 'Aquatic Plants'];
 
     return (
-        <footer className="bg-gray-800 text-white py-8 sm:py-12">
+        <footer className="bg-gray-800 text-white py-8 md:px-30 sm:py-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="mb-6 sm:mb-0">
-                        <h3 className="text-lg font-semibold mb-4">Fincart</h3>
+                        <Image
+                            src="/transparent-logo-light.png"
+                            alt="Fincart Logo"
+                            className="h-6 object-contain mb-6"
+                            width={150}
+                            height={100}
+                        />
                         <p className="text-gray-400">Your trusted marketplace for ornamental fish and aquatic plants.</p>
                     </div>
 
@@ -53,7 +60,7 @@ const Footer = () => {
                 </div>
 
                 <div className="border-t border-gray-700 mt-8 sm:mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center">
-                    <p className="text-gray-400 text-center sm:text-left mb-4 sm:mb-0">© 2025 Fincart. All rights reserved.</p>
+                    <p className="text-gray-400 text-center sm:text-left mb-4 sm:mb-0">© 2025 Fincarts. All rights reserved.</p>
                     <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 items-center">
                         <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
                         <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a>

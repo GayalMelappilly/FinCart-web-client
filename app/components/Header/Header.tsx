@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                                 src="/splash.png"
                                 alt="Fincart Logo"
                                 className="h-6 object-contain"
-                                width={100}
+                                width={150}
                                 height={100}
                             />
                         </Link>

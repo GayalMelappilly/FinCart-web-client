@@ -54,7 +54,7 @@ export default function Layout({ children }: LayoutProps) {
                                     src="/splash.png"
                                     alt="Fincart Logo"
                                     className="h-6 object-contain"
-                                    width={100}
+                                    width={140}
                                     height={100}
                                 />
                             </Link>
@@ -159,7 +159,7 @@ export default function Layout({ children }: LayoutProps) {
                 {/* Main content */}
                 <div className="flex flex-col flex-1 overflow-hidden">
                     {/* Top header */}
-                    <header className="bg-white shadow-sm z-10">
+                    <header className="bg-white shadow-sm z-10 pr-20">
                         <div className="px-4 sm:px-6 lg:px-8">
                             <div className="flex items-center justify-between h-16">
                                 <div className="flex items-center">

@@ -15,7 +15,7 @@ const Preferences:FC<Props> = ({formData, setFormData}) => {
         setFormData({
             ...formData,
             [section]: {
-                ...(formData[section as keyof ProfileFormData] as Record<string, any>),
+                ...(formData[section as keyof ProfileFormData] as {[key: string]: boolean}),
                 [field]: checked
             }
         });

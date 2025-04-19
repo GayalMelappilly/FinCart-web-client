@@ -65,7 +65,7 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
@@ -77,7 +77,7 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
@@ -89,7 +89,7 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
@@ -102,7 +102,7 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
                     value={formData.bio}
                     onChange={handleChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Tell us a bit about yourself"
                 />
             </div>

@@ -63,11 +63,6 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
     setIsDropdownOpen(false);
   };
 
-  // Function to get flag URL
-  const getFlagUrl = (countryCode: string) => {
-    return `/flags/${countryCode.toLowerCase()}.svg`;
-  };
-
   return (
     <div className="max-w-md w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
       {/* Top gradient banner */}
@@ -151,7 +146,7 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
                 />
               </div>
             </div>
-            <p className="mt-2 text-xs text-gray-500">We'll send a verification code to this number</p>
+            <p className="mt-2 text-xs text-gray-500">We&apos;ll send a verification code to this number</p>
           </div>
 
           <button
@@ -184,7 +179,7 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
         </form>
 
         <div className="text-center text-xs text-gray-500 mt-8">
-          <p>By continuing, you agree to Fincart's</p>
+          <p>By continuing, you agree to Fincart&apos;s</p>
           <p className="mt-1">
             <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Terms of Service</a>
             {" "}&{" "}

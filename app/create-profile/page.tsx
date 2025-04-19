@@ -12,6 +12,8 @@ import DeliveryInfo from '../components/CreateProfile/DeliveryInfo';
 import Preferences from '../components/CreateProfile/Preferences';
 import FormButtons from '../components/CreateProfile/FormButtons';
 import PageHeader from '../components/CreateProfile/PageHeader';
+import { useMutation } from '@tanstack/react-query';
+import { createProfile } from '@/pages/api/users/action';
 
 const CreateProfilePage: React.FC = () => {
   const router = useRouter();
@@ -38,6 +40,16 @@ const CreateProfilePage: React.FC = () => {
     }
   });
 
+  const mutation = useMutation({
+    mutationFn: createProfile,
+    onSuccess: () => {
+      router.push('/');
+    },
+    onError: (err) => {
+      console.log('User profile error : ', err)
+    }
+  })
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -46,7 +58,7 @@ const CreateProfilePage: React.FC = () => {
       setFormData({
         ...formData,
         [section]: {
-          ...(formData[section as keyof ProfileFormData] as Record<string, any>),
+          ...(formData[section as keyof ProfileFormData] as {[key: string]: boolean}),
           [field]: value
         }
       });
@@ -61,10 +73,8 @@ const CreateProfilePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // API call would go here to save the profile data
+      mutation.mutate(formData)
       console.log('Form data submitted:', formData);
-
-      // Navigate to dashboard after successful profile creation
       router.push('/');
     } catch (error) {
       console.error('Error creating profile:', error);
@@ -83,7 +93,7 @@ const CreateProfilePage: React.FC = () => {
                 <BasicInfo formData={formData} setFormData={setFormData} handleChange={handleChange} />
               )}
               {step === 2 && (
-                <DeliveryInfo formData={formData} setFormData={setFormData} handleChange={handleChange} />
+                <DeliveryInfo formData={formData} handleChange={handleChange} />
               )}
               {step === 3 && (
                 <Preferences formData={formData} setFormData={setFormData} />
