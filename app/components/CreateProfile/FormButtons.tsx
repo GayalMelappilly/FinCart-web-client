@@ -2,10 +2,11 @@ import React, { FC } from 'react'
 
 type Props = {
     step: number,
-    setStep: (step: number) => void
+    setStep: (step: number) => void,
+    isFormFilled: boolean
 }
 
-const FormButtons:FC<Props> = ({step, setStep}) => {
+const FormButtons:FC<Props> = ({step, setStep, isFormFilled}) => {
 
     const nextStep = () => {
         setStep(step + 1);
@@ -31,7 +32,8 @@ const FormButtons:FC<Props> = ({step, setStep}) => {
                 <button
                     type="button"
                     onClick={nextStep}
-                    className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    disabled={!isFormFilled}
+                    className={`ml-auto px-6 py-2 text-white rounded-md ${isFormFilled ? 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500' : 'bg-gray-500 cursor-not-allowed'}`}
                 >
                     Continue
                 </button>

@@ -26,12 +26,12 @@ const SideSection:FC<Props> = ({step}) => {
                         <span className="text-lg text-gray-800">Delivery Address</span>
                     </div>
 
-                    <div className={`flex items-center ${step >= 3 ? 'text-white' : 'text-white'}`}>
+                    {/* <div className={`flex items-center ${step >= 3 ? 'text-white' : 'text-white'}`}>
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-4 ${step >= 3 ? 'bg-blue-500' : 'bg-blue-300'}`}>
                             3
                         </div>
                         <span className="text-lg text-gray-800">Preferences</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

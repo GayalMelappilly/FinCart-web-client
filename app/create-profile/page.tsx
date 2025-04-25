@@ -13,36 +13,35 @@ import Preferences from '../components/CreateProfile/Preferences';
 import FormButtons from '../components/CreateProfile/FormButtons';
 import PageHeader from '../components/CreateProfile/PageHeader';
 import { useMutation } from '@tanstack/react-query';
-import { createProfile } from '@/pages/api/users/action';
+import { createProfile } from '../services/authServices';
 
 const CreateProfilePage: React.FC = () => {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
+  const [isFormFilled, setIsFormFilled] = useState<boolean>(false)
   const [formData, setFormData] = useState<ProfileFormData>({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
-    phone: '',
-    bio: '',
-    profileImage: null,
+    phone: '91+ 9876543210',
+    password: '',
+    profileImage: '',
     address: {
-      street: '',
+      addressLine1: '',
+      addressLine2: '',
       city: '',
       state: '',
       pincode: '',
-      landmark: '',
-      country: 'United States',
-    },
-    preferences: {
-      newsletter: true,
-      sms: false,
-      priorityDelivery: false,
+      country: 'India',
+      isDefault: true,
+      latitude: '',
+      longitude: '',
     }
   });
 
   const mutation = useMutation({
     mutationFn: createProfile,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem('accessToken',data.accessToken as string)
       router.push('/');
     },
     onError: (err) => {
@@ -58,7 +57,7 @@ const CreateProfilePage: React.FC = () => {
       setFormData({
         ...formData,
         [section]: {
-          ...(formData[section as keyof ProfileFormData] as {[key: string]: boolean}),
+          ...(formData.address),
           [field]: value
         }
       });
@@ -90,16 +89,16 @@ const CreateProfilePage: React.FC = () => {
             <PageHeader />
             <form onSubmit={handleSubmit} className="space-y-6">
               {step === 1 && (
-                <BasicInfo formData={formData} setFormData={setFormData} handleChange={handleChange} />
+                <BasicInfo formData={formData} setFormData={setFormData} handleChange={handleChange} setIsFormFilled={setIsFormFilled} />
               )}
               {step === 2 && (
-                <DeliveryInfo formData={formData} handleChange={handleChange} />
+                <DeliveryInfo formData={formData} handleChange={handleChange} setIsFormFilled={setIsFormFilled} />
               )}
-              {step === 3 && (
+              {/* {step === 3 && (
                 <Preferences formData={formData} setFormData={setFormData} />
-              )}
+              )} */}
 
-              <FormButtons step={step} setStep={setStep} />
+              <FormButtons step={step} setStep={setStep} isFormFilled={isFormFilled} />
             </form>
             {/* Progress Indicator for mobile */}
             <ProgressIndicatorMobile step={step} />

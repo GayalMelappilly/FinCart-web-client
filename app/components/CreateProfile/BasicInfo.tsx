@@ -2,38 +2,72 @@
 
 import { ProfileFormData } from '@/app/types/types'
 import Image from 'next/image'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import LoadingAnimation from '../UploadingAnimation/UploadingAnimation'
 
 type Props = {
     formData: ProfileFormData,
     setFormData: (formData: ProfileFormData) => void,
-    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void
+    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
+    setIsFormFilled: (isFormFilled: boolean) => void
 }
 
-const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
+const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange, setIsFormFilled }) => {
 
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [password, setPassword] = useState<string>()
+    const [uploading, setUploading] = useState<boolean>()
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-                setFormData({
-                    ...formData,
-                    profileImage: reader.result as string
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = async () => {
+            const base64Image = reader.result as string;
+            setImagePreview(base64Image as string);
+            setUploading(true);
+            setIsFormFilled(false)
+            try {
+                const response = await fetch('/api/image-upload/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image }),
                 });
-            };
-            reader.readAsDataURL(file);
-        }
+
+                const data = await response.json();
+                if (data.url) {
+                    console.log('Profile picture : ', data.url)
+                    setFormData({
+                        ...formData,
+                        profileImage: data.url as string
+                    });
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            } finally {
+                setUploading(false);
+                setIsFormFilled(true)
+            }
+        };
     };
+
+    useEffect(() => {
+        if (formData.password === password && formData.password != "") {
+            setIsFormFilled(true)
+        } else {
+            setIsFormFilled(false)
+        }
+    }, [formData.password, password])
 
     return (
         <div className="space-y-6">
             <div className="flex justify-center mb-8">
                 <div className="relative w-32 h-32 rounded-md overflow-hidden border-2 border-blue-100 bg-gray-100">
-                    {imagePreview ? (
+                    {uploading ? (
+                        <LoadingAnimation />
+                    ) : imagePreview ? (
                         <Image src={imagePreview} alt="Profile preview" layout="fill" objectFit="cover" />
                     ) : (
                         <div className="flex items-center justify-center h-full text-gray-400">
@@ -59,11 +93,11 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                        name="fullName"
+                        value={formData.fullName}
                         onChange={handleChange}
                         className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
@@ -71,40 +105,49 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        // onClick={}
+                        className="mt-3 px-6 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        Verify email
+                    </button>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
                     <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
+                        type="password"
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required
                     />
                 </div>
-            </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                <textarea
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleChange}
-                    rows={3}
-                    className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Tell us a bit about yourself"
-                />
             </div>
         </div>
     )

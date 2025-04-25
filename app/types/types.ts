@@ -74,23 +74,20 @@ export type ProductView = 'list' | 'add' | 'edit' | 'view';
 // set-profile
 
 export type ProfileFormData = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
-  bio: string;
+  password: string;
   profileImage: string | null;
   address: {
-    street: string;
+    addressLine1: string,
+    addressLine2: string ,
     city: string;
     state: string;
     pincode: string;
-    landmark: string;
     country: string;
-  };
-  preferences: {
-    newsletter: boolean;
-    sms: boolean;
-    priorityDelivery: boolean;
+    isDefault: boolean;
+    latitude: string;
+    longitude: string;
   };
 }

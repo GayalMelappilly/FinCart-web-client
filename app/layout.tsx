@@ -3,9 +3,10 @@ import "./globals.css";
 import { poppins } from "./components/Fonts/Fonts";
 import QueryProvider from "./providers/QueryProvider";
 import PageTransition from "./components/PageTransition/PageTransition";
+// import { AuthProvider } from "./context/authContext";
 
 export const metadata: Metadata = {
-  title: "Fincart",
+  title: "Fincarts",
   description: "",
 };
 
@@ -20,9 +21,11 @@ export default function RootLayout({
         className={`antialiased ${poppins.className}`}
       >
         <QueryProvider>
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {/* <AuthProvider> */}
+            <PageTransition>
+              {children}
+            </PageTransition>
+          {/* </AuthProvider> */}
         </QueryProvider>
       </body>
     </html>

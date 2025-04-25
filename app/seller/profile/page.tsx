@@ -6,7 +6,7 @@ import PersonalInfoCard from '@/app/components/Seller/Profile/PersonalInfoCard';
 import ProfileHeader from '@/app/components/Seller/Profile/ProfileHeader';
 import SecurityCard from '@/app/components/Seller/Profile/SecurityCard';
 import StoreInfoCard from '@/app/components/Seller/Profile/StoreInfoCard';
-import { useProfile } from '@/app/lib/hooks/useProfile';
+import { useProfile } from '@/hooks/useProfile';
 import { Save } from 'lucide-react';
 
 export default function ProfilePage() {

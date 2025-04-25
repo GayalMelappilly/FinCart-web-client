@@ -1,9 +1,14 @@
 'use client'
 
+import { getCurrentUser } from '@/app/services/authServices';
+import { CurrentUserResponse } from '@/app/types/auth/types';
+import { ProfileFormData } from '@/app/types/types';
+import { useQuery } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Spinner from '../LoadingSpinner/Spinner';
 
 interface HeaderProps {
   username?: string;
@@ -12,6 +17,23 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ username }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+    const [user, setUser] = useState<ProfileFormData>()
+
+    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') || '' : '';
+
+    const {data, isLoading, error} = useQuery({
+        queryKey: ['get-current-user'],
+        queryFn: () => getCurrentUser(accessToken),
+        enabled: !!accessToken
+    })
+
+    useEffect(()=>{
+        if(data) setUser(data)
+    }, [data])
+
+    if(error) console.log("ERROR HEADER COMP : ",error)
+    if(isLoading) return <Spinner />
+
     const categories: string[] = [''];
 
     const toggleMobileMenu = (): void => {
@@ -93,12 +115,8 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                             {/* Profile dropdown menu */}
                             {profileMenuOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                    {username ? (
+                                    {user ? (
                                         <>
-                                            <div className="px-4 py-2 border-b border-gray-100">
-                                                <p className="text-sm font-medium text-gray-700">Signed in as</p>
-                                                <p className="text-sm font-bold text-gray-900">{username}</p>
-                                            </div>
                                             <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 Your Profile
                                             </Link>

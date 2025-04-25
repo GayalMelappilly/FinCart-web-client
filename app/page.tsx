@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-50">
       <Head>
-        <title>Fish Market - Find Your Perfect Ornamental Fish</title>
-        <meta name="description" content="Marketplace for ornamental fish and aquatic plants" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Fincarts</title>
+        <meta name="description" content="Marketplace for ornamental fish" />
+        <link rel="icon" sizes="16x16" href="./icon.ico" />
       </Head>
       <Header />
       <Hero />
