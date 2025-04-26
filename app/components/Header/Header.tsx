@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
 
 interface HeaderProps {
-  username?: string;
+    username?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ username }) => {
@@ -21,18 +21,19 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
 
     const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') || '' : '';
 
-    const {data, isLoading, error} = useQuery({
+    const { data, isLoading, error } = useQuery({
         queryKey: ['get-current-user'],
         queryFn: () => getCurrentUser(accessToken),
         enabled: !!accessToken
     })
 
-    useEffect(()=>{
-        if(data) setUser(data)
+    useEffect(() => {
+        if (data) setUser(data)
+        console.log(data)
     }, [data])
 
-    if(error) console.log("ERROR HEADER COMP : ",error)
-    if(isLoading) return <Spinner />
+    if (error) console.log("ERROR HEADER COMP : ", error)
+    if (isLoading) return <Spinner />
 
     const categories: string[] = [''];
 
@@ -49,9 +50,9 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
             <div className="container mx-auto md:px-30 px-4 py-3">
                 <div className="flex items-center justify-between">
                     {/* Logo and optional menu button */}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center ">
                         <button
-                            className="sm:hidden text-gray-600"
+                            className="sm:hidden text-gray-600 mt-1"
                             onClick={toggleMobileMenu}
                             aria-label="Toggle mobile menu"
                         >
@@ -61,9 +62,9 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                             <Image
                                 src="/splash.png"
                                 alt="Fincart Logo"
-                                className="h-6 object-contain"
+                                className="md:h-6 h-5 object-contain pr-3"
                                 width={150}
-                                height={100}
+                                height={150}
                             />
                         </Link>
                     </div>
@@ -79,10 +80,9 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-black" />
                         </div>
 
-                        {/* Search icon for mobile */}
-                        <button className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors rounded-full p-2" aria-label="Search">
+                        {/* <button className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors rounded-full p-2" aria-label="Search">
                             <Search size={20} />
-                        </button>
+                        </button> */}
 
                         <Link href={'/seller/dashboard'}>
                             <button className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
@@ -104,12 +104,13 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
 
                         {/* Profile section */}
                         <div className="relative">
-                            <button 
+                            <button
                                 onClick={toggleProfileMenu}
-                                className="bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full p-2"
+                                className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profileImage ? 'my-2' : 'p-2'}`}
                                 aria-label="Profile"
                             >
-                                <User size={18} />
+                                {/* <p className='px-1'>{user.fullName?.charAt(0).toUpperCase()}</p> */}
+                                {user?.profileImage ? <Image src={user.profileImage} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
                             </button>
 
                             {/* Profile dropdown menu */}
@@ -225,7 +226,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                                         {category}
                                     </Link>
                                 ))}
-                                
+
                                 {username && (
                                     <>
                                         <div className="border-t border-gray-100 pt-4 mt-4">

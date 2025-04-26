@@ -80,7 +80,7 @@ export const getCurrentUser = async (accessToken: string): Promise<ProfileFormDa
     if (!data.user.id) {
       throw new Error('Failed to fetch user profile');
     }
-    return data;
+    return data.user;
   } catch (error) {
     console.error('Fetch user profile error:', error);
     throw error;
