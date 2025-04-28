@@ -1,3 +1,5 @@
+import React from "react"
+
 export type FormDataType = {
     fullName: string,
     address: string,
@@ -79,6 +81,10 @@ export type ProfileFormData = {
   phone: string;
   password: string;
   profileImage: string | null;
+  userType: 'customer' | 'breeder' | 'admin';
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  pointsBalance: number;
   address: {
     addressLine1: string,
     addressLine2: string ,

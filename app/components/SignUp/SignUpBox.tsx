@@ -1,6 +1,6 @@
 'use client'
 
-import { signUpUser } from '@/pages/api/users/action'
+// import { signUpUser } from '@/pages/api/users/action'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -26,16 +26,16 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
     dial_code: '+91'
   });
 
-  const mutation = useMutation({
-    mutationFn: signUpUser,
-    onSuccess: () => {
-      console.log('Phone number reached')
-      router.push('/signup/verification');
-    },
-    onError: (err) => {
-      console.log('Registration error : ', err)
-    }
-  })
+  // const mutation = useMutation({
+  //   mutationFn: signUpUser,
+  //   onSuccess: () => {
+  //     console.log('Phone number reached')
+  //     router.push('/signup/verification');
+  //   },
+  //   onError: (err) => {
+  //     console.log('Registration error : ', err)
+  //   }
+  // })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,17 +45,17 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
     const fullPhoneNumber = `${selectedCountry.dial_code}${phoneNumber}`;
 
     // Simulate OTP sending
-    try {
-      mutation.mutate(fullPhoneNumber)
-      setTimeout(() => {
-        // Store phone number in session storage for the verification page
-        sessionStorage.setItem('phoneNumber', fullPhoneNumber);
-      }, 1000);
-    } catch (error) {
-      console.error('Error sending OTP:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    // try {
+    //   mutation.mutate(fullPhoneNumber)
+    //   setTimeout(() => {
+    //     // Store phone number in session storage for the verification page
+    //     sessionStorage.setItem('phoneNumber', fullPhoneNumber);
+    //   }, 1000);
+    // } catch (error) {
+    //   console.error('Error sending OTP:', error);
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const selectCountry = (country: CountryCode) => {

@@ -22,9 +22,13 @@ const CreateProfilePage: React.FC = () => {
   const [formData, setFormData] = useState<ProfileFormData>({
     fullName: '',
     email: '',
-    phone: '91+ 9876543210',
+    phone: '',
     password: '',
     profileImage: '',
+    userType: 'customer',
+    emailVerified: false,
+    phoneVerified: true,
+    pointsBalance: 0,
     address: {
       addressLine1: '',
       addressLine2: '',
