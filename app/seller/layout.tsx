@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -20,6 +20,9 @@ import { getFormattedPathname } from '../utils/pathnameExtraction';
 import SideBar from '../components/Seller/SideBar/SideBar';
 import MobileSideBar from '../components/Seller/MobileSideBar/MobileSideBar';
 import Header from '../components/Seller/Header/Header';
+import Spinner from '../components/LoadingSpinner/Spinner';
+import { useQuery } from '@tanstack/react-query';
+import { getSellerDetails } from '../services/sellerAuthServices';
 
 interface LayoutProps {
     children: ReactNode;
@@ -29,13 +32,37 @@ interface LayoutProps {
 export type NavigationItem = {
     name: string;
     path: string;
-    icon: React.FC<any>; 
+    icon: React.FC<any>;
 };
 
 export default function Layout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pathname = usePathname();
     const title = getFormattedPathname(pathname as string)
+    const [user, setUser] = useState()
+    const [accessToken, setAccessToken] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setAccessToken(localStorage.getItem('sellerAccessToken') || '');
+        }
+    }, []);
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['get-seller-details'],
+        queryFn: () => getSellerDetails(accessToken),
+        enabled: !!accessToken
+    })
+
+    useEffect(() => {
+        if (data) {
+            setUser(data)
+            console.log("DATA SELLER : ",data)
+        }
+    }, [data])
+
+    if (error) console.log("ERROR HEADER COMP : ", error)
+    if (isLoading) return <Spinner />
 
     const navigationItems: NavigationItem[] = [
         { name: 'Dashboard', path: '/seller/dashboard', icon: Home },

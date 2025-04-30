@@ -186,8 +186,10 @@ const SignupForm: FC<Props> = ({
   const mutation = useMutation({
     mutationFn: createSellerProfile,
     onSuccess: (data) => {
-      // localStorage.setItem('accessToken',data.accessToken as string)
-      router.push('/seller/dashboard');
+      if (data.accessToken) {
+        localStorage.setItem('sellerAccessToken', data.accessToken as string)
+        router.push('/seller/dashboard');
+      }
     },
     onError: (err) => {
       console.log('Seller profile error : ', err)
@@ -261,6 +263,7 @@ const SignupForm: FC<Props> = ({
           <BusinessInfoStep
             formData={formData}
             handleChange={handleChange}
+            setFormData={setFormData}
             errors={errors}
           />
         )}

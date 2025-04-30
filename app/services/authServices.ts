@@ -23,7 +23,7 @@ export const signUpUser = async (phoneNumber: string) => {
 // Create user profile
 export const createProfile = async (formData: ProfileFormData) => {
   try {
-    const response = await fetch(`api/users/create-profile`, {
+    const response = await fetch(`/api/users/create-profile`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const getCurrentUser = async (accessToken: string): Promise<ProfileFormDa
   try {
     const response = await fetchWithAuth(`${apiUrl}/get-current-user`, {
       method: 'GET',
-    },accessToken)
+    },accessToken, 'user')
 
     const data = await response;
 

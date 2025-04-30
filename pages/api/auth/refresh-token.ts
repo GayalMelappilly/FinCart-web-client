@@ -5,11 +5,24 @@ import { serialize, parse } from 'cookie';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
+    console.log("REACHED")
+
     if (req.method !== 'GET') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
+
+    const { type } = req.query
+    console.log("TYPE : ",type)
+
     const cookies = parse(req.headers.cookie || '');
-    const refreshToken = cookies.refreshToken;
+
+    let refreshToken;
+
+    if(type == 'user'){
+        refreshToken = cookies.refreshToken;
+    }else if(type == 'seller'){
+        refreshToken = cookies.sellerRefreshToken
+    }
 
     const apiUrl = process.env.API_URL || 'http://localhost:5000/api/v1'
 
@@ -32,15 +45,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const accessToken = data.accessToken
 
-    res.setHeader('Set-Cookie', [
-        serialize('accessToken', accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            path: '/',
-            maxAge: 60 * 15,
-        }),
-    ])
+    if(type == 'user'){
+        res.setHeader('Set-Cookie', [
+            serialize('accessToken', accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                path: '/',
+                maxAge: 60 * 15,
+            }),
+        ])
+    }else if(type == 'seller'){
+        res.setHeader('Set-Cookie', [
+            serialize('sellerAccessToken', accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                path: '/',
+                maxAge: 60 * 15,
+            }),
+        ])
+    }
 
     console.log("TOKEN REFRESHED")
 

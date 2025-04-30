@@ -1,6 +1,6 @@
 'use client'
 
-export const fetchWithAuth = async (url: string, options: RequestInit = {}, accessToken: string) => {
+export const fetchWithAuth = async (url: string, options: RequestInit = {}, accessToken: string, type: string) => {
 
     let res = await fetch(url, {
         ...options,
@@ -11,16 +11,22 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
         credentials: 'include',
     });
 
+    console.log("RES : ",res)
+
     if (res.status === 401) {
         try {
             // Attempt to refresh token
-            const refresh = await fetch(`api/auth/refresh-token`, {
+            const refresh = await fetch(`/api/auth/refresh-token?type=${type}`, {
                 credentials: 'include',
             });
 
             const data = await refresh.json()
 
-            localStorage.setItem('accessToken', data.accessToken)
+            if(type == 'user'){
+                localStorage.setItem('accessToken', data.accessToken)
+            }else if(type == 'seller'){
+                localStorage.setItem('sellerAccessToken', data.accessToken)
+            }
 
             if (!data.success) throw new Error('Unable to refresh token');
 

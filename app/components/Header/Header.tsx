@@ -18,9 +18,14 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
     const [user, setUser] = useState<ProfileFormData>()
+    const [accessToken, setAccessToken] = useState('');
 
-    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') || '' : '';
-
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setAccessToken(localStorage.getItem('accessToken') || '');
+        }
+    }, []);
+    
     const { data, isLoading, error } = useQuery({
         queryKey: ['get-current-user'],
         queryFn: () => getCurrentUser(accessToken),
@@ -29,7 +34,6 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
 
     useEffect(() => {
         if (data) setUser(data)
-        console.log(data)
     }, [data])
 
     if (error) console.log("ERROR HEADER COMP : ", error)

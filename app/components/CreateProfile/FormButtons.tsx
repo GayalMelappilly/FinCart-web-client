@@ -28,7 +28,7 @@ const FormButtons:FC<Props> = ({step, setStep, isFormFilled}) => {
                 </button>
             )}
 
-            {step < 3 ? (
+            {step < 2 ? (
                 <button
                     type="button"
                     onClick={nextStep}
