@@ -1,9 +1,9 @@
-import { AccountFormData, FormErrors } from '@/app/types/seller/types';
+import { FormData, FormErrors } from '@/app/types/seller/types';
 import Link from 'next/link';
 import React, { FC } from 'react'
 
 type Props = {
-    formData: AccountFormData;
+    formData: FormData;
     handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     errors: FormErrors;
     error: string;

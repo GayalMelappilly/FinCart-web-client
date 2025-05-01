@@ -1,7 +1,6 @@
 'use client'
 
 import { getCurrentUser } from '@/app/services/authServices';
-import { CurrentUserResponse } from '@/app/types/auth/types';
 import { ProfileFormData } from '@/app/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'

@@ -59,7 +59,7 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange, setIsFormFi
         } else {
             setIsFormFilled(false)
         }
-    }, [formData.password, password])
+    }, [formData.password, password, setIsFormFilled])
 
     return (
         <div className="space-y-6">

@@ -9,7 +9,6 @@ import ProgressIndicatorMobile from '../components/CreateProfile/ProgressIndicat
 import SideSection from '../components/CreateProfile/SideSection';
 import BasicInfo from '../components/CreateProfile/BasicInfo';
 import DeliveryInfo from '../components/CreateProfile/DeliveryInfo';
-import Preferences from '../components/CreateProfile/Preferences';
 import FormButtons from '../components/CreateProfile/FormButtons';
 import PageHeader from '../components/CreateProfile/PageHeader';
 import { useMutation } from '@tanstack/react-query';

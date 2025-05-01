@@ -16,6 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const cookies = parse(req.headers.cookie || '');
 
+    console.log(cookies)
+
     let refreshToken;
 
     if(type == 'user'){
@@ -23,6 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }else if(type == 'seller'){
         refreshToken = cookies.sellerRefreshToken
     }
+
+    console.log("RFT : ", refreshToken)
 
     const apiUrl = process.env.API_URL || 'http://localhost:5000/api/v1'
 

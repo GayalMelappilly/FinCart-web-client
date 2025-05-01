@@ -14,7 +14,7 @@ type Props = {
   setPhoneNumber: (phoneNumber: string) => void;
 }
 
-const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNumber }) => {
+const SellerSignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNumber }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>({
     code: 'IN',
@@ -167,7 +167,7 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
             <div className="flex-grow border-t border-gray-200"></div>
           </div>
 
-          <Link href={'/login'} className="block w-full">
+          <Link href={'/seller/login'} className="block w-full">
             <button type="button" className="w-full bg-white text-blue-600 py-3 px-4 rounded-lg border border-blue-200 hover:bg-blue-50 focus:outline-none transition-colors shadow-sm font-medium flex items-center justify-center">
               Already have an account? Sign In
             </button>
@@ -187,4 +187,4 @@ const SignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setPhoneNu
   )
 }
 
-export default SignUpBox
+export default SellerSignUpBox

@@ -1,16 +1,55 @@
-import { NavigationItem } from '@/app/seller/layout';
-import { Home, LogOut, Package, ShoppingBag, User } from 'lucide-react';
+'use client'
+
+import { NavigationItem } from '@/app/seller/layout-component';
+import { logoutSeller } from '@/app/services/sellerAuthServices';
+import { useQuery } from '@tanstack/react-query';
+import { LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React, { FC } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { FC, useEffect, useState } from 'react'
+import Spinner from '../../LoadingSpinner/Spinner';
 
 type Props = {
     navigationItems: NavigationItem[];
     isActive: (path: string) => boolean;
 }
 
-const SideBar:FC<Props> = ({navigationItems, isActive}) => {
+const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
+    const [accessToken, setAccessToken] = useState('');
+    const router = useRouter();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setAccessToken(localStorage.getItem('sellerAccessToken') || '');
+        }
+    }, []);
+
+    // Move the useQuery hook to the component level
+    const { data, isLoading, error, refetch } = useQuery({
+        queryKey: ['logout-seller'],
+        queryFn: () => logoutSeller(accessToken),
+        enabled: false // This prevents the query from running automatically
+    });
+
+    useEffect(() => {
+        if (error) {
+            console.log("ERROR HEADER COMP : ", error);
+            localStorage.setItem('seller-loggedIn', 'false');
+        }
+        
+        if (data) {
+            localStorage.setItem('sellerAccessToken', '')
+            localStorage.setItem('seller-loggedIn', 'false')
+            router.push('/');
+        }
+    }, [data, error, router]);
+
+    const handleLogout = () => {
+        refetch(); // Trigger the query when the logout button is clicked
+    };
+
+    if (isLoading) return <Spinner />;
 
     return (
         <div className="hidden md:flex md:flex-shrink-0">
@@ -48,6 +87,7 @@ const SideBar:FC<Props> = ({navigationItems, isActive}) => {
                     <div className="pt-4 mt-6 border-t border-gray-200">
                         <button
                             className="flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 w-full"
+                            onClick={handleLogout}
                         >
                             <LogOut className="mr-3 h-5 w-5" />
                             Logout
@@ -56,7 +96,7 @@ const SideBar:FC<Props> = ({navigationItems, isActive}) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SideBar
+export default SideBar;

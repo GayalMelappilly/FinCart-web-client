@@ -1,33 +1,26 @@
-// 'use client'
+'use client'
 
-// import { useAuth } from '../../context/authContext';
-// import { useRouter } from 'next/navigation';
-// import { useEffect } from 'react';
-// import Spinner from '../../components/LoadingSpinner/Spinner'; // Create a loading spinner component
+import { ReactNode, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
-// // Higher-order component to protect routes that require authentication
-// const withAuth = <P extends object>(Component: React.ComponentType<P>) => {
-//   const ProtectedRoute: React.FC<P> = (props) => {
-//     const { isAuthenticated, isLoading } = useAuth();
-//     const router = useRouter();
-
-//     useEffect(() => {
-//       // Redirect to login if not authenticated and not loading
-//       if (!isAuthenticated && !isLoading) {
-//         router.push('/signup');
-//       }
-//     }, [isAuthenticated, isLoading, router]);
-
-//     // Show loading spinner while checking authentication
-//     if (isLoading) {
-//       return <Spinner />;
-//     }
-
-//     // If authenticated, render the protected component
-//     return isAuthenticated ? <Component {...props} /> : null;
-//   };
-
-//   return ProtectedRoute;
-// };
-
-// export default withAuth;
+// Protected wrapper component that checks authentication
+export default function ProtectedLayout({ children }: { children: ReactNode }) {
+  const isLoggedIn = localStorage?.getItem('seller-loggedIn') === 'true'
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  // Define public paths that don't require authentication
+  const publicPaths = ['/seller/signup', '/seller/signup/verification', '/seller/create-profile', '/seller/login'];
+  const isPublicPath = publicPaths.some(path => pathname === path);
+  
+  useEffect(() => {
+    // Only redirect if not on a public path and not authenticated
+    if (!isLoggedIn && !isPublicPath) {
+      console.log(isLoggedIn, pathname)
+      router.replace('/seller/signup');
+    }
+  }, [isLoggedIn, router, isPublicPath, pathname]);
+  
+  // If on public path or authenticated, show the children components
+  return isPublicPath || isLoggedIn ? <>{children}</> : null;
+}

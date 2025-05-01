@@ -7,16 +7,34 @@ import BusinessInfoStep from './BusinessInfoStep';
 import FormNavigation from './FormNavigation';
 import AddressStep from './AddressStep';
 import AccountStep from './AccountStep';
-import { FormErrors, SellerData } from '@/app/types/seller/types';
+import { FormData, FormErrors, SellerData } from '@/app/types/seller/types';
 import { useMutation } from '@tanstack/react-query';
 import { createSellerProfile } from '@/app/services/sellerAuthServices';
 
 type Props = {
   step: number;
   setStep: (step: number) => void;
-  formData: any;
-  setFormData: (data: any) => void;
+  formData: FormData;
+  setFormData: (data: FormData) => void;
 }
+
+interface ApiErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+      errors?: Record<string, string[]>;
+      // Add any other properties that might come in the error response
+    };
+    status?: number;
+    statusText?: string;
+  };
+  message: string;
+  // Add other properties that might be in the error object
+  code?: string;
+  request?: unknown;
+  config?: unknown;
+}
+
 
 const SignupForm: FC<Props> = ({
   step,
@@ -186,9 +204,8 @@ const SignupForm: FC<Props> = ({
   const mutation = useMutation({
     mutationFn: createSellerProfile,
     onSuccess: (data) => {
-      if (data.accessToken) {
-        localStorage.setItem('sellerAccessToken', data.accessToken as string)
-        router.push('/seller/dashboard');
+      if (data.success) {
+        router.push('/seller/login');
       }
     },
     onError: (err) => {
@@ -249,8 +266,9 @@ const SignupForm: FC<Props> = ({
       mutation.mutate(sellerData)
       // const response = await axios.post('/api/seller/register', sellerData);
 
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to register. Please try again.');
+    } catch (err: unknown) {
+      const error = err as ApiErrorResponse;
+      setError(error.response?.data?.message || 'Failed to register. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

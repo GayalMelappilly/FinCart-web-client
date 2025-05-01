@@ -1,4 +1,4 @@
-import { AuthResponse, User } from "@/app/types/auth/types"
+import { AuthResponse } from "@/app/types/auth/types"
 import { ProfileFormData } from "@/app/types/types"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
 

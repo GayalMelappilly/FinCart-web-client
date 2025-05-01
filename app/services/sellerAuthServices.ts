@@ -18,14 +18,14 @@ export const createSellerProfile = async (formData: SellerData) => {
             body: JSON.stringify(formData)
         })
 
-
         if (!response.ok) {
             throw new Error('Registration failed');
         }
 
-        const data = await response.json()
+        return {
+            success: true
+        }
 
-        return data
     } catch (error) {
         console.error('Registration error : ', error)
         throw error;
@@ -41,7 +41,67 @@ export const getSellerDetails = async (accessToken: string) => {
 
         const data = await response;
 
-        console.log("GET SELLER D : ",data)
+        console.log("GET SELLER D : ", data)
+
+        if (!data.success) {
+            throw new Error('Failed to fetch user profile');
+        }
+        return data;
+    } catch (error) {
+        console.error('Fetch user profile error:', error);
+        throw error;
+    }
+}
+
+interface FormData {
+    emailOrMobile: string;
+    password: string;
+    rememberMe: boolean;
+}
+
+export const loginSeller = async (formData: FormData) => {
+    console.log("FORM DATA : ", formData)
+    console.log("REACHED")
+
+    try {
+        const response = await fetch(`/api/seller/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData)
+        })
+
+        if (!response.ok) {
+            throw new Error('Login failed');
+        }
+
+        const data = await response.json()
+
+        console.log("data :", data)
+
+        return data
+    } catch (error) {
+        console.error('Login error : ', error)
+        throw error;
+    }
+}
+
+export const logoutSeller = async (accessToken: string) => {
+
+    console.log("Logout seller")
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/logout`, {
+            method: 'GET',
+        }, accessToken, 'seller')
+
+        const data = await response;
+
+        await fetch('/api/auth/logout', {
+            credentials: 'include',
+        })
 
         if (!data.success) {
             throw new Error('Failed to fetch user profile');

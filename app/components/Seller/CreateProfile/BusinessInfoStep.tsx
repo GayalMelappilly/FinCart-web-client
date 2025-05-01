@@ -1,13 +1,13 @@
 'use client'
 
-import { BusinessInfoFormData, FormErrors } from '@/app/types/seller/types';
+import { FormData, FormErrors } from '@/app/types/seller/types';
 import { FC, useState } from 'react';
 import LoadingAnimation from '../../UploadingAnimation/UploadingAnimation';
 import Image from 'next/image';
 
 type Props = {
-  formData: BusinessInfoFormData;
-  setFormData: (formData: BusinessInfoFormData) => void;
+  formData: FormData;
+  setFormData: (formData: FormData) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
   errors: FormErrors;
 }

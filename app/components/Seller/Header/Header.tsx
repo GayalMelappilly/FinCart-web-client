@@ -1,5 +1,5 @@
-import { NavigationItem } from '@/app/seller/layout';
-import { Bell, CircleArrowLeft, LogOut, Menu, X } from 'lucide-react';
+import { useSellerAuth } from '@/app/context/sellerAuthContext';
+import { Bell, Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react'
@@ -10,21 +10,41 @@ type Props = {
 }
 
 const Header: FC<Props> = ({ title, toggleSidebar }) => {
+
+    const { isLoggedIn, sellerData } = useSellerAuth()
+
+    console.log(sellerData)
+
     return (
-        <header className="bg-white shadow-sm z-10 pr-20">
+        <header className="bg-white shadow-sm z-10 md:pr-20">
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
-                        <button
-                            onClick={toggleSidebar}
-                            className="md:hidden text-gray-400 hover:text-gray-500"
-                        >
-                            <Menu className="h-6 w-6" />
-                        </button>
-                        <h1 className="ml-2 md:ml-0 text-lg font-medium text-gray-900">
-                            {title}
-                        </h1>
-                    </div>
+                    {!isLoggedIn ?
+                        (
+                            <div className="md:px-20 flex items-center ">
+                                <Link href="/" className="flex items-center space-x-2">
+                                    <Image
+                                        src="/splash.png"
+                                        alt="Fincart Logo"
+                                        className="md:h-6 h-5 object-contain pr-3"
+                                        width={150}
+                                        height={150}
+                                    />
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="flex items-center">
+                                <button
+                                    onClick={toggleSidebar}
+                                    className="md:hidden text-gray-400 hover:text-gray-500"
+                                >
+                                    <Menu className="h-6 w-6" />
+                                </button>
+                                <h1 className="ml-2 md:ml-0 text-lg font-medium text-gray-900">
+                                    {title}
+                                </h1>
+                            </div>
+                        )}
                     <div className="flex items-center space-x-4">
                         <Link href={'/'}>
                             <button className="bg-gray-100 hidden md:block hover:bg-blue-200 hover:text-blue-600 text-gray-800 p-2 rounded-lg relative">
@@ -36,9 +56,21 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
                             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
                         <Link href="/seller/profile" className="flex items-center">
-                            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            { sellerData?.businessInfo.logo_url
+                            ?
+                            (
+                                <Image
+                                    src={sellerData?.businessInfo.logo_url as string}
+                                    height={80}
+                                    width={80}
+                                    alt='profile-image'
+                                />
+                            ) 
+                            :
+                            (<div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
                                 <span className="text-blue-600 font-medium">TL</span>
-                            </div>
+                            </div>)
+                            }
                         </Link>
                     </div>
                 </div>

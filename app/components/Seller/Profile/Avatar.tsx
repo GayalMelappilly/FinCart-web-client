@@ -11,6 +11,9 @@ interface AvatarProps {
 }
 
 export default function Avatar({ src, name, editable = false, onAvatarChange }: AvatarProps) {
+
+  
+
   return (
     <div className="relative">
       <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 border-4 border-white shadow">

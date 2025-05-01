@@ -45,6 +45,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
             return response
 
         } catch (err) {
+            console.log(err)
             throw new Error('Session expired');
         }
     }
