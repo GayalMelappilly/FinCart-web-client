@@ -18,7 +18,7 @@ const SellerVerificationBox = () => {
         // Get phone number from session storage
         const storedPhone = sessionStorage.getItem('phoneNumber');
         if (!storedPhone) {
-            router.push('/signup');
+            router.push('/seller/signup');
             return;
         }
 

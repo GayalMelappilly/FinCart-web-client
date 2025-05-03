@@ -19,8 +19,8 @@ const FilterProduct:FC<Props> = ({ selectedCategory, setSelectedCategory, status
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none"
         >
           {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
+            <option key={category.id} value={category.name}>
+              {category.name}
             </option>
           ))}
         </select>

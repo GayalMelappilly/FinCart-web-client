@@ -6,6 +6,7 @@ import { IoIosArrowDown } from 'react-icons/io'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
 import Image from 'next/image'
 import { CountryCode, countryCodes } from '@/app/utils/dialCode'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   isLoading: boolean;
@@ -22,6 +23,8 @@ const SellerSignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setP
     dial_code: '+91'
   });
 
+  const router = useRouter()
+
   // const mutation = useMutation({
   //   mutationFn: signUpUser,
   //   onSuccess: () => {
@@ -36,16 +39,17 @@ const SellerSignUpBox: FC<Props> = ({ isLoading, setIsLoading, phoneNumber, setP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    router.push('/seller/signup/verification')
 
     // Format phone number with country code
-    // const fullPhoneNumber = `${selectedCountry.dial_code}${phoneNumber}`;
+    const fullPhoneNumber = `${selectedCountry.dial_code}${phoneNumber}`;
+    sessionStorage.setItem('phoneNumber', fullPhoneNumber);
 
     // Simulate OTP sending
     // try {
     //   mutation.mutate(fullPhoneNumber)
     //   setTimeout(() => {
     //     // Store phone number in session storage for the verification page
-    //     sessionStorage.setItem('phoneNumber', fullPhoneNumber);
     //   }, 1000);
     // } catch (error) {
     //   console.error('Error sending OTP:', error);

@@ -1,3 +1,4 @@
+import { FishProduct } from "../components/Seller/Products/AddOrEditProduct/Form"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
 import { SellerData } from "../types/seller/types"
 
@@ -41,8 +42,6 @@ export const getSellerDetails = async (accessToken: string) => {
 
         const data = await response;
 
-        console.log("GET SELLER D : ", data)
-
         if (!data.success) {
             throw new Error('Failed to fetch user profile');
         }
@@ -73,9 +72,9 @@ export const loginSeller = async (formData: FormData) => {
             body: JSON.stringify(formData)
         })
 
-        if (!response.ok) {
-            throw new Error('Login failed');
-        }
+        // if (!response.ok) {
+        //     throw new Error('Login failed');
+        // }
 
         const data = await response.json()
 
@@ -111,4 +110,34 @@ export const logoutSeller = async (accessToken: string) => {
         console.error('Fetch user profile error:', error);
         throw error;
     }
+}
+
+export const addProduct = async (productData: FishProduct) => {
+
+    console.log("Product details : ",productData)
+
+
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/product/add-product`, {
+            method: 'POST',
+            body: JSON.stringify(productData)
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        console.log("DATA : ",data)
+
+        if (!data.success) {
+            throw new Error('Failed to fetch user profile');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error add new fish to the list : ', error);
+        throw error;
+    }
+
 }

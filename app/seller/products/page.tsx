@@ -5,26 +5,27 @@ import { Plus, Edit } from 'lucide-react';
 import ProductsTable from '@/app/components/Seller/Products/ProductsTable';
 import RelatedProducts from '@/app/components/Seller/Products/RelatedProducts';
 import ProductDetails from '@/app/components/Seller/Products/ViewProduct/ProductDetails';
-import Form from '@/app/components/Seller/Products/AddOrEditProduct/Form';
+import Form, { FishProduct, FishProductView } from '@/app/components/Seller/Products/AddOrEditProduct/Form';
 import SearchProduct from '@/app/components/Seller/Products/SearchProduct';
 import FilterProduct from '@/app/components/Seller/Products/FilterProduct';
 import { Product, ProductView } from '@/app/types/types';
 import { productsMock } from '@/app/datasets/seller/productsData';
+import { categories } from '@/app/datasets/seller/categories';
 
 export default function Products() {
-    const [products, setProducts] = useState<Product[]>(productsMock);
-    const [view, setView] = useState<ProductView>('list');
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [editableProduct, setEditableProduct] = useState<Product | null>(null);
+    const [products, setProducts] = useState<FishProduct[] | undefined>();
+    const [view, setView] = useState<FishProductView>('list');
+    const [selectedProduct, setSelectedProduct] = useState<FishProduct | null>(null);
+    const [editableProduct, setEditableProduct] = useState<FishProduct | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All Categories');
     const [statusFilter, setStatusFilter] = useState('All');
-    const [sortBy, setSortBy] = useState<{ field: keyof Product | ''; direction: 'asc' | 'desc' }>({ field: '', direction: 'asc' });
+    const [sortBy, setSortBy] = useState<{ field: keyof FishProduct | ''; direction: 'asc' | 'desc' }>({ field: '', direction: 'asc' });
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
 
     // Function to handle filtering and sorting
-    const filteredProducts = products
+    const filteredProducts = products && products
         .filter(product => {
             const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,17 +34,17 @@ export default function Products() {
             const matchesCategory = selectedCategory === 'All Categories' || product.category === selectedCategory;
 
             const matchesStatus = statusFilter === 'All' ||
-                (statusFilter === 'Active' && product.status === 'active') ||
-                (statusFilter === 'Draft' && product.status === 'draft') ||
-                (statusFilter === 'Out of Stock' && product.status === 'out_of_stock');
+                (statusFilter === 'Active' && product.listing_status === 'active') ||
+                (statusFilter === 'Draft' && product.listing_status === 'draft') ||
+                (statusFilter === 'Out of Stock' && product.listing_status === 'out_of_stock');
 
             return matchesSearch && matchesCategory && matchesStatus;
         })
         .sort((a, b) => {
             if (!sortBy.field) return 0;
 
-            const fieldA = a[sortBy.field as keyof Product];
-            const fieldB = b[sortBy.field as keyof Product];
+            const fieldA = a[sortBy.field as keyof FishProduct];
+            const fieldB = b[sortBy.field as keyof FishProduct];
 
             if (typeof fieldA === 'string' && typeof fieldB === 'string') {
                 return sortBy.direction === 'asc'
@@ -63,40 +64,48 @@ export default function Products() {
     // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    const currentItems = filteredProducts?.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = filteredProducts && Math.ceil(filteredProducts.length / itemsPerPage);
 
     // Function to handle adding new product
     const handleAddProduct = () => {
-        const newProduct: Product = {
-            id: `PROD-${Math.floor(Math.random() * 10000).toString().padStart(3, '0')}`,
+        const newProduct: FishProduct = {
+            id: '',
             name: '',
             description: '',
             price: 0,
-            stock: 0,
-            category: 'Saltwater Fish',
+            quantity_available: 0,
+            category: '', // Aquatic Snails
             images: [],
-            featured: false,
-            status: 'draft',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            specifications: {},
-            weight: '',
-            dimensions: '',
-            tags: []
+            is_featured: false,
+            listing_status: 'active',
+            created_at: '',
+            updated_at: '',
+            size: '',
+            color: '',
+            care_instructions: {
+                tank_size: '',
+                temperature: '',
+                ph_level: '',
+                calcium: ''
+            },
+            dietary_requirements: {
+                food_type: '',
+                feeding_frequency: ''
+            }
         };
 
         setEditableProduct(newProduct);
         setView('add');
     };
 
-    const handleViewProduct = (product: Product) => {
+    const handleViewProduct = (product: FishProduct) => {
         setSelectedProduct(product);
         setView('view');
     };
 
     // Function to handle editing a product
-    const handleEditProduct = (product: Product) => {
+    const handleEditProduct = (product: FishProduct) => {
         setEditableProduct({ ...product });
         setView('edit');
     };
@@ -128,12 +137,12 @@ export default function Products() {
                             {/* Results Count */}
                             <div className="flex items-center justify-end">
                                 <span className="text-sm text-gray-600">
-                                    Showing {Math.min(filteredProducts.length, currentItems.length)} of {filteredProducts.length} products
+                                    Showing {filteredProducts && currentItems && Math.min(filteredProducts.length, currentItems.length)} of {filteredProducts?.length} products
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <ProductsTable
+                    {/* <ProductsTable
                         products={products}
                         setProducts={setProducts}
                         sortBy={sortBy}
@@ -147,12 +156,12 @@ export default function Products() {
                         currentItems={currentItems}
                         handleViewProduct={handleViewProduct}
                         handleEditProduct={handleEditProduct}
-                    />
+                    /> */}
                 </div>
             )}
 
             {/* Add/Edit Product Form */}
-            {(view === 'add' || view === 'edit') && editableProduct && (
+            {(view === 'add' || (view === 'edit' && editableProduct)) && (
                 <div>
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
@@ -169,7 +178,7 @@ export default function Products() {
                             Cancel
                         </button>
                     </div>
-                    <Form products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} />
+                    <Form products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} categories={categories} />
                 </div>
             )}
 
@@ -195,8 +204,8 @@ export default function Products() {
                             </button>
                         </div>
                     </div>
-                    <ProductDetails product={selectedProduct} />
-                    <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} />
+                    {/* <ProductDetails product={selectedProduct} />
+                    <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} /> */}
                 </div>
             )}
         </>

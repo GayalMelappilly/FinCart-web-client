@@ -45,3 +45,59 @@ body {
     --tw-gradient-to: var(--color-gold);
   }
 }
+
+
+
+/* Shimmer effect */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(226, 232, 240, 0.8), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pulse animation for the icon container */
+.skeleton-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .7;
+    transform: scale(0.95);
+  }
+}
+
+/* Progress bar animation */
+.skeleton-progress {
+  width: 0%;
+  border-radius: 9999px;
+  animation: progress 2.5s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+    opacity: 0.7;
+  }
+  50% {
+    width: 70%;
+    opacity: 0.9;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.7;
+  }
+}
