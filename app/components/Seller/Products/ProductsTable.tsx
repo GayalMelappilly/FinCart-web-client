@@ -2,22 +2,22 @@ import React, { FC } from 'react'
 import TableHead from './Table/TableHead'
 import TableProducts from './Table/TableProducts'
 import TablePagination from './Table/TablePagination'
-import { Product } from '@/app/types/types'
+import { FishProduct } from './AddOrEditProduct/Form'
 
 type Props = {
-    products: Product[],
-    setProducts: (products: Product[]) => void,
-    sortBy: { field: keyof Product | ''; direction: 'asc' | 'desc' },
-    setSortBy: (sortBy: { field: keyof Product | ''; direction: 'asc' | 'desc' }) => void,
+    products: FishProduct[] | undefined,
+    setProducts: (products: FishProduct[]) => void,
+    sortBy: { field: keyof FishProduct | ''; direction: 'asc' | 'desc' },
+    setSortBy: (sortBy: { field: keyof FishProduct | ''; direction: 'asc' | 'desc' }) => void,
     currentPage: number,
     setCurrentPage: (currentPage: number) => void,
-    filteredProducts: Product[],
+    filteredProducts: FishProduct[] | undefined,
     indexOfFirstItem: number,
     indexOfLastItem: number,
-    totalPages: number,
-    currentItems: Product[],
-    handleViewProduct: (product: Product) => void,
-    handleEditProduct: (product: Product) => void
+    totalPages: number | undefined,
+    currentItems: FishProduct[] | undefined,
+    handleViewProduct: (product: FishProduct) => void,
+    handleEditProduct: (product: FishProduct) => void
 }
 
 const ProductsTable: FC<Props> = ({ products, setProducts, sortBy, setSortBy, currentPage, setCurrentPage, filteredProducts, indexOfFirstItem, indexOfLastItem, totalPages, currentItems, handleViewProduct, handleEditProduct }) => {
@@ -27,14 +27,14 @@ const ProductsTable: FC<Props> = ({ products, setProducts, sortBy, setSortBy, cu
                 <table className="min-w-full divide-y divide-gray-200">
                     <TableHead sortBy={sortBy} setSortBy={setSortBy} />
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {currentItems.length === 0 ? (
+                        {currentItems?.length === 0 ? (
                             <tr>
                                 <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                                     No products found
                                 </td>
                             </tr>
                         ) : (
-                            currentItems.map((product) => (
+                            currentItems?.map((product) => (
                                 <TableProducts key={product.id} products={products} setProducts={setProducts} product={product} handleViewProduct={handleViewProduct} handleEditProduct={handleEditProduct} />
                             ))
                         )}

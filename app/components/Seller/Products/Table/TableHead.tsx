@@ -1,15 +1,16 @@
 import { Product } from '@/app/types/types';
 import { ArrowUpDown } from 'lucide-react'
 import React, { FC } from 'react'
+import { FishProduct } from '../AddOrEditProduct/Form';
 
 type Props = {
-    sortBy: {field: keyof Product | ''; direction: 'asc' | 'desc'},
-    setSortBy: (sortBy: {field: keyof Product | ''; direction: 'asc' | 'desc'}) => void,
+    sortBy: {field: keyof FishProduct | ''; direction: 'asc' | 'desc'},
+    setSortBy: (sortBy: {field: keyof FishProduct | ''; direction: 'asc' | 'desc'}) => void,
 }
 
 const TableHead:FC<Props> = ({ sortBy, setSortBy }) => {
 
-    const handleSort = (field: keyof Product) => {
+    const handleSort = (field: keyof FishProduct) => {
         if (sortBy.field === field) {
             setSortBy({
                 field,
@@ -54,11 +55,11 @@ const TableHead:FC<Props> = ({ sortBy, setSortBy }) => {
                 <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                    onClick={() => handleSort('stock')}
+                    onClick={() => handleSort('quantity_available')}
                 >
                     <div className="flex items-center">
                         Stock
-                        {sortBy.field === 'stock' && (
+                        {sortBy.field === 'quantity_available' && (
                             <ArrowUpDown className="h-4 w-4 ml-1" />
                         )}
                     </div>
@@ -78,11 +79,11 @@ const TableHead:FC<Props> = ({ sortBy, setSortBy }) => {
                 <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                    onClick={() => handleSort('status')}
+                    onClick={() => handleSort('listing_status')}
                 >
                     <div className="flex items-center">
                         Status
-                        {sortBy.field === 'status' && (
+                        {sortBy.field === 'listing_status' && (
                             <ArrowUpDown className="h-4 w-4 ml-1" />
                         )}
                     </div>
@@ -90,11 +91,11 @@ const TableHead:FC<Props> = ({ sortBy, setSortBy }) => {
                 <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                    onClick={() => handleSort('updatedAt')}
+                    onClick={() => handleSort('updated_at')}
                 >
                     <div className="flex items-center">
                         Last Updated
-                        {sortBy.field === 'updatedAt' && (
+                        {sortBy.field === 'updated_at' && (
                             <ArrowUpDown className="h-4 w-4 ml-1" />
                         )}
                     </div>

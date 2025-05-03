@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Edit } from 'lucide-react';
 import ProductsTable from '@/app/components/Seller/Products/ProductsTable';
 import RelatedProducts from '@/app/components/Seller/Products/RelatedProducts';
@@ -11,6 +11,9 @@ import FilterProduct from '@/app/components/Seller/Products/FilterProduct';
 import { Product, ProductView } from '@/app/types/types';
 import { productsMock } from '@/app/datasets/seller/productsData';
 import { categories } from '@/app/datasets/seller/categories';
+import { getSellerProducts } from '@/app/services/sellerAuthServices';
+import { useQuery } from '@tanstack/react-query';
+import Spinner from '@/app/components/LoadingSpinner/Spinner';
 
 export default function Products() {
     const [products, setProducts] = useState<FishProduct[] | undefined>();
@@ -23,6 +26,18 @@ export default function Products() {
     const [sortBy, setSortBy] = useState<{ field: keyof FishProduct | ''; direction: 'asc' | 'desc' }>({ field: '', direction: 'asc' });
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['get-seller-product'],
+        queryFn: getSellerProducts,
+    })
+
+    useEffect(() => {
+        if (data) setProducts(data.data.products)
+    }, [data])
+
+    if (error) console.log("Seller list error : ", error)
+    if (isLoading) return <Spinner />
 
     // Function to handle filtering and sorting
     const filteredProducts = products && products
@@ -142,7 +157,7 @@ export default function Products() {
                             </div>
                         </div>
                     </div>
-                    {/* <ProductsTable
+                    <ProductsTable
                         products={products}
                         setProducts={setProducts}
                         sortBy={sortBy}
@@ -156,7 +171,7 @@ export default function Products() {
                         currentItems={currentItems}
                         handleViewProduct={handleViewProduct}
                         handleEditProduct={handleEditProduct}
-                    /> */}
+                    />
                 </div>
             )}
 
@@ -204,8 +219,8 @@ export default function Products() {
                             </button>
                         </div>
                     </div>
-                    {/* <ProductDetails product={selectedProduct} />
-                    <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} /> */}
+                     <ProductDetails product={selectedProduct} />
+                    {/* <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} /> */}
                 </div>
             )}
         </>

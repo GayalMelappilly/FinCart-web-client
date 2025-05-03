@@ -1,28 +1,29 @@
 import { Product } from '@/app/types/types'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { FC } from 'react'
+import { FishProduct } from '../AddOrEditProduct/Form'
 
 type Props = {
     currentPage: number,
     setCurrentPage: (currentPage: number) => void,
-    filteredProducts: Product[],
+    filteredProducts: FishProduct[] | undefined,
     indexOfFirstItem: number,
     indexOfLastItem: number,
-    totalPages: number,
+    totalPages: number | undefined,
 }
 
 const TablePagination:FC<Props> = ({ currentPage, setCurrentPage, filteredProducts, indexOfFirstItem, indexOfLastItem, totalPages }) => {
 
     const paginate = (pageNumber: number) => {
-        if (pageNumber > 0 && pageNumber <= totalPages) {
+        if (totalPages && pageNumber > 0 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
         }
     };
 
     return (
         <>
-            {
-                filteredProducts.length > 0 && (
+            { filteredProducts && 
+                filteredProducts?.length > 0 && (
                     <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                             <div>
@@ -43,7 +44,7 @@ const TablePagination:FC<Props> = ({ currentPage, setCurrentPage, filteredProduc
                                         <ChevronLeft className="h-5 w-5" />
                                     </button>
 
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+                                    {totalPages && Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
                                         <button
                                             key={number}
                                             onClick={() => paginate(number)}

@@ -11,7 +11,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
         credentials: 'include',
     });
 
-    console.log("RES : ",res)
+    console.log("RES : ",res, url)
 
     if (res.status === 401) {
         try {

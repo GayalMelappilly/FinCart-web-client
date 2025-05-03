@@ -1,12 +1,21 @@
-import { Product } from '@/app/types/types'
+'use client'
+
 import { AlertCircle, Package, Tag } from 'lucide-react'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import { FishProduct } from '../AddOrEditProduct/Form'
+import formatCareInstructions from '@/app/utils/formatCareInstructions'
+import Image from 'next/image'
 
 type Props = {
-    product: Product
+    product: FishProduct
 }
 
-const ProductDetails:FC<Props> = ({product}) => {
+const ProductDetails: FC<Props> = ({ product }) => {
+
+    const [preview, setPreview] = useState<string>(product.images[0])
+ 
+    const formattedInstruction = formatCareInstructions(product.care_instructions);
+
     return (
         <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
             {/* Product Header */}
@@ -16,10 +25,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                     <div className="w-full md:w-1/3 mb-6 md:mb-0 md:pr-6">
                         <div className="bg-gray-100 rounded-lg overflow-hidden h-64 relative">
                             {product.images.length > 0 ? (
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center"
-                                    style={{ backgroundImage: `url('/api/placeholder/600/600')` }}
-                                />
+                                <Image className='absolute inset-0 bg-cover bg-center h-full w-full' src={preview} alt='fish-image' height={200} width={100} />
                             ) : (
                                 <div className="h-full flex items-center justify-center">
                                     <Package className="h-12 w-12 text-gray-400" />
@@ -31,11 +37,8 @@ const ProductDetails:FC<Props> = ({product}) => {
                         {product.images.length > 1 && (
                             <div className="mt-3 grid grid-cols-4 gap-2">
                                 {product.images.map((image, index) => (
-                                    <div key={index} className="h-16 bg-gray-100 rounded overflow-hidden">
-                                        <div
-                                            className="h-full bg-cover bg-center"
-                                            style={{ backgroundImage: `url('/api/placeholder/100/100')` }}
-                                        />
+                                    <div key={index} className="h-16 bg-gray-100 rounded overflow-hidden" onClick={()=>setPreview(image)}>
+                                        <Image className='h-full bg-cover bg-center' src={image} alt='fish-image' height={100} width={100} />
                                     </div>
                                 ))}
                             </div>
@@ -49,7 +52,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                                 <h2 className="text-2xl font-bold text-gray-900">{product.name}</h2>
                                 <div className="mt-1 flex items-center">
                                     <span className="text-sm text-gray-500">SKU: {product.id}</span>
-                                    {product.featured && (
+                                    {product.is_featured && (
                                         <span className="ml-3 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded-full">
                                             Featured
                                         </span>
@@ -57,18 +60,18 @@ const ProductDetails:FC<Props> = ({product}) => {
                                 </div>
                             </div>
 
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.status === 'active' ? 'bg-green-100 text-green-800' :
-                                product.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.listing_status === 'active' ? 'bg-green-100 text-green-800' :
+                                product.listing_status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
                                     'bg-red-100 text-red-800'
                                 }`}>
-                                {product.status === 'active' ? 'Active' :
-                                    product.status === 'draft' ? 'Draft' :
+                                {product.listing_status === 'active' ? 'Active' :
+                                    product.listing_status === 'draft' ? 'Draft' :
                                         'Out of Stock'}
                             </span>
                         </div>
 
                         <div className="mt-6">
-                            <div className="text-3xl font-bold text-gray-900">${product.price.toFixed(2)}</div>
+                            <div className="text-3xl font-bold text-gray-900">${Number(product.price).toFixed(2)}</div>
                             <div className="mt-2 flex items-center">
                                 <Tag className="h-5 w-5 text-gray-400 mr-1" />
                                 <span className="text-sm text-gray-500">{product.category}</span>
@@ -77,17 +80,17 @@ const ProductDetails:FC<Props> = ({product}) => {
 
                         <div className="mt-4">
                             <div className="flex items-center">
-                                <div className={`h-3 w-3 rounded-full mr-2 ${product.stock > 10 ? 'bg-green-500' :
-                                    product.stock > 0 ? 'bg-yellow-500' :
+                                <div className={`h-3 w-3 rounded-full mr-2 ${product.quantity_available > 10 ? 'bg-green-500' :
+                                    product.quantity_available > 0 ? 'bg-yellow-500' :
                                         'bg-red-500'
                                     }`} />
                                 <span className="text-sm font-medium">
-                                    {product.stock > 10 ? 'In Stock' :
-                                        product.stock > 0 ? 'Low Stock' :
+                                    {product.quantity_available > 10 ? 'In Stock' :
+                                        product.quantity_available > 0 ? 'Low Stock' :
                                             'Out of Stock'}
                                 </span>
                                 <span className="ml-2 text-sm text-gray-500">
-                                    ({product.stock} units available)
+                                    ({product.quantity_available} units available)
                                 </span>
                             </div>
                         </div>
@@ -97,7 +100,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                             <p className="text-gray-700">{product.description}</p>
                         </div>
 
-                        {product.tags.length > 0 && (
+                        {/* {product.tags.length > 0 && (
                             <div className="mt-4">
                                 <div className="flex flex-wrap gap-2">
                                     {product.tags.map((tag, index) => (
@@ -107,7 +110,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                                     ))}
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>
@@ -133,7 +136,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                     {/* Specifications Tab */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Left Column: Specifications */}
-                        <div>
+                        {/* <div>
                             <h3 className="text-lg font-medium text-gray-900 mb-4">Product Specifications</h3>
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <dl className="space-y-2">
@@ -148,7 +151,7 @@ const ProductDetails:FC<Props> = ({product}) => {
                                     )}
                                 </dl>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Right Column: Additional Info */}
                         <div>
@@ -157,19 +160,19 @@ const ProductDetails:FC<Props> = ({product}) => {
                                 <dl className="space-y-2">
                                     <div className="grid grid-cols-3 gap-4 py-2 border-b border-gray-200">
                                         <dt className="text-sm font-medium text-gray-500">Weight</dt>
-                                        <dd className="text-sm text-gray-900 col-span-2">{product.weight || 'N/A'}</dd>
+                                        <dd className="text-sm text-gray-900 col-span-2">{product.size || 'N/A'}</dd>
                                     </div>
-                                    <div className="grid grid-cols-3 gap-4 py-2 border-b border-gray-200">
+                                    {/* <div className="grid grid-cols-3 gap-4 py-2 border-b border-gray-200">
                                         <dt className="text-sm font-medium text-gray-500">Dimensions</dt>
                                         <dd className="text-sm text-gray-900 col-span-2">{product.dimensions || 'N/A'}</dd>
-                                    </div>
+                                    </div> */}
                                     <div className="grid grid-cols-3 gap-4 py-2 border-b border-gray-200">
                                         <dt className="text-sm font-medium text-gray-500">Created</dt>
-                                        <dd className="text-sm text-gray-900 col-span-2">{new Date(product.createdAt).toLocaleString()}</dd>
+                                        <dd className="text-sm text-gray-900 col-span-2">{new Date(product.created_at).toLocaleString()}</dd>
                                     </div>
                                     <div className="grid grid-cols-3 gap-4 py-2">
                                         <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
-                                        <dd className="text-sm text-gray-900 col-span-2">{new Date(product.updatedAt).toLocaleString()}</dd>
+                                        <dd className="text-sm text-gray-900 col-span-2">{new Date(product.updated_at).toLocaleString()}</dd>
                                     </div>
                                 </dl>
                             </div>
@@ -183,10 +186,11 @@ const ProductDetails:FC<Props> = ({product}) => {
                                         <div className="text-sm text-blue-800">
                                             <p>This species requires specific care conditions:</p>
                                             <ul className="list-disc ml-5 mt-2 space-y-1">
-                                                <li>Maintain water temperature between 74-78°F</li>
-                                                <li>pH levels should be 8.1-8.4</li>
-                                                <li>Regular feeding schedule: 2-3 times daily in small amounts</li>
-                                                <li>Acclimate slowly when introducing to a new tank</li>
+                                                {
+                                                    Object.entries(formattedInstruction).map(([key, value]) => (
+                                                        <li key={key}>{key}: {value}</li>
+                                                    ))
+                                                }
                                             </ul>
                                         </div>
                                     </div>

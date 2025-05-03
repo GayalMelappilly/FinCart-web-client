@@ -141,3 +141,84 @@ export const addProduct = async (productData: FishProduct) => {
     }
 
 }
+
+export const editProduct = async (productData: FishProduct) => {
+
+    console.log("Product details : ",productData)
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/product/edit-product/${productData.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(productData)
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        console.log("DATA : ",data)
+
+        if (!data.success) {
+            throw new Error('Product edit error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error edit fish : ', error);
+        throw error;
+    }
+
+}
+
+export const deleteProduct = async (productId: string) => {
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/product/delete-product/${productId}`, {
+            method: 'DELETE',
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        console.log("DATA : ",data)
+
+        if (!data.success) {
+            throw new Error('Product edit error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error edit fish : ', error);
+        throw error;
+    }
+}
+
+export const getSellerProducts = async () => {
+
+    console.log("Get seller products")
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+
+        const response = await fetchWithAuth(`${apiUrl}/seller/products`, {
+            method: 'GET'
+        }, accessToken, 'seller')
+
+        const data = await response
+
+        console.log('Seller list : ', data)
+
+        if (!data.success) {
+            throw new Error('Failed to fetch user profile');
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching the seller list : ', error);
+        throw error;
+    }
+}

@@ -2,7 +2,7 @@
 
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import Spinner from '@/app/components/LoadingSpinner/Spinner';
-import { addProduct } from '@/app/services/sellerAuthServices';
+import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation } from '@tanstack/react-query';
 import { DollarSign, FileImage, Info, X } from 'lucide-react';
 import React, { FC, useState } from 'react';
@@ -27,6 +27,7 @@ export interface FishProduct {
     care_instructions: Record<string, string>;
     dietary_requirements: Record<string, string>;
     view_count?: number;
+    fish_categories?: {id: string, name: string}
 }
 
 export type FishProductView = 'list' | 'add' | 'edit' | 'view';
@@ -53,6 +54,8 @@ const Form: FC<Props> = ({
 
     const [uploading, setUploading] = useState<boolean>(false)
 
+    console.log(editableProduct)
+
     const addMutation = useMutation({
         mutationFn: addProduct,
         onSuccess: (data) => {
@@ -63,6 +66,15 @@ const Form: FC<Props> = ({
         }
     })
 
+    const editMutation = useMutation({
+        mutationFn: editProduct,
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (err) => {
+            console.log('Edit product error : ',err)
+        }
+    })
 
     // Function to handle form submission
     const handleSubmit = (e: React.FormEvent) => {
@@ -81,11 +93,8 @@ const Form: FC<Props> = ({
             }
             addMutation.mutate(editableProduct)
         } else {
-            if (products && products?.length > 0) {
-                setProducts([...products, editableProduct]);
-            }else{
-                setProducts([editableProduct])
-            }
+            setProducts([editableProduct])
+            editMutation.mutate(editableProduct)
         }
 
         // Reset form and go back to list view
@@ -333,7 +342,7 @@ const Form: FC<Props> = ({
                                                 value={editableProduct?.category || ''}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="">Select a category</option>
+                                                <option value="">{editableProduct?.fish_categories?.name || 'Select the category'}</option>
                                                 {categories.map((category) => (
                                                     <option key={category.id} value={category.name}>
                                                         {category.name}
