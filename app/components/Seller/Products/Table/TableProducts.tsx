@@ -1,8 +1,7 @@
 'use client'
 
-import { Product } from '@/app/types/types'
 import { Edit, Eye, Package, Trash2 } from 'lucide-react'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { FishProduct } from '../AddOrEditProduct/Form'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'

@@ -57,6 +57,13 @@ interface PaymentSettings {
     min_payout_amount: number;
 }
 
+interface SalesHistory {
+    daily_sales: number;
+    order_count: number;
+    new_customers: number;
+    cancellations: number;
+}
+
 interface Business {
     id: string;
     businessInfo: BusinessInfo;
@@ -65,7 +72,7 @@ interface Business {
     metrics: Metrics;
     settings: Settings[];
     paymentSettings: PaymentSettings[];
-    recentSales: any[]; // Type can be specified more precisely if structure is known
+    recentSales: SalesHistory[]; 
     commission_rate: number;
     created_at: Date;
     updated_at: Date;

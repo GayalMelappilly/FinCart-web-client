@@ -1,7 +1,6 @@
 'use client'
 
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
-import Spinner from '@/app/components/LoadingSpinner/Spinner';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation } from '@tanstack/react-query';
 import { DollarSign, FileImage, Info, X } from 'lucide-react';

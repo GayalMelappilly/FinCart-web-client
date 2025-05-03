@@ -3,13 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit } from 'lucide-react';
 import ProductsTable from '@/app/components/Seller/Products/ProductsTable';
-import RelatedProducts from '@/app/components/Seller/Products/RelatedProducts';
+// import RelatedProducts from '@/app/components/Seller/Products/RelatedProducts';
 import ProductDetails from '@/app/components/Seller/Products/ViewProduct/ProductDetails';
 import Form, { FishProduct, FishProductView } from '@/app/components/Seller/Products/AddOrEditProduct/Form';
 import SearchProduct from '@/app/components/Seller/Products/SearchProduct';
 import FilterProduct from '@/app/components/Seller/Products/FilterProduct';
-import { Product, ProductView } from '@/app/types/types';
-import { productsMock } from '@/app/datasets/seller/productsData';
 import { categories } from '@/app/datasets/seller/categories';
 import { getSellerProducts } from '@/app/services/sellerAuthServices';
 import { useQuery } from '@tanstack/react-query';

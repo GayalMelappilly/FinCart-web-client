@@ -1,4 +1,3 @@
-import { Product } from '@/app/types/types';
 import { ArrowUpDown } from 'lucide-react'
 import React, { FC } from 'react'
 import { FishProduct } from '../AddOrEditProduct/Form';

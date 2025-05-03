@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
     Home,
+    LucideIcon,
     Package,
     ShoppingBag,
     User
@@ -27,7 +28,7 @@ interface LayoutProps {
 export type NavigationItem = {
     name: string;
     path: string;
-    icon: React.FC<any>;
+    icon: LucideIcon;
 };
 
 export default function Layout({ children }: LayoutProps) {
