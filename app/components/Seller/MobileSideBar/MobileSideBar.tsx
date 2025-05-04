@@ -1,4 +1,4 @@
-import { NavigationItem } from '@/app/seller/layout';
+import { NavigationItem } from '@/app/seller/layout-component';
 import { CircleArrowLeft, LogOut, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

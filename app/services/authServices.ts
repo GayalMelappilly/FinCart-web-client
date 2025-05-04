@@ -1,6 +1,7 @@
 import { AuthResponse } from "@/app/types/auth/types"
 import { ProfileFormData } from "@/app/types/types"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
+import { FishListFilters, FishListResponse } from "../types/list/fishList"
 
 const apiUrl = process.env.API_URL || 'http://localhost:5000/api/v1'
 
@@ -69,11 +70,10 @@ export const refreshAccessToken = async (): Promise<ProfileFormData | null> => {
 
 // Get current user
 export const getCurrentUser = async (accessToken: string): Promise<ProfileFormData> => {
-
   try {
     const response = await fetchWithAuth(`${apiUrl}/get-current-user`, {
       method: 'GET',
-    },accessToken, 'user')
+    }, accessToken, 'user')
 
     const data = await response;
 
@@ -83,6 +83,45 @@ export const getCurrentUser = async (accessToken: string): Promise<ProfileFormDa
     return data.user;
   } catch (error) {
     console.error('Fetch user profile error:', error);
+    throw error;
+  }
+};
+
+export const getFishList = async (filters: FishListFilters = {}): Promise<FishListResponse> => {
+  
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    
+    // Add all filters to query parameters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, String(value));
+      }
+    });
+    
+    // Construct the URL with query parameters
+    const url = `${apiUrl}/fish-list${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    // Make the fetch request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error fetching fish listings: ${response.status}`);
+    }
+    
+    const data: FishListResponse = await response.json();
+
+    console.log('fish list : ',data)
+
+    return data;
+  } catch (error) {
+    console.error('Error fetching fish listings:', error);
     throw error;
   }
 };

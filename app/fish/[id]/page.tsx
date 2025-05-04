@@ -5,14 +5,44 @@ import Header from '@/app/components/Header/Header';
 import BackButton from '@/app/components/BackButton/BackButton';
 import Preview from '@/app/components/FishDetails/Preview';
 import CareInfo from '@/app/components/FishDetails/CareInfo';
-import { fishData } from '@/app/datasets/fishDetails';
 import FishInfo from '@/app/components/FishDetails/FishInfo';
 import FAQ from '@/app/components/FishDetails/FAQ';
-import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
+// import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 import BreederInfo from '@/app/components/FishDetails/BreederInfo';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { decodeFishData } from '@/app/utils/uriComponent';
+import { FishListing } from '@/app/types/list/fishList';
+import Spinner from '@/app/components/LoadingSpinner/Spinner';
 
 export default function Page() {
-  const fish = fishData;
+  // Use App Router hooks instead of Pages Router
+  // const params = useParams();
+  const searchParams = useSearchParams();
+  
+  // const id = params?.id;
+  const data = searchParams?.get('data');
+  
+  const [fishData, setFishData] = useState<FishListing | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    
+    // Only use data from URL parameter
+    if (data && typeof data === 'string') {
+      try {
+        const decodedFish = decodeFishData(data);
+        setFishData(decodedFish);
+      } catch (error) {
+        console.error('Failed to decode fish data from URL:', error);
+      }
+    }
+    
+    setIsLoading(false);
+  }, [data]);
+
+  if(isLoading) return <Spinner />
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -30,16 +60,16 @@ export default function Page() {
           </div>
           
           <div className="w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6">
-            <FishInfo fish={fish} />
+            <FishInfo fish={fishData} />
             <div className="sm:hidden">
               <BreederInfo />
             </div>
-            <CareInfo fish={fish} />
+            <CareInfo />
           </div>
         </div>
         
         <div className="mt-8 sm:mt-12">
-          <RelatedFishRecommendation relatedFish={fish.relatedFish} />
+          {/* <RelatedFishRecommendation relatedFish={fish.relatedFish} /> */}
         </div>
         <div className="mt-8 sm:mt-12">
           <FAQ />
