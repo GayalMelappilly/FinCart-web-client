@@ -15,7 +15,6 @@ const FishInfo: FC<Props> = ({ fish }) => {
     const params = useParams();
     const id = params?.id as string;
 
-
     const [quantity, setQuantity] = useState(1);
 
     const incrementQuantity = () => {
@@ -75,7 +74,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
             </div>
 
             <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="flex border border-gray-300 rounded-md">
+                <div className="flex border border-gray-300 rounded-md w-fit">
                     <button
                         onClick={decrementQuantity}
                         className="px-4 py-2 text-gray-600 hover:bg-gray-100"

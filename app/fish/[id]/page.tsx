@@ -10,18 +10,10 @@ import FAQ from '@/app/components/FishDetails/FAQ';
 // import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 import BreederInfo from '@/app/components/FishDetails/BreederInfo';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { decodeFishData } from '@/app/utils/uriComponent';
 import { FishListing } from '@/app/types/list/fishList';
 import Spinner from '@/app/components/LoadingSpinner/Spinner';
 
 export default function Page() {
-  // Use App Router hooks instead of Pages Router
-  // const params = useParams();
-  const searchParams = useSearchParams();
-  
-  // const id = params?.id;
-  const data = searchParams?.get('data');
   
   const [fishData, setFishData] = useState<FishListing | undefined>();
   const [isLoading, setIsLoading] = useState(true);
@@ -29,18 +21,17 @@ export default function Page() {
   useEffect(() => {
     setIsLoading(true);
     
-    // Only use data from URL parameter
-    if (data && typeof data === 'string') {
+    const data = localStorage.getItem('selectedFish')
+    if (data) {
       try {
-        const decodedFish = decodeFishData(data);
-        setFishData(decodedFish);
+        setFishData(JSON.parse(data));
       } catch (error) {
         console.error('Failed to decode fish data from URL:', error);
       }
     }
     
     setIsLoading(false);
-  }, [data]);
+  }, []);
 
   if(isLoading) return <Spinner />
 
@@ -53,16 +44,16 @@ export default function Page() {
       <main className="container mx-auto px-4 sm:px-6 md:px-30 py-4 sm:py-6">
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           <div className='w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6'>
-            <Preview />
+            <Preview images={fishData?.images} />
             <div className="hidden sm:block">
-              <BreederInfo />
+              <BreederInfo breeder={fishData?.seller} />
             </div>
           </div>
           
           <div className="w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6">
             <FishInfo fish={fishData} />
             <div className="sm:hidden">
-              <BreederInfo />
+              <BreederInfo breeder={fishData?.seller} />
             </div>
             <CareInfo />
           </div>

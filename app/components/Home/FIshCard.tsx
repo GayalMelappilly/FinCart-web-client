@@ -1,7 +1,6 @@
 import { FishListing } from '@/app/types/list/fishList';
-import { encodeFishData } from '@/app/utils/uriComponent';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { FC } from 'react'
 
 type Props = {
@@ -18,13 +17,15 @@ const PlaceholderImage = () => (
 
 const FishCard:FC<Props> = ({fish}) => {
 
-    const encodedData = encodeFishData(fish)
+    const router = useRouter()
+
+    const HandleClick = () => {
+        localStorage.setItem('selectedFish', JSON.stringify(fish))
+        router.push(`/fish/${fish.id}`);
+    }
 
     return (
-        <Link href={{
-            pathname: `/fish/${fish.id}`,
-            query: { data: encodedData }
-            }} className="group">
+        <div onClick={HandleClick} className="group">
             <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full flex flex-col">
                 <div className="h-48 overflow-hidden relative">
                     {fish.images && fish.images.length > 0 ? (
@@ -85,7 +86,7 @@ const FishCard:FC<Props> = ({fish}) => {
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 }
 

@@ -9,6 +9,12 @@ export interface FishCategory {
     id: string;
     display_name: string;
     logo_url: string | null;
+    seller_addresses: {
+      seller_locations: {
+        city: string;
+        state: string;
+      }
+    }
   }
   
   export interface FishListing {

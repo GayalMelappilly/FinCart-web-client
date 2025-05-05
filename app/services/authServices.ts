@@ -2,8 +2,11 @@ import { AuthResponse } from "@/app/types/auth/types"
 import { ProfileFormData } from "@/app/types/types"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
 import { FishListFilters, FishListResponse } from "../types/list/fishList"
+import { config } from "dotenv"
+import { SellerProfileResponse } from "../types/sellerProfile/type"
+config()
 
-const apiUrl = process.env.API_URL || 'http://localhost:5000/api/v1'
+const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
 
 // Signup user
 export const signUpUser = async (phoneNumber: string) => {
@@ -87,22 +90,25 @@ export const getCurrentUser = async (accessToken: string): Promise<ProfileFormDa
   }
 };
 
+// Get fish list
 export const getFishList = async (filters: FishListFilters = {}): Promise<FishListResponse> => {
-  
+
   try {
     // Build query parameters
     const queryParams = new URLSearchParams();
-    
+
     // Add all filters to query parameters
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         queryParams.append(key, String(value));
       }
     });
-    
+
     // Construct the URL with query parameters
     const url = `${apiUrl}/fish-list${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    
+
+    console.log(url)
+
     // Make the fetch request
     const response = await fetch(url, {
       method: 'GET',
@@ -110,14 +116,14 @@ export const getFishList = async (filters: FishListFilters = {}): Promise<FishLi
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!response.ok) {
       throw new Error(`Error fetching fish listings: ${response.status}`);
     }
-    
+
     const data: FishListResponse = await response.json();
 
-    console.log('fish list : ',data)
+    console.log('fish list : ', data)
 
     return data;
   } catch (error) {
@@ -125,3 +131,26 @@ export const getFishList = async (filters: FishListFilters = {}): Promise<FishLi
     throw error;
   }
 };
+
+// Get breeder info
+export const getBreederInfo = async (id: string): Promise<SellerProfileResponse> => {
+  try {
+    const response = await fetch(`${apiUrl}/get-seller/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error('Failed to fetch breeder profile');
+    }
+    return data;
+  } catch (error) {
+    console.error('Fetch user breeder error:', error);
+    throw error;
+  }
+}
+

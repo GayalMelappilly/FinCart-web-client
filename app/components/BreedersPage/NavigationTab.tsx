@@ -7,7 +7,7 @@ type Props = {
 
 const NavigationTab: FC<Props> = ({ activeTab, setActiveTab }) => {
     return (
-        <nav className="bg-white border-b border-gray-200 mx-2 sm:mx-4 md:mx-6 lg:mx-8">
+        <nav className="max-w-6xl bg-white border-b py-4 border rounded-lg shadow-sm border-gray-200 md:mx-auto lg:mx-auto">
             <div className="container mx-auto px-2 sm:px-4">
                 <div className="flex justify-center sm:justify-start overflow-x-auto">
                     <button
