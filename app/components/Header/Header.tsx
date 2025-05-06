@@ -1,6 +1,6 @@
 'use client'
 
-import { getCurrentUser } from '@/app/services/authServices';
+import { getCurrentUser, logoutUser } from '@/app/services/authServices';
 import { ProfileFormData } from '@/app/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
     username?: string;
@@ -18,6 +19,8 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
     const [user, setUser] = useState<ProfileFormData>()
     const [accessToken, setAccessToken] = useState('');
+
+    const router = useRouter()
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -31,9 +34,24 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         enabled: !!accessToken
     })
 
+    const logoutQuery = useQuery({
+        queryKey: ['logout-user'],
+        queryFn: () => logoutUser(accessToken),
+        enabled: false 
+    });
+
     useEffect(() => {
+        console.log(data)
         if (data) setUser(data)
     }, [data])
+
+    useEffect(()=>{
+        if (logoutQuery.data) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('accessToken')
+            router.push('/');
+        }
+    },[logoutQuery.data])
 
     if (error) console.log("ERROR HEADER COMP : ", error)
     if (isLoading) return <Spinner />
@@ -47,6 +65,12 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     const toggleProfileMenu = (): void => {
         setProfileMenuOpen(!profileMenuOpen);
     };
+    
+    const HandleLogout = () => {
+        logoutQuery.refetch(); 
+    }
+
+    if (isLoading) return <Spinner />;
 
     return (
         <header className="bg-white shadow-sm relative">
@@ -131,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                                                 Settings
                                             </Link>
                                             <div className="border-t border-gray-100">
-                                                <button className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                                <button onClick={HandleLogout} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                                     Sign out
                                                 </button>
                                             </div>

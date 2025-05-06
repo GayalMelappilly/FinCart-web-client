@@ -7,7 +7,7 @@ import Header from '@/app/components/Header/Header';
 import BackButton from '@/app/components/BackButton/BackButton';
 import ShippingSection from '@/app/components/Checkout/ShippingSection';
 import PaymentSection from '@/app/components/Checkout/PaymentSection';
-import OrderSummary from '@/app/components/Checkout/OrderSummary';
+import { OrderSummary } from '@/app/components/Checkout/OrderSummary';
 import Footer from '@/app/components/Footer/Footer';
 
 const Page = () => {
@@ -77,7 +77,7 @@ const Page = () => {
 
                     {isOrderSummaryOpen && (
                         <div className="mt-4 duration-300">
-                            <OrderSummary orderDetails={orderDetails} />
+                            <OrderSummary />
                         </div>
                     )}
                 </div>
@@ -99,7 +99,7 @@ const Page = () => {
                     {/* Desktop Order Summary - Hidden on mobile */}
                     <div className="hidden lg:block lg:w-1/3">
                         <div className="sticky top-4">
-                            <OrderSummary orderDetails={orderDetails} />
+                            <OrderSummary />
                         </div>
                     </div>
                 </div>

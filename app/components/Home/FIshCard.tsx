@@ -2,6 +2,7 @@ import { FishListing } from '@/app/types/list/fishList';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react'
+import { roboto } from '../Fonts/Fonts';
 
 type Props = {
     fish: FishListing
@@ -82,7 +83,7 @@ const FishCard:FC<Props> = ({fish}) => {
                     </div>
 
                     <div className="mt-auto">
-                        <p className="text-blue-600 font-medium text-lg">₹{Number(fish.price).toFixed(2)}</p>
+                        <p className={`text-blue-600 font-medium text-lg ${roboto.className}`}>₹{Number(fish.price).toFixed(2)}</p>
                     </div>
                 </div>
             </div>

@@ -98,7 +98,7 @@ export const logoutSeller = async (accessToken: string) => {
 
         const data = await response;
 
-        await fetch('/api/auth/logout', {
+        await fetch('/api/seller/logout', {
             credentials: 'include',
         })
 

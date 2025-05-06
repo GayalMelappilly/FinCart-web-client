@@ -1,6 +1,7 @@
-import { CartItem } from '@/app/datasets/cartItems';
+import { CartItem } from '@/app/types/cart/type';
 import React, { FC, useState } from 'react'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
+import { roboto } from '../Fonts/Fonts';
 
 type Props = {
     cartItems: CartItem[],
@@ -12,11 +13,11 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
     const [promoApplied, setPromoApplied] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = subtotal > 100 ? 0 : 12.99;
+    const subtotal = cartItems?.reduce((sum, item) => sum + (Number(item.fish_listings.price) * item.quantity), 0);
+    const shipping = subtotal > 100 ? 0 : 60;
     const discount = promoApplied ? subtotal * 0.1 : 0;
-    const tax = (subtotal - discount) * 0.07;
-    const total = subtotal + shipping + tax - discount;
+    // const tax = (subtotal - discount) * 0.07;
+    const total = subtotal + shipping - discount;
 
     const applyPromoCode = () => {
         setLoading(true);
@@ -39,31 +40,31 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
                     <div className="space-y-4">
                         <div className="flex justify-between">
                             <span className="text-gray-600">Subtotal</span>
-                            <span className="text-gray-800 font-medium">${subtotal.toFixed(2)}</span>
+                            <span className={`text-gray-800 font-medium ${roboto.className}`}>₹{subtotal?.toFixed(2)}</span>
                         </div>
 
                         <div className="flex justify-between">
                             <span className="text-gray-600">Shipping</span>
-                            <span className="text-gray-800 font-medium">
-                                {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
+                            <span className={`text-gray-800 font-medium ${roboto.className}`}>
+                                {shipping === 0 ? 'Free' : `₹${shipping.toFixed(2)}`}
                             </span>
                         </div>
 
                         {promoApplied && (
                             <div className="flex justify-between text-green-600">
                                 <span>Discount (10%)</span>
-                                <span>-${discount.toFixed(2)}</span>
+                                <span className={`${roboto.className}`}>-₹{discount.toFixed(2)}</span>
                             </div>
                         )}
 
-                        <div className="flex justify-between">
+                        {/* <div className="flex justify-between">
                             <span className="text-gray-600">Tax (7%)</span>
-                            <span className="text-gray-800 font-medium">${tax.toFixed(2)}</span>
-                        </div>
+                            <span className="text-gray-800 font-medium">₹{tax.toFixed(2)}</span>
+                        </div> */}
 
                         <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
                             <span className="text-lg font-semibold text-gray-800">Total</span>
-                            <span className="text-xl font-bold text-blue-600">${total.toFixed(2)}</span>
+                            <span className={`text-xl font-bold text-blue-600 ${roboto.className}`}>₹{total.toFixed(2)}</span>
                         </div>
                     </div>
 

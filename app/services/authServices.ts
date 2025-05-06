@@ -4,6 +4,7 @@ import { fetchWithAuth } from "../lib/fetchWithAuth"
 import { FishListFilters, FishListResponse } from "../types/list/fishList"
 import { config } from "dotenv"
 import { SellerProfileResponse } from "../types/sellerProfile/type"
+import { StandardResponse } from "../types/cart/type"
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -71,6 +72,30 @@ export const refreshAccessToken = async (): Promise<ProfileFormData | null> => {
   }
 };
 
+export const logoutUser = async (accessToken: string) => {
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/logout`, {
+      method: 'GET',
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    await fetch('/api/users/logout', {
+      credentials: 'include',
+    })
+
+    if (!data.success) {
+      throw new Error('Failed to fetch user profile');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Fetch user profile error:', error);
+    throw error;
+  }
+}
+
 // Get current user
 export const getCurrentUser = async (accessToken: string): Promise<ProfileFormData> => {
   try {
@@ -80,10 +105,16 @@ export const getCurrentUser = async (accessToken: string): Promise<ProfileFormDa
 
     const data = await response;
 
-    if (!data.user.id) {
+    console.log('data user : ', data)
+
+    if (!data.id) {
       throw new Error('Failed to fetch user profile');
     }
-    return data.user;
+
+    localStorage.setItem('user', JSON.stringify(data))
+
+    return data;
+
   } catch (error) {
     console.error('Fetch user profile error:', error);
     throw error;
@@ -154,3 +185,84 @@ export const getBreederInfo = async (id: string): Promise<SellerProfileResponse>
   }
 }
 
+export const addToCart = async (item: { fishId: string | undefined, quantity: number }) => {
+
+  const accessToken = localStorage.getItem('accessToken')
+  console.log(item)
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/cart/add-item`, {
+      method: 'POST',
+      body: JSON.stringify(item)
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Failed to fetch breeder profile');
+    }
+    return data;
+  } catch (error) {
+    console.error('Fetch user breeder error:', error);
+    throw error;
+  }
+}
+
+export const editCartItem = async (item: { id: string, quantity: string | number }): Promise<StandardResponse> => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/cart/edit-item`, {
+      method: 'PUT',
+      body: JSON.stringify(item)
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Failed to fetch breeder profile');
+    }
+    return data;
+  } catch (error) {
+    console.error('Fetch user breeder error:', error);
+    throw error;
+  }
+}
+
+export const deleteCartItem = async (id: string): Promise<StandardResponse> => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/cart/remove-item/${id}`, {
+      method: 'DELETE',
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Delete from cart unsuccessful');
+    }
+    return data;
+  } catch (error) {
+    console.error('Failed to delete item from cart:', error);
+    throw error;
+  }
+}

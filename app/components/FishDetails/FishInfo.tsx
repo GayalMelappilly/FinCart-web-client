@@ -1,6 +1,8 @@
 'use client'
 
+import { addToCart } from '@/app/services/authServices'
 import { FishListing } from '@/app/types/list/fishList'
+import { useMutation } from '@tanstack/react-query'
 import { CreditCard, Heart, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -17,6 +19,16 @@ const FishInfo: FC<Props> = ({ fish }) => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const mutation = useMutation({
+        mutationFn: addToCart,
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (err) => {
+            console.log('User profile error : ', err)
+        }
+    })
+
     const incrementQuantity = () => {
         if (fish && quantity < fish.quantityAvailable) {
             setQuantity(quantity + 1);
@@ -29,10 +41,12 @@ const FishInfo: FC<Props> = ({ fish }) => {
         }
     };
 
-    const addToCart = () => {
-        // Logic to add the fish to the cart would go here
-        console.log(`Added ${quantity} ${fish?.name} to cart`);
-        // Navigate to cart page or show confirmation
+    const HandleAddToCart = () => {
+        const item = {
+            fishId: fish?.id,
+            quantity
+        }
+        mutation.mutate(item)
     };
 
     const addToWishlist = () => {
@@ -68,7 +82,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
                 <span className={`font-medium ${fish && fish?.quantityAvailable > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {fish && fish?.quantityAvailable > 0 ? 'In Stock' : 'Out of Stock'}
                 </span>
-                {fish &&fish?.quantityAvailable > 0 && (
+                {fish && fish?.quantityAvailable > 0 && (
                     <span className="ml-2 text-gray-500">({fish?.quantityAvailable} available)</span>
                 )}
             </div>
@@ -95,7 +109,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
                 </div>
 
                 <button
-                    onClick={addToCart}
+                    onClick={HandleAddToCart}
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 text-lg font-semibold rounded-md transition-colors flex items-center justify-center"
                 >
                     <ShoppingCart size={20} className="mr-2" />
@@ -103,7 +117,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
                 </button>
 
                 <Link
-                    href={`${id}/checkout`}
+                    href={`${id}-&${quantity}/checkout`}
                     className="gap-2 rounded-md bg-amber-500/80 hover:bg-amber-500 px-6 py-3 text-white text-lg font-semibold transition-colors flex items-center justify-center"
                 >
                     <CreditCard size={20} className="text-white" />
