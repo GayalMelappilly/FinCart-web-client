@@ -1,10 +1,9 @@
 'use client'
 
-import { CartItem, FishListing } from '@/app/types/cart/type'
+import { CartItem } from '@/app/types/cart/type'
 import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi'
-import RupeeSymbol from '../RupeeSymbol/RupeeSymbol'
 import { roboto } from '../Fonts/Fonts'
 import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem, editCartItem } from '@/app/services/authServices'
@@ -27,7 +26,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
             quantities[item.fish_listings.id] = item.quantity;
         });
         setOriginalQuantities(quantities);
-    }, []);
+    }, [cartItems]);
 
     const deleteMutation = useMutation({
         mutationFn: deleteCartItem,

@@ -5,18 +5,19 @@ import Head from 'next/head';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import OrderSummary from '../components/Cart/OrderSummary';
-import RelatedProducts from '../components/Cart/RelatedProducts';
+// import RelatedProducts from '../components/Cart/RelatedProducts';
 import CartIsEmpty from '../components/Cart/CartIsEmpty';
 import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 import CartItems from '../components/Cart/CartItems';
 import { CartItem } from '../types/cart/type';
+import Spinner from '../components/LoadingSpinner/Spinner';
 
 const Page: React.FC = () => {
 
     const [cartItems, setCartItems] = useState<CartItem[]>();
     const [isLoading, setIsLoading] = useState(true);
-    const [ordersCount, setOrderCount] = useState<number | null>()
-    const [wishlistCount, setWishlistCount] = useState<number | null>()
+    // const [ordersCount, setOrderCount] = useState<number | null>()
+    // const [wishlistCount, setWishlistCount] = useState<number | null>()
 
     const storageData = typeof window !== 'undefined' ? localStorage.getItem('user') : ''
     const userData = storageData ? JSON.parse(storageData) : ''
@@ -29,9 +30,12 @@ const Page: React.FC = () => {
             }
             setIsLoading(false);
         } catch (err) {
+            console.log(err)
             setIsLoading(false);
         }
-    }, []);
+    }, [userData]);
+
+    if(isLoading) return (<Spinner />)
 
     return (
         <div className="min-h-screen bg-gray-50">

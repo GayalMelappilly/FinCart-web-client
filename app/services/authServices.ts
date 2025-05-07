@@ -1,4 +1,4 @@
-import { AuthResponse } from "@/app/types/auth/types"
+import { AuthResponse, LoginCredentials } from "@/app/types/auth/types"
 import { ProfileFormData } from "@/app/types/types"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
 import { FishListFilters, FishListResponse } from "../types/list/fishList"
@@ -71,6 +71,31 @@ export const refreshAccessToken = async (): Promise<ProfileFormData | null> => {
     throw error;
   }
 };
+
+export const loginUser = async (formData: LoginCredentials) => {
+
+  if (!formData.identifier || !formData.password) {
+    return Error('Identifier and password must be provided')
+  }
+
+  try {
+    const response = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(formData)
+    })
+
+    const data = await response.json()
+    console.log("data :", data)
+    return data
+  } catch (error) {
+    console.error('Login error : ', error)
+    throw error;
+  }
+}
 
 export const logoutUser = async (accessToken: string) => {
 

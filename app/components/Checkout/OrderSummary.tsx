@@ -1,10 +1,9 @@
 'use client'
 
-import { OrderDetailsType } from '@/app/types/types'
 import { FishListing } from '@/app/types/list/fishList';
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { roboto } from '../Fonts/Fonts';
 

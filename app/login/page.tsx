@@ -6,7 +6,7 @@ import Footer from '../components/Footer/Footer';
 import LoginBox from '../components/Login/LoginBox';
 
 const Page: React.FC = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  // const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ const Page: React.FC = () => {
           <title>Sign Up | Fincart</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <LoginBox isLoading={isLoading} setIsLoading={setIsLoading} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
+        <LoginBox isLoading={isLoading} setIsLoading={setIsLoading} />
       </div>
       <Footer />
     </>

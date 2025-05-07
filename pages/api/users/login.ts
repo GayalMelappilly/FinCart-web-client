@@ -11,16 +11,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log("form data: ",req.body)
 
   try {
-    const response = await fetch(`${apiUrl}/seller/login`, {
+    const response = await fetch(`${apiUrl}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(req.body),
       credentials: 'include'
     });
 
+    console.log(response)
+
     if (!response.ok) {
       const err = await response.json();
-      return res.status(response.status).json({success: false, error: err.message || 'Something went wrong' });
+      return res.status(response.status).json({ success: false, error: err.message || 'Something went wrong' });
     }
 
     const data = await response.json();
@@ -31,14 +33,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { accessToken, refreshToken } = data.data;
 
     res.setHeader('Set-Cookie', [
-      serialize('sellerAccessToken', accessToken, {
+      serialize('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 15,
       }),
-      serialize('sellerRefreshToken', refreshToken, {
+      serialize('refreshToken', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -47,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }),
     ]);
 
-    return res.status(200).json({ message: 'Seller logged in', accessToken: accessToken});
+    return res.status(200).json({ message: 'User logged in', accessToken: accessToken});
   } catch (error) {
     console.error('Proxy error:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
