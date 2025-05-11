@@ -45,6 +45,7 @@ const CreateProfilePage: React.FC = () => {
     mutationFn: createProfile,
     onSuccess: (data) => {
       localStorage.setItem('accessToken',data.accessToken as string)
+      localStorage.removeItem('email-address')
       router.push('/');
     },
     onError: (err) => {

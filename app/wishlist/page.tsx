@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '../components/Header/Header';
 import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
@@ -13,10 +13,33 @@ import { wishlistData } from '../datasets/wishlistItems';
 import DiscoverButton from '../components/Wishlist/DiscoverButton';
 import RecentlyViewed from '../components/Wishlist/RecentlyViewed';
 import TipsSection from '../components/Wishlist/TipsSection';
+import Spinner from '../components/LoadingSpinner/Spinner';
 
 const Page: React.FC = () => {
     // Sample wishlist items
-    const [wishlistItems, setWishlistItems] = useState<WishlistItemInterface[]>(wishlistData);
+    const [wishlistItems, setWishlistItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    // const [ordersCount, setOrderCount] = useState<number | null>()
+    // const [wishlistCount, setWishlistCount] = useState<number | null>()
+
+
+    useEffect(() => {
+        try {
+            const storageData = typeof window !== 'undefined' ? localStorage.getItem('user') : ''
+            const userData = storageData ? JSON.parse(storageData) : ''
+            setIsLoading(true);
+            if (userData) {
+                setWishlistItems(userData.wishlists[0].wishlistItems)
+            }
+            setIsLoading(false);
+        } catch (err) {
+            console.log(err)
+            setIsLoading(false);
+        }
+    }, []);
+    
+    if(wishlistItems) console.log('wishlist Items : ', wishlistItems)
+    if (isLoading) return (<Spinner />)
 
     return (
         <>
@@ -28,12 +51,12 @@ const Page: React.FC = () => {
                 <Header />
                 <ContinueShoppingButton />
                 <main className="container mx-auto px-4 md:px-30 py-8">
-                    {wishlistItems.length > 0 ? (
+                    {wishlistItems && wishlistItems.length > 0 ? (
                         <>
                             <ShareWishlist wishlistItems={wishlistItems} />
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                {wishlistItems.map((item) => (
-                                    <WishlistItem key={item.id} item={item} wishlistItems={wishlistItems} setWishlistItems={setWishlistItems} />
+                                {wishlistItems.map((item, index) => (
+                                    <WishlistItem key={index} wishlistItems={item} />
                                 ))}
                             </div>
                             <DiscoverButton />

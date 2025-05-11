@@ -9,6 +9,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
 import { useRouter } from 'next/navigation';
+import { UserType } from '@/app/types/user/type';
 
 interface HeaderProps {
     username?: string;
@@ -17,7 +18,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ username }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
-    const [user, setUser] = useState<ProfileFormData | null>()
+    const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
 
     const router = useRouter()
@@ -28,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         }
     }, []);
     
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['get-current-user'],
         queryFn: () => getCurrentUser(accessToken),
         enabled: !!accessToken
@@ -134,11 +135,11 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                         <div className="relative">
                             <button
                                 onClick={toggleProfileMenu}
-                                className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profile_picture_url ? 'my-2' : 'p-2'}`}
+                                className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
                                 aria-label="Profile"
                             >
                                 {/* <p className='px-1'>{user.fullName?.charAt(0).toUpperCase()}</p> */}
-                                {user?.profile_picture_url ? <Image src={user.profile_picture_url} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
+                                {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
                             </button>
 
                             {/* Profile dropdown menu */}

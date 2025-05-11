@@ -9,8 +9,8 @@ import OrderSummary from '../components/Cart/OrderSummary';
 import CartIsEmpty from '../components/Cart/CartIsEmpty';
 import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 import CartItems from '../components/Cart/CartItems';
-import { CartItem } from '../types/cart/type';
 import Spinner from '../components/LoadingSpinner/Spinner';
+import { CartItem } from '../types/user/type';
 
 const Page: React.FC = () => {
 
@@ -19,21 +19,21 @@ const Page: React.FC = () => {
     // const [ordersCount, setOrderCount] = useState<number | null>()
     // const [wishlistCount, setWishlistCount] = useState<number | null>()
 
-    const storageData = typeof window !== 'undefined' ? localStorage.getItem('user') : ''
-    const userData = storageData ? JSON.parse(storageData) : ''
-
+    
     useEffect(() => {
         try {
+            const storageData = typeof window !== 'undefined' ? localStorage.getItem('user') : ''
+            const userData = storageData ? JSON.parse(storageData) : ''
             setIsLoading(true);
             if (userData) {
-                setCartItems(userData.shopping_carts[0].cart_items)
+                setCartItems(userData.shoppingCarts[0].cartItems)
             }
             setIsLoading(false);
         } catch (err) {
             console.log(err)
             setIsLoading(false);
         }
-    }, [userData]);
+    }, []);
 
     if(isLoading) return (<Spinner />)
 

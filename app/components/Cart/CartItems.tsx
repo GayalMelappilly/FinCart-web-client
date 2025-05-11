@@ -1,12 +1,12 @@
 'use client'
 
-import { CartItem } from '@/app/types/cart/type'
 import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi'
 import { roboto } from '../Fonts/Fonts'
 import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem, editCartItem } from '@/app/services/authServices'
+import { CartItem } from '@/app/types/user/type'
 
 type Props = {
     cartItems: CartItem[],
@@ -21,9 +21,11 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
 
     // Initialize original quantities when cart items load
     useEffect(() => {
+        if (!cartItems || cartItems.length === 0) return;
+
         const quantities: Record<string, number> = {};
         cartItems.forEach(item => {
-            quantities[item.fish_listings.id] = item.quantity;
+            quantities[item.fishListings.id] = item.quantity;
         });
         setOriginalQuantities(quantities);
     }, [cartItems]);
@@ -54,7 +56,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
 
         // Update cart items state
         setCartItems(cartItems.map(item =>
-            item.fish_listings.id === id ? { ...item, quantity: newQuantity } : item
+            item.fishListings.id === id ? { ...item, quantity: newQuantity } : item
         ));
 
         // Check if the new quantity is different from original
@@ -99,8 +101,8 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                         <div className="flex flex-col sm:flex-row sm:items-center">
                             <div className="flex-shrink-0 relative h-20 w-20 rounded-md overflow-hidden bg-gray-100">
                                 <Image
-                                    src={item.fish_listings.images[0]}
-                                    alt={item.fish_listings.name}
+                                    src={item.fishListings.images[0]}
+                                    alt={item.fishListings.name}
                                     layout="fill"
                                     objectFit="cover"
                                 />
@@ -109,17 +111,17 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                             <div className="mt-4 sm:mt-0 sm:ml-6 flex-1">
                                 <div className="flex flex-col sm:flex-row sm:justify-between">
                                     <div>
-                                        <h3 className="text-base font-medium text-gray-800">{item.fish_listings.name}</h3>
+                                        <h3 className="text-base font-medium text-gray-800">{item.fishListings.name}</h3>
                                         <div className="mt-1 flex text-sm text-gray-500">
-                                            <p>{item.fish_listings.breed}</p>
+                                            <p>{item.fishListings.breed}</p>
                                             <span className="mx-1">·</span>
-                                            <p>Size: {item.fish_listings.size}</p>
+                                            <p>Size: {item.fishListings.size}</p>
                                         </div>
                                     </div>
 
                                     <div className="mt-4 sm:mt-0">
                                         <p className={`text-base font-medium text-gray-800 ${roboto.className}`}>
-                                            ₹{(Number(item.fish_listings.price) * item.quantity).toFixed(2)}
+                                            ₹{(Number(item.fishListings.price) * item.quantity).toFixed(2)}
                                         </p>
                                     </div>
                                 </div>
@@ -130,7 +132,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                                             <button
                                                 type="button"
                                                 className="p-2 text-gray-600 hover:text-gray-700"
-                                                onClick={() => updateQuantity(item.fish_listings.id, item.quantity - 1)}
+                                                onClick={() => updateQuantity(item.fishListings.id, item.quantity - 1)}
                                             >
                                                 <FiMinus className="h-4 w-4" />
                                             </button>
@@ -138,12 +140,12 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                                             <button
                                                 type="button"
                                                 className="p-2 text-gray-600 hover:text-gray-700"
-                                                onClick={() => updateQuantity(item.fish_listings.id, item.quantity + 1)}
+                                                onClick={() => updateQuantity(item.fishListings.id, item.quantity + 1)}
                                             >
                                                 <FiPlus className="h-4 w-4" />
                                             </button>
                                         </div>
-                                        {itemsToUpdate[item.fish_listings.id] && (
+                                        {itemsToUpdate[item.fishListings.id] && (
                                             <button 
                                                 className='bg-green-600 px-3 py-1 rounded-md text-white'
                                                 onClick={() => handleUpdate(item)}

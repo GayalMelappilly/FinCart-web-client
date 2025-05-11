@@ -79,7 +79,7 @@ export type ProfileFormData = {
   email: string;
   phone: string;
   password: string;
-  profile_picture_url: string | null;
+  profileImage: string | null;
   userType: 'customer' | 'breeder' | 'admin';
   emailVerified: boolean;
   phoneVerified: boolean;

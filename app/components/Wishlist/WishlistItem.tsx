@@ -1,38 +1,49 @@
 import { WishlistItemInterface } from '@/app/types/types'
+import { FishListing, WishlistItem as WishlistItemType } from '@/app/types/user/type'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { FiShoppingCart, FiTrash2 } from 'react-icons/fi'
+import { toNumber } from '@/app/utils/toNumber'
+import { useMutation } from '@tanstack/react-query'
+import { deletewishlistItem } from '@/app/services/authServices'
 
 type Props = {
-    item: WishlistItemInterface,
-    wishlistItems: WishlistItemInterface[],
-    setWishlistItems: (wishlistItems: WishlistItemInterface[]) => void
+    wishlistItems: WishlistItemType,
 }
 
-const WishlistItem:FC<Props> = ({item, wishlistItems, setWishlistItems}) => {
+const WishlistItem: FC<Props> = ({wishlistItems}) => {
 
-    // Remove item handler
-    const removeFromWishlist = (id: number) => {
-        setWishlistItems(wishlistItems.filter(item => item.id !== id));
+    const mutation = useMutation({
+        mutationFn: deletewishlistItem,
+        onSuccess: (data) => {
+            console.log(data);
+        },
+        onError: (err) => {
+            console.log('Delete item from cart error : ', err);
+        }
+    });
+
+    const removeFromWishlist = (id: string) => {
+        mutation.mutate(id)
     };
 
-    // Add to cart handler (would connect to cart functionality)
+    if(wishlistItems) console.log('items : ',wishlistItems)
+    
     const addToCart = (item: WishlistItemInterface) => {
         console.log(`Added ${item.name} to cart`);
-        // Here you would integrate with your cart management
     };
 
     return (
-        <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
             <div className="relative h-48 bg-gray-100">
                 <Image
-                    src={item.image}
-                    alt={item.name}
+                    src={wishlistItems.fishListings.images[0]}
+                    alt={wishlistItems.fishListings.name}
                     layout="fill"
                     objectFit="cover"
                 />
                 <button
-                    onClick={() => removeFromWishlist(item.id)}
+                    onClick={() => removeFromWishlist(wishlistItems.fishListings.id)}
                     className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
                     aria-label="Remove from wishlist"
                 >
@@ -41,10 +52,10 @@ const WishlistItem:FC<Props> = ({item, wishlistItems, setWishlistItems}) => {
             </div>
 
             <div className="p-4 flex-grow">
-                <h3 className="font-medium text-gray-800">{item.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">{item.species}</p>
-                <div className="flex justify-between items-center mt-1">
-                    <span className="text-sm text-gray-600">Size: {item.size}</span>
+                <h3 className="font-medium text-gray-800">{wishlistItems.fishListings.name}</h3>
+                <p className="text-sm text-gray-500 mt-1">{wishlistItems.fishListings.breed}</p>
+                {/* <div className="flex justify-between items-center mt-1">
+                    <span className="text-sm text-gray-600">Size: {wishlistItems.fishListings.size}</span>
                     {item.inStock ? (
                         <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
                             In Stock
@@ -54,13 +65,13 @@ const WishlistItem:FC<Props> = ({item, wishlistItems, setWishlistItems}) => {
                             Out of Stock
                         </span>
                     )}
-                </div>
+                </div> */}
             </div>
 
             <div className="bg-gray-50 p-4 border-t border-gray-100">
                 <div className="flex justify-between items-center">
-                    <span className="font-bold text-gray-800">${item.price.toFixed(2)}</span>
-                    <button
+                    <span className="font-bold text-gray-800">₹{toNumber(wishlistItems.fishListings.price).toFixed(2)}</span>
+                    {/* <button
                         onClick={() => addToCart(item)}
                         disabled={!item.inStock}
                         className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${item.inStock
@@ -70,7 +81,7 @@ const WishlistItem:FC<Props> = ({item, wishlistItems, setWishlistItems}) => {
                     >
                         <FiShoppingCart className="mr-1 h-4 w-4" />
                         Add to Cart
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

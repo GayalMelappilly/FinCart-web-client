@@ -5,6 +5,7 @@ import { FishListFilters, FishListResponse } from "../types/list/fishList"
 import { config } from "dotenv"
 import { SellerProfileResponse } from "../types/sellerProfile/type"
 import { StandardResponse } from "../types/cart/type"
+import { UserType } from "../types/user/type"
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -17,6 +18,46 @@ export const signUpUser = async (phoneNumber: string) => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ phoneNumber }),
+    credentials: "include"
+  })
+
+  const response = await res.json()
+  console.log(response)
+  return response
+}
+
+export const verifyEmail = async (email: string) => {
+  const res = await fetch(`${apiUrl}/verify-email/`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email }),
+    credentials: "include"
+  })
+
+  const response = await res.json()
+  console.log(response)
+  return response
+}
+
+export const confirmOtp = async (code: string) => {
+
+  console.log('Verification code: ', code)
+
+  const token = localStorage.getItem('vt')
+
+  if (!token) {
+    console.log("No token found")
+    return
+  }
+
+  const res = await fetch(`${apiUrl}/confirm-verification-code/`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ code, token }),
     credentials: "include"
   })
 
@@ -72,6 +113,7 @@ export const refreshAccessToken = async (): Promise<ProfileFormData | null> => {
   }
 };
 
+// Login user
 export const loginUser = async (formData: LoginCredentials) => {
 
   if (!formData.identifier || !formData.password) {
@@ -97,6 +139,7 @@ export const loginUser = async (formData: LoginCredentials) => {
   }
 }
 
+// Logout user
 export const logoutUser = async (accessToken: string) => {
 
   try {
@@ -122,7 +165,7 @@ export const logoutUser = async (accessToken: string) => {
 }
 
 // Get current user
-export const getCurrentUser = async (accessToken: string): Promise<ProfileFormData> => {
+export const getCurrentUser = async (accessToken: string): Promise<UserType> => {
   try {
     const response = await fetchWithAuth(`${apiUrl}/get-current-user`, {
       method: 'GET',
@@ -210,6 +253,7 @@ export const getBreederInfo = async (id: string): Promise<SellerProfileResponse>
   }
 }
 
+// Add  to cart
 export const addToCart = async (item: { fishId: string | undefined, quantity: number }) => {
 
   const accessToken = localStorage.getItem('accessToken')
@@ -239,6 +283,7 @@ export const addToCart = async (item: { fishId: string | undefined, quantity: nu
   }
 }
 
+// Edit cart item
 export const editCartItem = async (item: { id: string, quantity: string | number }): Promise<StandardResponse> => {
   const accessToken = localStorage.getItem('accessToken')
 
@@ -266,6 +311,7 @@ export const editCartItem = async (item: { id: string, quantity: string | number
   }
 }
 
+// Delete cart item
 export const deleteCartItem = async (id: string): Promise<StandardResponse> => {
   const accessToken = localStorage.getItem('accessToken')
 
@@ -288,6 +334,62 @@ export const deleteCartItem = async (id: string): Promise<StandardResponse> => {
     return data;
   } catch (error) {
     console.error('Failed to delete item from cart:', error);
+    throw error;
+  }
+}
+
+// Add to wishlist
+export const addToWishlist = async (id: string) => {
+  const accessToken = localStorage.getItem('accessToken')
+  console.log(id)
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/wishlist/add-item`, {
+      method: 'POST',
+      body: JSON.stringify({id})
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Failed to fetch breeder profile');
+    }
+    return data;
+  } catch (error) {
+    console.error('Fetch user breeder error:', error);
+    throw error;
+  }
+}
+
+// Delete from wishlist
+export const deletewishlistItem = async (id: string): Promise<StandardResponse> => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/wishlist/remove-item/${id}`, {
+      method: 'DELETE',
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Delete from wishlist unsuccessful');
+    }
+    return data;
+  } catch (error) {
+    console.error('Failed to delete item from wishlist:', error);
     throw error;
   }
 }

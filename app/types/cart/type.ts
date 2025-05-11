@@ -1,23 +1,23 @@
 // types/cart.ts
 
-export type FishListing = {
-    id: string;
-    name: string;
-    breed: string;
-    color: string;
-    description: string;
-    price: string; // Use number if price is stored as a number
-    size: string;
-    images: string[];
-  }
+// export type FishListing = {
+//     id: string;
+//     name: string;
+//     breed: string;
+//     color: string;
+//     description: string;
+//     price: string; // Use number if price is stored as a number
+//     size: string;
+//     images: string[];
+//   }
   
-  export type CartItem = {
-    id: string; // unique cart item ID
-    fish_listing_id: string;
-    fish_listings: FishListing;
-    quantity: number;
-    added_at: string; // ISO date string
-  }
+//   export type CartItem = {
+//     id: string; // unique cart item ID
+//     fish_listing_id: string;
+//     fish_listings: FishListing;
+//     quantity: number;
+//     added_at: string; // ISO date string
+//   }
   
   export type StandardResponse = {
     success: boolean,

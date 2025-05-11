@@ -1,4 +1,5 @@
-import { CartItem } from '@/app/types/cart/type';
+
+import { CartItem } from '@/app/types/user/type';
 import React, { FC, useState } from 'react'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
 import { roboto } from '../Fonts/Fonts';
@@ -13,7 +14,7 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
     const [promoApplied, setPromoApplied] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const subtotal = cartItems?.reduce((sum, item) => sum + (Number(item.fish_listings.price) * item.quantity), 0);
+    const subtotal = cartItems?.reduce((sum, item) => sum + (Number(item.fishListings.price) * item.quantity), 0);
     const shipping = subtotal > 100 ? 0 : 60;
     const discount = promoApplied ? subtotal * 0.1 : 0;
     // const tax = (subtotal - discount) * 0.07;

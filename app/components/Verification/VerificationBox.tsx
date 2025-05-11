@@ -1,62 +1,65 @@
 'use client'
 
+import { confirmOtp } from '@/app/services/authServices';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import { FiShield } from 'react-icons/fi';
 
 const VerificationBox = () => {
-
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [isLoading, setIsLoading] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [error, setError] = useState<boolean>(false)
+    const [email, setEmail] = useState<string>('');
     const [timer, setTimer] = useState(30);
     const [canResend, setCanResend] = useState(false);
+    const [verificationError, setVerificationError] = useState<string>('');
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const router = useRouter();
 
-    useEffect(() => {
-        // Get phone number from session storage
-        const storedPhone = sessionStorage.getItem('phoneNumber');
-        if (!storedPhone) {
-            router.push('/signup');
-            return;
+    const emailAddress = localStorage.getItem('email-address')
+
+    useEffect(()=>{
+        if(emailAddress) setEmail(emailAddress)
+    },[emailAddress])
+
+    const mutation = useMutation({
+        mutationFn: confirmOtp,
+        onSuccess: (data) => {
+            if (!data.success) {
+                console.log(data)
+                setVerificationError('Invalid OTP')
+                setError(true)
+            }
+            if (data.success) {
+                console.log('OTP verified')
+                router.push('/create-profile');
+            }
+        },
+        onError: (err) => {
+            console.log('Verification error : ', err)
         }
-
-        setPhoneNumber(storedPhone);
-
-        // Focus the first input field
-        if (inputRefs.current[0]) {
-            inputRefs.current[0].focus();
-        }
-
-        // Set up countdown timer
-        const countdown = setInterval(() => {
-            setTimer((prevTimer) => {
-                if (prevTimer <= 1) {
-                    clearInterval(countdown);
-                    setCanResend(true);
-                    return 0;
-                }
-                return prevTimer - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(countdown);
-    }, [router]);
+    })
 
     const handleOtpChange = (index: number, value: string) => {
-        // Only allow numbers
-        if (value && !/^\d+$/.test(value)) return;
+        // Allow alphanumeric characters (letters and numbers)
+        if (value && !/^[a-zA-Z0-9]$/.test(value)) return;
 
         const newOtp = [...otp];
         // Only take the last character if multiple were pasted
-        newOtp[index] = value.slice(-1);
+        newOtp[index] = value.slice(-1).toUpperCase();
         setOtp(newOtp);
 
         // Auto-focus next input
         if (value && index < 5 && inputRefs.current[index + 1]) {
             inputRefs.current[index + 1]?.focus();
         }
+
+        // Clear any previous error message when user starts typing
+        if (verificationError) {
+            setVerificationError('');
+        }
+        setError(false)
     };
 
     const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
@@ -79,36 +82,62 @@ const VerificationBox = () => {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').trim();
 
-        // Check if pasted content is a 6-digit number
-        if (/^\d{6}$/.test(pastedData)) {
-            const digits = pastedData.split('');
-            setOtp(digits);
+        // Check if pasted content is 6 characters (alphanumeric)
+        if (/^[a-zA-Z0-9]{6}$/.test(pastedData)) {
+            const characters = pastedData.split('');
+            setOtp(characters.map(char => char.toUpperCase()));
             // Focus the last input
             inputRefs.current[5]?.focus();
         }
     };
 
-    const handleResendOtp = () => {
+    const handleResendOtp = async () => {
         if (!canResend) return;
 
         // Reset timer and resend ability
         setTimer(30);
         setCanResend(false);
+        setIsLoading(true);
 
-        // Simulate OTP resend
-        console.log('Resending OTP to', phoneNumber);
-
-        // Restart countdown
-        const countdown = setInterval(() => {
-            setTimer((prevTimer) => {
-                if (prevTimer <= 1) {
-                    clearInterval(countdown);
-                    setCanResend(true);
-                    return 0;
-                }
-                return prevTimer - 1;
+        try {
+            // API call to resend verification email
+            const response = await fetch('/api/auth/send-verification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
             });
-        }, 1000);
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to resend verification code');
+            }
+            
+            // Clear the input fields
+            setOtp(['', '', '', '', '', '']);
+            if (inputRefs.current[0]) {
+                inputRefs.current[0].focus();
+            }
+        } catch (error) {
+            console.error('Error resending verification code:', error);
+            setVerificationError('Failed to resend verification code. Please try again.');
+        } finally {
+            setIsLoading(false);
+
+            // Restart countdown
+            const countdown = setInterval(() => {
+                setTimer((prevTimer) => {
+                    if (prevTimer <= 1) {
+                        clearInterval(countdown);
+                        setCanResend(true);
+                        return 0;
+                    }
+                    return prevTimer - 1;
+                });
+            }, 1000);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -118,17 +147,15 @@ const VerificationBox = () => {
         if (otpValue.length !== 6) return;
 
         setIsLoading(true);
+        setVerificationError('');
 
-        // Simulate verification
         try {
-            // API call would go here
-            setTimeout(() => {
-                // Clear session storage and redirect to dashboard or onboarding
-                sessionStorage.removeItem('phoneNumber');
-                router.push('/create-profile');
-            }, 1500);
-        } catch (error) {
-            console.error('Error verifying OTP:', error);
+
+            mutation.mutate(String(otp.join('')) as string)
+
+        } catch (error: any) {
+            console.error('Error verifying code:', error);
+            setVerificationError(error.message || 'Invalid verification code. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -149,12 +176,12 @@ const VerificationBox = () => {
                 </div>
 
                 <h3 className="text-xl font-semibold text-gray-800 mb-2 text-center">
-                    Verify Your Phone
+                    Verify Your Email
                 </h3>
 
                 <div className="mb-6 text-center text-gray-600">
-                    <p>We&apos;ve sent a 6-digit code to</p>
-                    <p className="font-medium">{phoneNumber}</p>
+                    <p>We&apos;ve sent a 6-character code to</p>
+                    <p className="font-medium">{email}</p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -166,23 +193,26 @@ const VerificationBox = () => {
                             className="grid grid-cols-6 gap-2 sm:gap-4"
                             onPaste={handlePaste}
                         >
-                            {otp.map((digit, idx) => (
+                            {otp.map((char, idx) => (
                                 <input
                                     key={idx}
                                     ref={(el) => {
                                         inputRefs.current[idx] = el;
                                     }}
                                     type="text"
-                                    inputMode="numeric"
+                                    inputMode="text"
                                     maxLength={1}
-                                    value={digit}
+                                    value={char}
                                     onChange={(e) => handleOtpChange(idx, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(idx, e)}
-                                    className="w-full h-12 sm:h-14 text-center text-black text-lg sm:text-xl font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className={`w-full h-12 sm:h-14 text-center text-black text-lg sm:text-xl font-medium border ${error ? 'border-red-400' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                                     required
                                 />
                             ))}
                         </div>
+                        {verificationError && (
+                            <p className="mt-2 text-red-600 text-sm">{verificationError}</p>
+                        )}
                     </div>
 
                     <button
@@ -213,7 +243,7 @@ const VerificationBox = () => {
                                 ? 'text-blue-600 hover:underline'
                                 : 'text-gray-400 cursor-not-allowed'
                                 }`}
-                            disabled={!canResend}
+                            disabled={!canResend || isLoading}
                         >
                             {canResend ? 'Resend' : `Resend in ${timer}s`}
                         </button>

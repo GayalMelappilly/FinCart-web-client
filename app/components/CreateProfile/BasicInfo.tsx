@@ -18,6 +18,12 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange, setIsFormFi
     const [password, setPassword] = useState<string>()
     const [uploading, setUploading] = useState<boolean>()
 
+    const emailAddress = localStorage.getItem('email-address')
+
+    useEffect(() => {
+        formData.email = emailAddress as string
+    }, [emailAddress])
+
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -113,16 +119,9 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange, setIsFormFi
                             value={formData.email}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            required
+                            disabled
                         />
                     </div>
-                    <button
-                        type="button"
-                        // onClick={}
-                        className="mt-3 px-6 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                        Verify email
-                    </button>
                 </div>
 
                 <div>
