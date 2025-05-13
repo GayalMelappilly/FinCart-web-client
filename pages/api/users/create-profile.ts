@@ -6,7 +6,7 @@ import { serialize } from 'cookie';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
 
-  const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
+  const apiUrl = process.env.NODE_ENV === 'production' ? process.env.SERVER_API : process.env.LOCAL_HOST_API
 
   try {
     const response = await fetch(`${apiUrl}/create-profile`, {
