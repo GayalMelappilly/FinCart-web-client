@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 const Categories = () => {
@@ -17,7 +18,7 @@ const Categories = () => {
                     ].map((category, index) => (
                         <div key={index} className="group relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer">
                             <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-80 group-hover:opacity-90 transition-opacity`}></div>
-                            <img src={category.image} alt={category.name} className="w-full h-32 object-cover mix-blend-overlay" />
+                            <Image src={category.image} alt={category.name} className="w-full h-32 object-cover mix-blend-overlay" height={1000} width={1000} />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <h3 className="text-white font-bold text-lg">{category.name}</h3>
                             </div>

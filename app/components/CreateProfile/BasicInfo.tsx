@@ -18,11 +18,9 @@ const BasicInfo: FC<Props> = ({ formData, setFormData, handleChange, setIsFormFi
     const [password, setPassword] = useState<string>()
     const [uploading, setUploading] = useState<boolean>()
 
-    const emailAddress = localStorage.getItem('email-address')
-
-    useEffect(() => {
-        formData.email = emailAddress as string
-    }, [emailAddress])
+    if (typeof window !== 'undefined') {
+        formData.email = localStorage.getItem('email-address') as string
+    }
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

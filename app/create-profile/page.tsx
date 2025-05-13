@@ -44,9 +44,11 @@ const CreateProfilePage: React.FC = () => {
   const mutation = useMutation({
     mutationFn: createProfile,
     onSuccess: (data) => {
-      localStorage.setItem('accessToken',data.accessToken as string)
-      localStorage.removeItem('email-address')
-      router.push('/');
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', data.accessToken as string)
+        localStorage.removeItem('email-address')
+        router.push('/');
+      }
     },
     onError: (err) => {
       console.log('User profile error : ', err)
@@ -86,7 +88,7 @@ const CreateProfilePage: React.FC = () => {
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="flex min-h-screen bg-gray-50 md:px-30">
         <div className="flex-1 flex flex-col p-8">
           <div className="max-w-2xl w-full mx-auto">
@@ -109,7 +111,7 @@ const CreateProfilePage: React.FC = () => {
           </div>
         </div>
         {/* Side Section */}
-        <SideSection step={step} /> 
+        <SideSection step={step} />
       </div>
       <Footer />
     </>

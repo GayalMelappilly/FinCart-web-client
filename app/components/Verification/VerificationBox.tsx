@@ -17,11 +17,12 @@ const VerificationBox = () => {
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const router = useRouter();
 
-    const emailAddress = localStorage.getItem('email-address')
-
+    
+    
     useEffect(()=>{
+        const emailAddress = localStorage.getItem('email-address')
         if(emailAddress) setEmail(emailAddress)
-    },[emailAddress])
+    },[])
 
     const mutation = useMutation({
         mutationFn: confirmOtp,
