@@ -2,13 +2,11 @@
 
 import { verifyEmail } from '@/app/services/authServices'
 import { useMutation } from '@tanstack/react-query'
-import { verify } from 'crypto'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
 import { HiOutlineMail } from 'react-icons/hi'
-import { HiOutlineLockClosed } from 'react-icons/hi'
 
 const EmailSignUpBox = () => {
 
@@ -125,7 +123,7 @@ const EmailSignUpBox = () => {
                 </form>
 
                 <div className="text-center text-xs text-gray-500 mt-8">
-                    <p>By continuing, you agree to Fincart's</p>
+                    <p>By continuing, you agree to Fincart&apos;s</p>
                     <p className="mt-1">
                         <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Terms of Service</a>
                         {" "}&{" "}

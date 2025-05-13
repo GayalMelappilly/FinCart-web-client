@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import Footer from '../components/Footer/Footer';
-import SignUpBox from '../components/SignUp/SignUpBox';
 import EmailSignUpBox from '../components/SignUp/EmailSignUpBox';
 
 const Page: React.FC = () => {

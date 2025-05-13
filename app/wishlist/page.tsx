@@ -7,12 +7,8 @@ import ContinueShoppingButton from '../components/ContinueShoppingButton/Continu
 import Footer from '../components/Footer/Footer';
 import ShareWishlist from '../components/Wishlist/ShareWishlist';
 import WishlistItem from '../components/Wishlist/WishlistItem';
-import { WishlistItemInterface } from '../types/types';
 import EmptyWishlist from '../components/Wishlist/EmptyWishlist';
-import { wishlistData } from '../datasets/wishlistItems';
 import DiscoverButton from '../components/Wishlist/DiscoverButton';
-import RecentlyViewed from '../components/Wishlist/RecentlyViewed';
-import TipsSection from '../components/Wishlist/TipsSection';
 import Spinner from '../components/LoadingSpinner/Spinner';
 
 const Page: React.FC = () => {
@@ -64,8 +60,8 @@ const Page: React.FC = () => {
                     ) : (
                         <EmptyWishlist />
                     )}
-                    <RecentlyViewed />
-                    <TipsSection />
+                    {/* <RecentlyViewed /> */}
+                    {/* <TipsSection /> */}
                 </main>
 
             </div>

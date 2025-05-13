@@ -153,9 +153,9 @@ const VerificationBox = () => {
 
             mutation.mutate(String(otp.join('')) as string)
 
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error verifying code:', error);
-            setVerificationError(error.message || 'Invalid verification code. Please try again.');
+            setVerificationError('Invalid verification code. Please try again.');
         } finally {
             setIsLoading(false);
         }

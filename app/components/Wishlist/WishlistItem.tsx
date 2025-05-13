@@ -1,8 +1,7 @@
-import { WishlistItemInterface } from '@/app/types/types'
-import { FishListing, WishlistItem as WishlistItemType } from '@/app/types/user/type'
+import { WishlistItem as WishlistItemType } from '@/app/types/user/type'
 import Image from 'next/image'
-import React, { FC, useEffect, useState } from 'react'
-import { FiShoppingCart, FiTrash2 } from 'react-icons/fi'
+import React, { FC } from 'react'
+import { FiTrash2 } from 'react-icons/fi'
 import { toNumber } from '@/app/utils/toNumber'
 import { useMutation } from '@tanstack/react-query'
 import { deletewishlistItem } from '@/app/services/authServices'
@@ -29,9 +28,9 @@ const WishlistItem: FC<Props> = ({wishlistItems}) => {
 
     if(wishlistItems) console.log('items : ',wishlistItems)
     
-    const addToCart = (item: WishlistItemInterface) => {
-        console.log(`Added ${item.name} to cart`);
-    };
+    // const addToCart = (item: WishlistItemInterface) => {
+    //     console.log(`Added ${item.name} to cart`);
+    // };
 
     return (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">

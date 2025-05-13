@@ -1,7 +1,6 @@
 'use client'
 
 import { getCurrentUser, logoutUser } from '@/app/services/authServices';
-import { ProfileFormData } from '@/app/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import Image from 'next/image';
@@ -29,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         }
     }, []);
     
-    const { data, isLoading, error, refetch } = useQuery({
+    const { data, isLoading, error } = useQuery({
         queryKey: ['get-current-user'],
         queryFn: () => getCurrentUser(accessToken),
         enabled: !!accessToken

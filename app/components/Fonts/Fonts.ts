@@ -7,7 +7,7 @@ export const poppins = Poppins({
 });
 
 export const roboto = Roboto({
-    weight: '400',
+    weight: '700',
     style: "normal",
     subsets: ["latin"]
 })
