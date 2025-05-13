@@ -30,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const apiUrl = process.env.NODE_ENV === 'production' ? process.env.SERVER_API : process.env.LOCAL_HOST_API
 
+    console.log('api url')
+
     if (!refreshToken) return res.status(401).json({ message: 'No refresh token' });
 
     const response = await fetch(`${apiUrl}/refresh`, {
