@@ -19,7 +19,8 @@ export const OrderSummary = () => {
     useEffect(() => {
         setIsLoading(true);
 
-        const data = localStorage.getItem('selectedFish')
+        const data = typeof window !== 'undefined' ? localStorage.getItem('selectedFish') : ""
+        
         if (data) {
             try {
                 setOrderSummary(JSON.parse(data));

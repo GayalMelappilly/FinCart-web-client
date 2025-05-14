@@ -11,7 +11,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
         credentials: 'include',
     });
 
-    console.log("RES : ",res, url, accessToken)
+    console.log("RES : ", res, url, accessToken)
 
     if (res.status === 401) {
         try {
@@ -22,10 +22,14 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
 
             const data = await refresh.json()
 
-            if(type == 'user'){
-                localStorage.setItem('accessToken', data.accessToken)
-            }else if(type == 'seller'){
-                localStorage.setItem('sellerAccessToken', data.accessToken)
+            if (type == 'user') {
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('accessToken', data.accessToken)
+                }
+            } else if (type == 'seller') {
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('sellerAccessToken', data.accessToken)
+                }
             }
 
             if (!data.success) throw new Error('Unable to refresh token');

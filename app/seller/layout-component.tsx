@@ -53,16 +53,20 @@ export default function Layout({ children }: LayoutProps) {
     useEffect(() => {
         if (data) {
             setIsLoggedIn(true)
-            localStorage.setItem('seller-loggedIn', 'true')
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('seller-loggedIn', 'true')
+            }
             setSellerData(data.data)
         }
     }, [data, setIsLoggedIn, setSellerData])
 
-    if (error){
+    if (error) {
         console.log("ERROR HEADER COMP : ", error)
-        localStorage.setItem('seller-loggedIn', 'false')
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('seller-loggedIn', 'false')
+        }
     }
-    
+
     if (isLoading) return <Spinner />
 
     const navigationItems: NavigationItem[] = [
@@ -82,23 +86,23 @@ export default function Layout({ children }: LayoutProps) {
 
     return (
         <>
-        <ProtectedLayout>
-            <div className="flex h-screen bg-gray-50">
-                {isLoggedIn && <>
-                    <SideBar navigationItems={navigationItems} isActive={isActive} />
-                    {sidebarOpen && (
-                        <MobileSideBar navigationItems={navigationItems} toggleSidebar={toggleSidebar} isActive={isActive} />
-                    )}
-                </>}
-                <div className="flex flex-col flex-1 overflow-hidden">
-                    <Header title={title} toggleSidebar={toggleSidebar} />
-                    <main className="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 lg:p-8">
-                        {children}
-                    </main>
+            <ProtectedLayout>
+                <div className="flex h-screen bg-gray-50">
+                    {isLoggedIn && <>
+                        <SideBar navigationItems={navigationItems} isActive={isActive} />
+                        {sidebarOpen && (
+                            <MobileSideBar navigationItems={navigationItems} toggleSidebar={toggleSidebar} isActive={isActive} />
+                        )}
+                    </>}
+                    <div className="flex flex-col flex-1 overflow-hidden">
+                        <Header title={title} toggleSidebar={toggleSidebar} />
+                        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 lg:p-8">
+                            {children}
+                        </main>
+                    </div>
                 </div>
-            </div>
-            <Footer />
-        </ProtectedLayout>
+                <Footer />
+            </ProtectedLayout>
         </>
     );
 }

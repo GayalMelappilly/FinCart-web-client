@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
             setAccessToken(localStorage.getItem('accessToken') || '');
         }
     }, []);
-    
+
     const { data, isLoading, error } = useQuery({
         queryKey: ['get-current-user'],
         queryFn: () => getCurrentUser(accessToken),
@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     const logoutQuery = useQuery({
         queryKey: ['logout-user'],
         queryFn: () => logoutUser(accessToken),
-        enabled: false 
+        enabled: false
     });
 
     useEffect(() => {
@@ -45,14 +45,16 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         if (data) setUser(data)
     }, [data])
 
-    useEffect(()=>{
+    useEffect(() => {
         if (logoutQuery.data) {
-            localStorage.removeItem('user');
-            localStorage.removeItem('accessToken')
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('user');
+                localStorage.removeItem('accessToken')
+            }
             setUser(null)
             router.refresh();
         }
-    },[logoutQuery.data, router])
+    }, [logoutQuery.data, router])
 
     if (error) console.log("Error fetching user : ", error)
     if (isLoading || logoutQuery.isLoading) return <Spinner />
@@ -66,9 +68,9 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     const toggleProfileMenu = (): void => {
         setProfileMenuOpen(!profileMenuOpen);
     };
-    
+
     const HandleLogout = () => {
-        logoutQuery.refetch(); 
+        logoutQuery.refetch();
     }
 
     if (isLoading) return <Spinner />;

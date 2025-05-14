@@ -28,7 +28,9 @@ const LoginBox: FC<Props> = ({ isLoading, setIsLoading }) => {
                 setError(true)
             }
             if (data.accessToken) {
-                localStorage.setItem('accessToken', data.accessToken as string)
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('accessToken', data.accessToken as string)
+                }
                 router.push('/');
             }
         },

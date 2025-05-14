@@ -35,12 +35,16 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
     useEffect(() => {
         if (error) {
             console.log("ERROR HEADER COMP : ", error);
-            localStorage.setItem('seller-loggedIn', 'false');
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('seller-loggedIn', 'false');
+            }
         }
-        
+
         if (data) {
-            localStorage.setItem('sellerAccessToken', '')
-            localStorage.setItem('seller-loggedIn', 'false')
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('sellerAccessToken', '')
+                localStorage.setItem('seller-loggedIn', 'false')
+            }
             router.push('/');
         }
     }, [data, error, router]);

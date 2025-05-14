@@ -38,16 +38,20 @@ export default function LoginPage() {
         onSuccess: (data) => {
             if (data.accessToken) {
                 setIsLoggedIn(true)
-                localStorage.setItem('sellerAccessToken', data.accessToken as string)
-                localStorage.setItem('seller-loggedIn', 'true')
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('sellerAccessToken', data.accessToken as string)
+                    localStorage.setItem('seller-loggedIn', 'true')
+                }
                 router.push('/seller/dashboard');
             }
         },
         onError: (err) => {
             setIsLoggedIn(false)
             console.log('Seller login error : ', err)
-            localStorage.setItem('seller-loggedIn', 'false')
-            localStorage.removeItem('seller-loggedIn');
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('seller-loggedIn', 'false')
+                localStorage.removeItem('seller-loggedIn');
+            }
         }
     })
 

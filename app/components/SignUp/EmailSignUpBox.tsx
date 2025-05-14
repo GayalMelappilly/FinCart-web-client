@@ -26,8 +26,10 @@ const EmailSignUpBox = () => {
                 setIsLoading(false);
             }
             if (data.success) {
-                localStorage.setItem('email-address', email)
-                localStorage.setItem('vt', data.token)
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('email-address', email)
+                    localStorage.setItem('vt', data.token)
+                }
                 setIsLoading(false);
                 router.push('/signup/verification');
             }

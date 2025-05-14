@@ -21,7 +21,7 @@ export default function Page() {
   useEffect(() => {
     setIsLoading(true);
     
-    const data = localStorage.getItem('selectedFish')
+    const data = typeof window !== 'undefined' ? localStorage.getItem('selectedFish') : ''
     if (data) {
       try {
         setFishData(JSON.parse(data));

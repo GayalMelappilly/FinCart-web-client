@@ -12,7 +12,9 @@ const Listings: FC<Props> = ({ fishListings }) => {
     const router = useRouter()
 
     const HandleClick = (fish: FishListing) => {
-        localStorage.setItem('selectedFish', JSON.stringify(fish))
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('selectedFish', JSON.stringify(fish))
+        }
         router.push(`/fish/${fish.id}`);
     }
 
@@ -24,7 +26,7 @@ const Listings: FC<Props> = ({ fishListings }) => {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                 {fishListings?.map((fish) => (
-                    <div key={fish.id} onClick={()=>HandleClick(fish)} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200">
+                    <div key={fish.id} onClick={() => HandleClick(fish)} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200">
                         <div className="aspect-square bg-gray-50 relative">
                             <Image
                                 src={fish.images[0] as string}

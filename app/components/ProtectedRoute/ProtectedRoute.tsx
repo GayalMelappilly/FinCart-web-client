@@ -18,7 +18,7 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
   const isPublicPath = publicPaths.some(path => pathname === path);
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem('seller-loggedIn') === 'true';
+    const loggedIn = typeof window !== 'undefined' ? localStorage.getItem('seller-loggedIn') === 'true' : false
     setIsLoggedIn(loggedIn);
 
     if (!loggedIn && !isPublicPath) {

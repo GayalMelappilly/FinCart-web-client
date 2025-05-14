@@ -47,8 +47,8 @@ const CreateProfilePage: React.FC = () => {
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', data.accessToken as string)
         localStorage.removeItem('email-address')
-        router.push('/');
       }
+      router.push('/');
     },
     onError: (err) => {
       console.log('User profile error : ', err)

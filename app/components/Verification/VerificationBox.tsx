@@ -20,7 +20,7 @@ const VerificationBox = () => {
     
     
     useEffect(()=>{
-        const emailAddress = localStorage.getItem('email-address')
+        const emailAddress = typeof window !== 'undefined' ? localStorage.getItem('email-address') : ''
         if(emailAddress) setEmail(emailAddress)
     },[])
 

@@ -25,7 +25,9 @@ const FishCard: FC<Props> = ({ fish }) => {
     })
 
     const HandleClick = () => {
-        localStorage.setItem('selectedFish', JSON.stringify(fish))
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('selectedFish', JSON.stringify(fish))
+        }
         router.push(`/fish/${fish.id}`);
     }
 

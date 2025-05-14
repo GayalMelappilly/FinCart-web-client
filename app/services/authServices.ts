@@ -154,12 +154,12 @@ export const logoutUser = async (accessToken: string) => {
     })
 
     if (!data.success) {
-      throw new Error('Failed to fetch user profile');
+      throw new Error('Failed to logout user');
     }
 
     return data;
   } catch (error) {
-    console.error('Fetch user profile error:', error);
+    console.error('User logout error:', error);
     throw error;
   }
 }
