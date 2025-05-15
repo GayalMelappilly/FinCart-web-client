@@ -36,18 +36,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Assuming backend sends { accessToken, refreshToken }
     const { accessToken, refreshToken } = data.data;
 
+    console.log('type : ',process.env.NODE_ENV)
+
     res.setHeader('Set-Cookie', [
       serialize('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         maxAge: 60 * 15,
       }),
       serialize('refreshToken', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
       }),
