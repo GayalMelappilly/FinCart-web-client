@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }),
     ]);
 
-    return res.status(200).json({ success: true, message: 'Seller logged out successfully' });
+    return res.status(200).json({ success: true, message: 'User logged out successfully' });
   } catch (error) {
     console.error('Proxy error:', error);
     return res.status(500).json({ success: false, error: 'Internal Server Error' });

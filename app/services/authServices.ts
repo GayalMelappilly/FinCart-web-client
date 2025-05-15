@@ -5,7 +5,6 @@ import { FishListFilters, FishListResponse } from "../types/list/fishList"
 import { config } from "dotenv"
 import { SellerProfileResponse } from "../types/sellerProfile/type"
 import { StandardResponse } from "../types/cart/type"
-import { UserType } from "../types/user/type"
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -165,7 +164,15 @@ export const logoutUser = async (accessToken: string) => {
 }
 
 // Get current user
-export const getCurrentUser = async (accessToken: string): Promise<UserType> => {
+export const getCurrentUser = async (accessToken: string) => {
+
+  if(!accessToken){
+    return {
+      success: false,
+      message: 'AccessToken not found'
+    }
+  }
+
   try {
     const response = await fetchWithAuth(`${apiUrl}/get-current-user`, {
       method: 'GET',
@@ -181,7 +188,10 @@ export const getCurrentUser = async (accessToken: string): Promise<UserType> => 
 
     localStorage.setItem('user', JSON.stringify(data))
 
-    return data;
+    return {
+      success: true,
+      data: data
+    }
 
   } catch (error) {
     console.error('Fetch user profile error:', error);

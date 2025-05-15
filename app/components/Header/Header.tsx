@@ -1,7 +1,7 @@
 'use client'
 
 import { getCurrentUser, logoutUser } from '@/app/services/authServices';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ username }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
-    const [user, setUser] = useState<UserType | null>()
+    const [user, setUser] = useState<UserType | null >()
     const [accessToken, setAccessToken] = useState('');
 
     const router = useRouter()
@@ -34,30 +34,26 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         enabled: !!accessToken
     })
 
-    const logoutQuery = useQuery({
-        queryKey: ['logout-user'],
-        queryFn: () => logoutUser(accessToken),
-        enabled: false
-    });
-
-    useEffect(() => {
-        console.log(data)
-        if (data) setUser(data)
-    }, [data])
-
-    useEffect(() => {
-        if (logoutQuery.data) {
+    const logoutMutation = useMutation({
+        mutationFn: () => logoutUser(accessToken),
+        onSuccess: () => {
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('user');
                 localStorage.removeItem('accessToken')
+                setAccessToken('')
             }
             setUser(null)
             router.refresh();
         }
-    }, [logoutQuery.data, router])
+    });
 
-    if (error) console.log("Error fetching user : ", error)
-    if (isLoading || logoutQuery.isLoading) return <Spinner />
+    useEffect(() => {
+        if (data?.success) setUser(data?.data)
+        
+    }, [data])
+
+    if (error) console.log("Error fetching user : ", error);
+    if (isLoading || logoutMutation.isPending) return <Spinner />
 
     const categories: string[] = [''];
 
@@ -70,10 +66,8 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     };
 
     const HandleLogout = () => {
-        logoutQuery.refetch();
+        logoutMutation.mutate();
     }
-
-    if (isLoading) return <Spinner />;
 
     return (
         <header className="bg-white shadow-sm relative">
@@ -110,10 +104,6 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-black" />
                         </div>
 
-                        {/* <button className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors rounded-full p-2" aria-label="Search">
-                            <Search size={20} />
-                        </button> */}
-
                         <Link href={'/seller/dashboard'}>
                             <button className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                                 Sell
@@ -139,7 +129,6 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                                 className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
                                 aria-label="Profile"
                             >
-                                {/* <p className='px-1'>{user.fullName?.charAt(0).toUpperCase()}</p> */}
                                 {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
                             </button>
 
@@ -180,6 +169,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                 </div>
             </div>
 
+            {/* Mobile menu */}
             {mobileMenuOpen ? (
                 <div className="fixed inset-0 z-40 overflow-hidden">
                     <div
@@ -267,7 +257,10 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
                                         <Link href="/settings" className="text-gray-600 hover:text-blue-600 transition-colors">
                                             Settings
                                         </Link>
-                                        <button className="text-left text-red-600 hover:text-red-700 transition-colors">
+                                        <button 
+                                            className="text-left text-red-600 hover:text-red-700 transition-colors"
+                                            onClick={HandleLogout}
+                                        >
                                             Sign out
                                         </button>
                                     </>
