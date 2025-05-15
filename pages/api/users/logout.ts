@@ -9,17 +9,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Clear the cookies on the client side
     res.setHeader('Set-Cookie', [
-      serialize('sellerAccessToken', '', {
+      serialize('accessToken', '', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         maxAge: -1, // Expire immediately
       }),
-      serialize('sellerRefreshToken', '', {
+      serialize('refreshToken', '', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         maxAge: -1, // Expire immediately
       }),

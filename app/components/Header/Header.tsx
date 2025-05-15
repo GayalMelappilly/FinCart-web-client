@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     })
 
     const logoutMutation = useMutation({
-        mutationFn: () => logoutUser(accessToken),
+        mutationFn: logoutUser,
         onSuccess: () => {
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('user');
@@ -66,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     };
 
     const HandleLogout = () => {
-        logoutMutation.mutate();
+        logoutMutation.mutate(accessToken)
     }
 
     return (
