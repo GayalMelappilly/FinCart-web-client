@@ -143,7 +143,7 @@ export const logoutUser = async (accessToken: string) => {
 
   try {
     const response = await fetchWithAuth(`${apiUrl}/logout`, {
-      method: 'GET',
+      method: 'DELETE',
     }, accessToken, 'user')
 
     const data = await response;
