@@ -50,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const data = await response.json();
+    console.log('Logout data : ',data)
     return res.status(200).json({ success: true, message: 'Successfully logged out' });
   } catch (error) {
     console.error('Logout error:', error);
