@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   try {
     // Extract the token from the cookies
-    const { accessToken, refreshToken } = req.cookies;
+    const { accessToken } = req.cookies;
     
     // Call the backend logout endpoint
     const response = await fetch(`${apiUrl}/logout`, {
