@@ -66,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
     };
 
     const HandleLogout = () => {
-        logoutMutation.mutate(accessToken)
+        logoutMutation.mutate()
     }
 
     return (

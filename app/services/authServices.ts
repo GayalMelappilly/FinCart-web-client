@@ -139,22 +139,22 @@ export const loginUser = async (formData: LoginCredentials) => {
 }
 
 // Logout user
-export const logoutUser = async (accessToken: string) => {
-
+export const logoutUser = async () => {
   try {
-    const response = await fetchWithAuth(`${apiUrl}/logout`, {
+    const response = await fetch('/api/users/logout', {
       method: 'DELETE',
       credentials: 'include'
-    }, accessToken, 'user')
+    });
 
-    const data = await response;
-
-    // await fetch('/api/users/logout', {
-    //   credentials: 'include',
-    // })
+    const data = await response.json();
 
     if (!data.success) {
       throw new Error('Failed to logout user');
+    }
+
+    // Clear any local storage items
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('accessToken');
     }
 
     return data;
