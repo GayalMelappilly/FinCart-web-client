@@ -144,13 +144,14 @@ export const logoutUser = async (accessToken: string) => {
   try {
     const response = await fetchWithAuth(`${apiUrl}/logout`, {
       method: 'DELETE',
+      credentials: 'include'
     }, accessToken, 'user')
 
     const data = await response;
 
-    await fetch('/api/users/logout', {
-      credentials: 'include',
-    })
+    // await fetch('/api/users/logout', {
+    //   credentials: 'include',
+    // })
 
     if (!data.success) {
       throw new Error('Failed to logout user');
