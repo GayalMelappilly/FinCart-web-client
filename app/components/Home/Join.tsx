@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Join = () => {
@@ -9,12 +10,12 @@ const Join = () => {
                     Join our community of fish enthusiasts, collectors, and sellers today.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <button className="bg-white py-3 px-8 rounded-lg text-black text-lg hover:shadow-lg font-medium hover:scale-105 duration-300">
+                    <Link href={'/signup'} className="bg-white py-3 px-8 rounded-lg text-black text-lg hover:shadow-lg font-medium hover:scale-105 duration-300">
                         Sign Up Now
-                    </button>
-                    <button className="border-2 border-white text-white py-3 px-8 rounded-lg text-lg font-medium hover:scale-105 duration-300">
+                    </Link>
+                    <Link href={'/seller/dashboard'} className="border-2 border-white text-white py-3 px-8 rounded-lg text-lg font-medium hover:scale-105 duration-300">
                         Become a seller
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>

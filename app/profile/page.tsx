@@ -18,38 +18,11 @@ import Spinner from '../components/LoadingSpinner/Spinner';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import BackButton from '../components/BackButton/BackButton';
-
-// Types based on schema
-interface UserProfile {
-    id: string;
-    email: string;
-    full_name: string;
-    phone_number?: string;
-    user_type: string;
-    created_at?: Date;
-    email_verified?: boolean;
-    phone_verified?: boolean;
-    points_balance?: number;
-    profile_picture_url?: string;
-    user_addresses?: UserAddress[];
-    orders: [];
-    wishlists: [];
-}
-
-interface UserAddress {
-    id: string;
-    address_line1: string;
-    address_line2?: string;
-    city: string;
-    state: string;
-    postal_code: string;
-    country: string;
-    is_default?: boolean;
-}
+import { UserType } from '../types/user/type';
 
 const Page = () => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [user, setUser] = useState<UserProfile | null>(null);
+    const [user, setUser] = useState<UserType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [ordersCount, setOrderCount] = useState<number | null>()
     const [wishlistCount, setWishlistCount] = useState<number | null>()
@@ -99,10 +72,10 @@ const Page = () => {
                             <div className="flex flex-col md:flex-row items-start md:items-end -mt-16 mb-4">
                                 <div className="relative">
                                     <div className="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-white shadow-lg">
-                                        {user && user.profile_picture_url ? (
+                                        {user && user.profilePictureUrl ? (
                                             <Image
-                                                src={user.profile_picture_url}
-                                                alt={user.full_name}
+                                                src={user.profilePictureUrl}
+                                                alt={user.fullName}
                                                 width={128}
                                                 height={128}
                                                 className="object-cover"
@@ -120,11 +93,11 @@ const Page = () => {
                                 <div className="mt-4 md:mt-0 md:ml-6 flex-grow">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between">
                                         <div>
-                                            <h1 className="text-2xl font-bold text-gray-900">{user?.full_name}</h1>
+                                            <h1 className="text-2xl font-bold text-gray-900">{user?.fullName}</h1>
                                             <p className="text-gray-500 flex items-center mt-1">
                                                 <Mail size={16} className="mr-2" />
                                                 {user?.email}
-                                                {user?.email_verified && (
+                                                {user?.emailVerified && (
                                                     <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                         Verified
                                                     </span>
@@ -156,7 +129,7 @@ const Page = () => {
                                             </div>
                                             <div className="ml-4">
                                                 <p className="text-sm text-gray-500">Member Since</p>
-                                                <p className="font-medium">{formatDate(user?.created_at)}</p>
+                                                {user?.createdAt && <p className="font-medium">{formatDate(new Date(user?.createdAt))}</p> }
                                             </div>
                                         </div>
 
@@ -167,8 +140,8 @@ const Page = () => {
                                             <div className="ml-4">
                                                 <p className="text-sm text-gray-500">Phone Number</p>
                                                 <p className="font-medium flex items-center">
-                                                    {user?.phone_number || 'Not provided'}
-                                                    {user?.phone_verified && (
+                                                    {user?.phoneNumber || 'Not provided'}
+                                                    {user?.phoneVerified && (
                                                         <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                             Verified
                                                         </span>
@@ -183,7 +156,7 @@ const Page = () => {
                                             </div>
                                             <div className="ml-4">
                                                 <p className="text-sm text-gray-500">Reward Points</p>
-                                                <p className="font-medium">{user?.points_balance} points</p>
+                                                <p className="font-medium">{user?.pointsBalance} points</p>
                                             </div>
                                         </div>
                                     </div>
@@ -291,7 +264,7 @@ const Page = () => {
                                                 <h3 className="font-medium text-yellow-800 mb-2">Reward Points</h3>
                                                 <div className="flex items-center justify-between">
                                                     <p className="text-gray-700">Current Balance</p>
-                                                    <p className="font-bold text-lg">{user?.points_balance} points</p>
+                                                    <p className="font-bold text-lg">{user?.pointsBalance} points</p>
                                                 </div>
                                                 <div className="mt-4">
                                                     <Link
@@ -315,25 +288,25 @@ const Page = () => {
                                                 </button>
                                             </div>
 
-                                            {user?.user_addresses && user.user_addresses.length > 0 ? (
+                                            {user?.userAddresses && user.userAddresses.length > 0 ? (
                                                 <div className="space-y-4">
-                                                    {user.user_addresses.map((address) => (
+                                                    {user.userAddresses.map((address) => (
                                                         <div
                                                             key={address.id}
                                                             className="border rounded-lg p-4 relative hover:border-blue-300 transition"
                                                         >
-                                                            {address.is_default && (
+                                                            {address.isDefault && (
                                                                 <span className="absolute top-4 right-4 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                                     Default
                                                                 </span>
                                                             )}
-                                                            <h3 className="font-medium">{user.full_name}</h3>
-                                                            <p className="text-gray-600 mt-1">{address.address_line1}</p>
-                                                            {address.address_line2 && (
-                                                                <p className="text-gray-600">{address.address_line2}</p>
+                                                            <h3 className="font-medium">{user.fullName}</h3>
+                                                            <p className="text-gray-600 mt-1">{address.addressLine1}</p>
+                                                            {address.addressLine2 && (
+                                                                <p className="text-gray-600">{address.addressLine2}</p>
                                                             )}
                                                             <p className="text-gray-600">
-                                                                {address.city}, {address.state} {address.postal_code}
+                                                                {address.city}, {address.state} {address.postalCode}
                                                             </p>
                                                             <p className="text-gray-600">{address.country}</p>
 
@@ -341,7 +314,7 @@ const Page = () => {
                                                                 <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                                                     Edit
                                                                 </button>
-                                                                {!address.is_default && (
+                                                                {!address.isDefault && (
                                                                     <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                                                         Set as Default
                                                                     </button>
@@ -377,7 +350,7 @@ const Page = () => {
                                                         <div>
                                                             <p className="text-gray-600">{user?.email}</p>
                                                             <div className="mt-1">
-                                                                {user?.email_verified ? (
+                                                                {user?.emailVerified ? (
                                                                     <span className="text-green-600 text-sm flex items-center">
                                                                         <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -399,9 +372,9 @@ const Page = () => {
                                                     <h3 className="text-lg font-medium mb-2">Phone Number</h3>
                                                     <div className="flex items-center justify-between">
                                                         <div>
-                                                            <p className="text-gray-600">{user?.phone_number || 'Not provided'}</p>
+                                                            <p className="text-gray-600">{user?.phoneNumber || 'Not provided'}</p>
                                                             <div className="mt-1">
-                                                                {user?.phone_verified ? (
+                                                                {user?.phoneVerified ? (
                                                                     <span className="text-green-600 text-sm flex items-center">
                                                                         <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -410,13 +383,13 @@ const Page = () => {
                                                                     </span>
                                                                 ) : (
                                                                     <span className="text-yellow-600 text-sm">
-                                                                        {user?.phone_number ? 'Not Verified' : ''}
+                                                                        {user?.phoneNumber ? 'Not Verified' : ''}
                                                                     </span>
                                                                 )}
                                                             </div>
                                                         </div>
                                                         <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                                            {user?.phone_number ? 'Change' : 'Add'}
+                                                            {user?.phoneNumber ? 'Change' : 'Add'}
                                                         </button>
                                                     </div>
                                                 </div>
