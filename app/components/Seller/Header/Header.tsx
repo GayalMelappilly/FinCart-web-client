@@ -1,5 +1,5 @@
 import { useSellerAuth } from '@/app/context/sellerAuthContext';
-import { Bell, Menu } from 'lucide-react';
+import { Bell, Menu, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react'
@@ -56,21 +56,7 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
                             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
                         <Link href="/seller/profile" className="flex items-center">
-                            { sellerData?.businessInfo.logo_url
-                            ?
-                            (
-                                <Image
-                                    src={sellerData?.businessInfo.logo_url as string}
-                                    height={80}
-                                    width={80}
-                                    alt='profile-image'
-                                />
-                            ) 
-                            :
-                            (<div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span className="text-blue-600 font-medium">TL</span>
-                            </div>)
-                            }
+                            {sellerData?.businessInfo.logo_url ? <Image src={sellerData?.businessInfo.logo_url as string} alt='profile-image' className='rounded-full hover:scale-105 h-8 w-8' width={1000} height={1000} /> : <User size={18} />}
                         </Link>
                     </div>
                 </div>

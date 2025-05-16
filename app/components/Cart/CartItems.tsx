@@ -7,6 +7,7 @@ import { roboto } from '../Fonts/Fonts'
 import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem, editCartItem } from '@/app/services/authServices'
 import { CartItem } from '@/app/types/user/type'
+import { useToast } from '@/app/providers/ToastProvider'
 
 type Props = {
     cartItems: CartItem[],
@@ -14,10 +15,10 @@ type Props = {
 }
 
 const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
-    // Track original quantities to compare with current values
     const [originalQuantities, setOriginalQuantities] = useState<Record<string, number>>({});
-    // Track which items have update buttons visible
     const [itemsToUpdate, setItemsToUpdate] = useState<Record<string, boolean>>({});
+
+    const { showToast } = useToast()
 
     // Initialize original quantities when cart items load
     useEffect(() => {
@@ -33,20 +34,24 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
     const deleteMutation = useMutation({
         mutationFn: deleteCartItem,
         onSuccess: (data) => {
+            showToast('success', 'Removed item from cart')
             console.log(data);
         },
         onError: (err) => {
             console.log('Delete item from cart error : ', err);
+            showToast('error', 'Failed to remove item from cart')
         }
     });
 
     const editMutation = useMutation({
         mutationFn: editCartItem,
         onSuccess: (data) => {
+            showToast('success', 'Quantity updated')
             console.log('Cart item updated successfully:', data);
         },
         onError: (err) => {
             console.log('Update item in cart error : ', err);
+            showToast('error', 'Failed to update quantity')
         }
     });
 
@@ -75,7 +80,11 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
             id: item?.id,
             quantity: item.quantity
         }
+        console.log(cartItem, cartItems)
         setItemsToUpdate({})
+        const itemToUpdate = cartItems.find(item => item.id == cartItem.id)
+        if(itemToUpdate) itemToUpdate.quantity = cartItem.quantity
+        console.log(cartItems)
         editMutation.mutate(cartItem);
     };
 

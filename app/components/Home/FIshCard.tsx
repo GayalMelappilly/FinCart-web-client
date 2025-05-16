@@ -21,9 +21,11 @@ const FishCard: FC<Props> = ({ fish }) => {
     const mutation = useMutation({
         mutationFn: addToWishlist,
         onSuccess: (data) => {
+            showToast('success', 'Item added to wishlist')
             console.log(data)
         },
         onError: (err) => {
+            showToast('error', 'Failed to add item to wishlist')
             console.log('Error adding to wishlist : ', err)
         }
     });
@@ -36,6 +38,7 @@ const FishCard: FC<Props> = ({ fish }) => {
             console.log(data)
         },
         onError: (err) => {
+            showToast('error', 'Failed to add item to cart')
             console.log('User profile error : ', err)
         }
     })

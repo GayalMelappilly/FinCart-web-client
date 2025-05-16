@@ -120,7 +120,7 @@ export const loginUser = async (formData: LoginCredentials) => {
   }
 
   try {
-    const response = await fetch('/api/users/login', {
+    const response = await fetch('/api/seller/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

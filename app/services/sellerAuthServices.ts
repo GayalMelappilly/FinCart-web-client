@@ -87,6 +87,46 @@ export const loginSeller = async (formData: FormData) => {
     }
 }
 
+export const verifySellerEmail = async (email: string) => {
+  const res = await fetch(`${apiUrl}/seller/verify-email`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email }),
+    credentials: "include"
+  })
+
+  const response = await res.json()
+  console.log(response)
+  return response
+}
+
+export const confirmSellerOtp = async (code: string) => {
+
+  console.log('Verification code: ', code)
+
+  const token = localStorage.getItem('svt')
+
+  if (!token) {
+    console.log("No token found")
+    return
+  }
+
+  const res = await fetch(`${apiUrl}/seller/confirm-verification-code/`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ code, token }),
+    credentials: "include"
+  })
+
+  const response = await res.json()
+  console.log(response)
+  return response
+}
+
 export const logoutSeller = async (accessToken: string) => {
 
     console.log("Logout seller")

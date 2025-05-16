@@ -29,6 +29,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
             console.log(data)
         },
         onError: (err) => {
+            showToast('error', 'Failed to add item to cart')
             console.log('User profile error : ', err)
         }
     })

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Footer from '@/app/components/Footer/Footer';
 import SellerSignUpBox from '@/app/components/Seller/Signup/SellerSignUpBox';
+import EmailSignUpBox from '@/app/components/Seller/Signup/sellerEmailSignup';
 
 const Page: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -16,9 +17,9 @@ const Page: React.FC = () => {
           <title>Sign Up | Fincart</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <SellerSignUpBox isLoading={isLoading} setIsLoading={setIsLoading} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
+        {/* <SellerSignUpBox isLoading={isLoading} setIsLoading={setIsLoading} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} /> */}
+        < EmailSignUpBox />
       </div>
-      <Footer />
     </>
   );
 };
