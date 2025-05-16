@@ -1,7 +1,13 @@
-import { ArrowUp, DollarSign } from 'lucide-react'
-import React from 'react'
+import { ArrowDown, ArrowUp, DollarSign } from 'lucide-react'
+import React, { FC } from 'react'
+import { MetricWithTrend } from '@/app/types/seller/sellerDetails/types'
+import { roboto } from '../../Fonts/Fonts'
 
-const TotalRevenue = () => {
+type Props = {
+    data: MetricWithTrend | undefined 
+}
+
+const TotalRevenue:FC<Props> = ({data}) => {
     return (
         <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center">
@@ -10,11 +16,22 @@ const TotalRevenue = () => {
                 </div>
                 <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                    <h3 className="text-lg font-semibold text-gray-900">$8,459.25</h3>
+                    <h3 className={`text-lg font-semibold text-gray-900 ${roboto.className}`}>₹{data?.total}</h3>
                     <div className="flex items-center text-xs mt-1">
-                        <ArrowUp className="h-3 w-3 text-green-500 mr-1" />
-                        <span className="text-green-500">23.5%</span>
-                        <span className="text-gray-400 ml-1">vs last month</span>
+                        {data?.trend == 'up' ? (
+                            <>
+                                <ArrowUp className="h-3 w-3 text-green-500 mr-1" />
+                                <span className="text-green-500">{data.percentChange}%</span>
+                                <span className="text-gray-400 ml-1">vs last month</span>
+                            </>
+                        ) : (
+                            
+                            <>
+                                <ArrowDown className="h-3 w-3 text-red-500 mr-1" />
+                                <span className="text-red-500">{data?.percentChange}%</span>
+                                <span className="text-gray-400 ml-1">vs last month</span>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

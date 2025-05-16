@@ -55,6 +55,7 @@ export default function Layout({ children }: LayoutProps) {
             setIsLoggedIn(true)
             if (typeof window !== 'undefined') {
                 localStorage.setItem('seller-loggedIn', 'true')
+                localStorage.setItem('seller', JSON.stringify(data.data))
             }
             setSellerData(data.data)
         }
