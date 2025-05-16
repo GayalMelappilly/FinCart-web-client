@@ -1,5 +1,6 @@
 'use client'
 
+import { useToast } from '@/app/providers/ToastProvider'
 import { loginUser } from '@/app/services/authServices'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
@@ -19,6 +20,8 @@ const LoginBox: FC<Props> = ({ isLoading, setIsLoading }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(false)
 
+    const {showToast} = useToast()
+
     const router = useRouter()
 
     const mutation = useMutation({
@@ -28,6 +31,7 @@ const LoginBox: FC<Props> = ({ isLoading, setIsLoading }) => {
                 setError(true)
             }
             if (data.accessToken) {
+                showToast('success', 'Logged in successfully')
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('accessToken', data.accessToken as string)
                 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { useToast } from '@/app/providers/ToastProvider'
 import { addToCart } from '@/app/services/authServices'
 import { FishListing } from '@/app/types/list/fishList'
 import { useMutation } from '@tanstack/react-query'
@@ -19,9 +20,12 @@ const FishInfo: FC<Props> = ({ fish }) => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const {showToast} = useToast()
+
     const mutation = useMutation({
         mutationFn: addToCart,
         onSuccess: (data) => {
+            showToast('success', 'Item added to cart')
             console.log(data)
         },
         onError: (err) => {

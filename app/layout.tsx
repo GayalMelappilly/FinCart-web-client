@@ -3,6 +3,7 @@ import "./globals.css";
 import { poppins } from "./components/Fonts/Fonts";
 import QueryProvider from "./providers/QueryProvider";
 import PageTransition from "./components/PageTransition/PageTransition";
+import { ToastProvider } from "./providers/ToastProvider";
 // import { AuthProvider } from "./context/authContext";
 
 export const metadata: Metadata = {
@@ -22,9 +23,11 @@ export default function RootLayout({
       >
         <QueryProvider>
           {/* <AuthProvider> */}
+          <ToastProvider>
             <PageTransition>
               {children}
             </PageTransition>
+          </ToastProvider>
           {/* </AuthProvider> */}
         </QueryProvider>
       </body>

@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react'
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
-import { addToWishlist } from '@/app/services/authServices';
+import { addToCart, addToWishlist } from '@/app/services/authServices';
+import { useToast } from '@/app/providers/ToastProvider';
 
 type Props = {
     fish: FishListing
@@ -14,6 +15,8 @@ type Props = {
 const FishCard: FC<Props> = ({ fish }) => {
     const [isHovered, setIsHovered] = useState(false);
     const router = useRouter();
+
+    const { showToast } = useToast()
 
     const mutation = useMutation({
         mutationFn: addToWishlist,
@@ -24,6 +27,19 @@ const FishCard: FC<Props> = ({ fish }) => {
             console.log('Error adding to wishlist : ', err)
         }
     });
+
+
+    const cartMutation = useMutation({
+        mutationFn: addToCart,
+        onSuccess: (data) => {
+            showToast('success', 'Item added to cart')
+            console.log(data)
+        },
+        onError: (err) => {
+            console.log('User profile error : ', err)
+        }
+    })
+
 
     const HandleClick = () => {
         if (typeof window !== 'undefined') {
@@ -36,6 +52,19 @@ const FishCard: FC<Props> = ({ fish }) => {
         e.stopPropagation();
         try {
             mutation.mutate(fish.id)
+        } catch (err) {
+            console.log('Error while adding item to wishlist', err)
+        }
+    }
+
+    const HandleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        try {
+            const item = {
+                fishId: fish?.id,
+                quantity: 1
+            }
+            cartMutation.mutate(item)
         } catch (err) {
             console.log('Error while adding item to wishlist', err)
         }
@@ -139,7 +168,7 @@ const FishCard: FC<Props> = ({ fish }) => {
                                     ({fish.avgRating.toFixed(1)})
                                 </span> */}
                             </div>
-                            
+
                             {/* Price - with currency symbol */}
                             <p className="font-bold text-sm xs:text-base text-gray-800">₹{Number(fish.price).toFixed(2)}</p>
                         </div>
@@ -148,11 +177,8 @@ const FishCard: FC<Props> = ({ fish }) => {
                         <button
                             className="mt-2.5 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
                             text-white py-2 xs:py-2.5 rounded-lg text-xs xs:text-sm font-medium transition-all duration-300 
-                            flex items-center justify-center shadow-sm hover:shadow group"
-                            onClick={(e) => {
-                                e.stopPropagation(); // Prevent card click
-                                // Add to cart logic
-                            }}
+                            flex items-center justify-center shadow-sm hover:shadow group cursor-pointer"
+                            onClick={HandleAddToCart}
                         >
                             <ShoppingCart size={16} className="mr-1.5 group-hover:animate-pulse" />
                             Add to Cart
