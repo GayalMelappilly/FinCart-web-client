@@ -1,12 +1,12 @@
 'use client';
 
-import { UserProfile } from './types';
+import { SellerData } from '@/app/types/seller/sellerDetails/types';
 
 interface BioCardProps {
-  profile: UserProfile;
-  editableProfile: UserProfile;
+  profile: SellerData | null;
+  editableProfile: SellerData | null;
   isEditMode: boolean;
-  onProfileChange: (profile: UserProfile) => void;
+  onProfileChange: (profile: SellerData | null) => void;
 }
 
 export default function BioCard({ 
@@ -16,11 +16,20 @@ export default function BioCard({
   onProfileChange 
 }: BioCardProps) {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!editableProfile) return;
+    
     onProfileChange({
       ...editableProfile,
-      bio: e.target.value
+      businessInfo: {
+        ...editableProfile.businessInfo,
+        storeDescription: e.target.value
+      }
     });
   };
+
+  if (!profile || !editableProfile) {
+    return <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6">Loading...</div>;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6 transition-all">
@@ -28,11 +37,11 @@ export default function BioCard({
       
       {isEditMode ? (
         <div>
-          <label htmlFor="bio" className="sr-only">Bio</label>
+          <label htmlFor="storeDescription" className="sr-only">Bio</label>
           <textarea 
-            id="bio"
-            name="bio"
-            value={editableProfile.bio}
+            id="storeDescription"
+            name="storeDescription"
+            value={editableProfile.businessInfo.storeDescription || ''}
             onChange={handleChange}
             rows={5}
             className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -44,7 +53,7 @@ export default function BioCard({
         </div>
       ) : (
         <div className="prose prose-sm max-w-none text-gray-700">
-          <p>{profile.bio}</p>
+          <p>{profile.businessInfo.storeDescription || 'No bio provided yet.'}</p>
         </div>
       )}
     </div>

@@ -1,38 +1,78 @@
+import { 
+  Address, 
+  BusinessInfo, 
+  ContactInfo, 
+  SellerData, 
+  SellerMetrics,
+  TopFishListing,
+  SellerSettings,
+  SellerPaymentSettings,
+  SellerSalesHistory,
+  SalesChartData,
+  TopSellingProduct,
+  RecentOrder,
+  Location
+} from '@/app/types/seller/sellerDetails/types';
 import { useState, useEffect } from 'react';
-import { UserProfile, PasswordForm, NotificationType } from '@/app/components/Seller/Profile/types'
+
+export interface DashboardMetric {
+  total: string;
+  percentChange: string;
+  trend: string;
+}
+
+export interface PasswordForm {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export type NotificationType = {
+  type: 'success' | 'error' | 'info';
+  message: string;
+} | null;
 
 export function useProfile() {
   const [activeTab, setActiveTab] = useState<'view' | 'edit'>('view');
-  const [profile, setProfile] = useState<UserProfile>({
-    id: 'S12345',
-    name: 'Tyrion Lannister',
-    email: 'tyrion@got.com',
-    phone: '+91 1234567891',
-    address: 'Casterly Rock, King\'s Landing',
-    joinDate: '12 June 1945',
-    avatar: '/profile-avatar.jpg',
-    bio: 'Casterly Rock exotic fins',
-    storeName: 'Tyrion\'s Aquatics',
-    taxId: 'TAX-9876543',
-  });
-  
-  const [editableProfile, setEditableProfile] = useState<UserProfile>(profile);
+  const [profile, setProfile] = useState<SellerData | null>(null);
+  const [editableProfile, setEditableProfile] = useState<SellerData | null>(null);
   const [passwordForm, setPasswordForm] = useState<PasswordForm>({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
-  const [notification, setNotification] = useState<NotificationType | null>(null);
+  const [notification, setNotification] = useState<NotificationType>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const loadProfileFromLocalStorage = () => {
+      try {
+        const sellerDataString = localStorage.getItem('sellerData');
+        if (sellerDataString) {
+          const sellerData = JSON.parse(sellerDataString);
+          setProfile(sellerData);
+          setEditableProfile(sellerData);
+        }
+      } catch (error) {
+        console.error('Error loading profile from localStorage:', error);
+        showNotification('error', 'Failed to load profile data');
+      }
+    };
+
+    loadProfileFromLocalStorage();
+  }, []);
 
   // Reset editable profile when switching tabs
   useEffect(() => {
-    if (activeTab === 'view') {
+    if (activeTab === 'view' && profile) {
       setEditableProfile(profile);
     }
   }, [activeTab, profile]);
 
   const handleProfileUpdate = async () => {
+    if (!editableProfile) return;
+    
     setIsLoading(true);
     
     try {
@@ -41,14 +81,100 @@ export function useProfile() {
       
       // Update the profile with the edited values
       setProfile(editableProfile);
+      
+      // Save updated profile to localStorage
+      localStorage.setItem('sellerData', JSON.stringify(editableProfile));
+      
       setActiveTab('view');
       showNotification('success', 'Profile updated successfully!');
     } catch (error) {
       showNotification('error', 'Failed to update profile. Please try again.');
-      console.log(error)
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBusinessInfoUpdate = (updates: Partial<BusinessInfo>) => {
+    if (!editableProfile) return;
+    
+    setEditableProfile({
+      ...editableProfile,
+      businessInfo: {
+        ...editableProfile.businessInfo,
+        ...updates
+      }
+    });
+  };
+
+  const handleAddressUpdate = (updates: Partial<Address>) => {
+    if (!editableProfile) return;
+    
+    setEditableProfile({
+      ...editableProfile,
+      address: editableProfile.address ? {
+        ...editableProfile.address,
+        ...updates
+      } : {
+        addressLine1: '',
+        addressType: null,
+        landmark: null,
+        location: {
+          city: '',
+          state: '',
+          country: '',
+          pinCode: ''
+        },
+        ...updates
+      }
+    });
+  };
+
+  const handleContactInfoUpdate = (updates: Partial<ContactInfo>) => {
+    if (!editableProfile) return;
+    
+    setEditableProfile({
+      ...editableProfile,
+      contactInfo: {
+        ...editableProfile.contactInfo,
+        ...updates
+      }
+    });
+  };
+
+  const handleSettingsUpdate = (updates: Partial<SellerSettings>) => {
+    if (!editableProfile) return;
+    
+    setEditableProfile({
+      ...editableProfile,
+      settings: editableProfile.settings ? {
+        ...editableProfile.settings,
+        ...updates
+      } : {
+        autoAcceptOrders: false,
+        defaultWarrantyPeriod: 0,
+        returnWindow: 0,
+        shippingProvider: '',
+        minOrderValue: 0,
+        ...updates
+      }
+    });
+  };
+
+  const handlePaymentSettingsUpdate = (updates: Partial<SellerPaymentSettings>) => {
+    if (!editableProfile) return;
+    
+    setEditableProfile({
+      ...editableProfile,
+      paymentSettings: editableProfile.paymentSettings ? {
+        ...editableProfile.paymentSettings,
+        ...updates
+      } : {
+        paymentCycle: '',
+        minPayoutAmount: 0,
+        ...updates
+      }
+    });
   };
 
   const handlePasswordChange = async () => {
@@ -83,14 +209,14 @@ export function useProfile() {
       showNotification('success', 'Password changed successfully!');
     } catch (error) {
       showNotification('error', 'Failed to update password. Please try again.');
-      console.log(error)
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const showNotification = (type: 'success' | 'error' | 'info', message: string) => {
-    setNotification({ type: type as 'success' | 'error', message });
+    setNotification({ type: type as 'success' | 'error' | 'info', message });
     setTimeout(() => setNotification(null), 3000);
   };
 
@@ -106,6 +232,11 @@ export function useProfile() {
     isLoading,
     handleProfileUpdate,
     handlePasswordChange,
+    handleBusinessInfoUpdate,
+    handleAddressUpdate,
+    handleContactInfoUpdate,
+    handleSettingsUpdate,
+    handlePaymentSettingsUpdate,
     showNotification
   };
 }

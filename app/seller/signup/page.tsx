@@ -1,14 +1,14 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
-import Footer from '@/app/components/Footer/Footer';
-import SellerSignUpBox from '@/app/components/Seller/Signup/SellerSignUpBox';
+// import Footer from '@/app/components/Footer/Footer';
+// import SellerSignUpBox from '@/app/components/Seller/Signup/SellerSignUpBox';
 import EmailSignUpBox from '@/app/components/Seller/Signup/sellerEmailSignup';
 
 const Page: React.FC = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  // const [phoneNumber, setPhoneNumber] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>

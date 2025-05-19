@@ -47,7 +47,7 @@ export interface ContactInfo {
 // Address information
 export interface Address {
   addressLine1: string;
-  addressLine2: string | null;
+  addressLine2?: string | null;
   landmark: string | null;
   addressType: string | null;
   location: Location | {

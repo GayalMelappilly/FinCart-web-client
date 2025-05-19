@@ -32,7 +32,7 @@ export const ToastContext = React.createContext<ToastContextType | undefined>(un
 export const Toast: React.FC<ToastProps> = ({
   type,
   message,
-  position = 'bottom-right',
+  // position = 'bottom-right',
   onClose,
 }) => {
   const [isExiting, setIsExiting] = useState(false);
@@ -49,7 +49,7 @@ export const Toast: React.FC<ToastProps> = ({
   useEffect(() => {
     const timer = setTimeout(handleClose, 3000);
     return () => clearTimeout(timer);
-  }, []);
+  });
 
   // Configure icon based on toast type
   const getIcon = () => {

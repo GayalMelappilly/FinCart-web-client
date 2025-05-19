@@ -5,7 +5,7 @@ import { loginUser } from '@/app/services/authServices'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { HiEye, HiEyeOff, HiLockClosed, HiUser } from 'react-icons/hi'
 
 const LoginBox = () => {

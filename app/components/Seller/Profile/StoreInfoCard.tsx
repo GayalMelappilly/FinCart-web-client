@@ -1,14 +1,14 @@
 'use client';
 
-import { UserProfile } from './types';
 import { User, Calendar, Settings } from 'lucide-react';
 import Avatar from './Avatar';
+import { SellerData } from '@/app/types/seller/sellerDetails/types';
 
 interface StoreInfoCardProps {
-  profile: UserProfile;
-  editableProfile: UserProfile;
+  profile: SellerData | null;
+  editableProfile: SellerData | null;
   isEditMode: boolean;
-  onProfileChange: (profile: UserProfile) => void;
+  onProfileChange: (profile: SellerData | null) => void;
   onAvatarChange: () => void;
 }
 
@@ -19,29 +19,39 @@ export default function StoreInfoCard({
   onProfileChange,
   onAvatarChange
 }: StoreInfoCardProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle business info changes specifically
+  const handleBusinessInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editableProfile) return;
+    
     onProfileChange({
       ...editableProfile,
-      [e.target.name]: e.target.value
+      businessInfo: {
+        ...editableProfile.businessInfo,
+        [e.target.name]: e.target.value
+      }
     });
   };
+
+  if (!profile || !editableProfile) {
+    return <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 h-full">Loading...</div>;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 h-full transition-all">
       <div className="flex flex-col items-center mb-6">
         <Avatar 
-          src={profile.avatar} 
-          name={profile.name} 
+          src={profile.businessInfo.logoUrl || ''} 
+          name={profile.businessInfo.businessName} 
           editable={isEditMode}
           onAvatarChange={onAvatarChange}
         />
         
         <div className="mt-4 text-center">
-          <h2 className="text-xl font-semibold text-gray-900">{profile.name}</h2>
-          <p className="text-gray-600">{profile.storeName}</p>
+          <h2 className="text-xl font-semibold text-gray-900">{profile.businessInfo.displayName}</h2>
+          <p className="text-gray-600">{profile.businessInfo.businessName}</p>
           <div className="flex items-center justify-center mt-2 text-sm text-gray-500">
             <Calendar size={16} className="mr-1" />
-            <span>Member since {profile.joinDate}</span>
+            <span>Member since {new Date(profile.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
@@ -52,29 +62,29 @@ export default function StoreInfoCard({
         {isEditMode ? (
           <div className="space-y-4">
             <div>
-              <label htmlFor="storeName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
                 Store Name
               </label>
               <input 
-                id="storeName"
-                name="storeName"
+                id="businessName"
+                name="businessName"
                 type="text" 
-                value={editableProfile.storeName}
-                onChange={handleChange}
+                value={editableProfile.businessInfo.businessName}
+                onChange={handleBusinessInfoChange}
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
             
             <div>
-              <label htmlFor="taxId" className="block text-sm font-medium text-gray-700 mb-1">
-                Tax ID
+              <label htmlFor="gstin" className="block text-sm font-medium text-gray-700 mb-1">
+                Tax ID (GSTIN)
               </label>
               <input 
-                id="taxId"
-                name="taxId"
+                id="gstin"
+                name="gstin"
                 type="text" 
-                value={editableProfile.taxId}
-                onChange={handleChange}
+                value={editableProfile.businessInfo.gstin || ''}
+                onChange={handleBusinessInfoChange}
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -87,7 +97,7 @@ export default function StoreInfoCard({
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-500">Store Name</p>
-                <p className="text-gray-900">{profile.storeName}</p>
+                <p className="text-gray-900">{profile.businessInfo.businessName}</p>
               </div>
             </div>
             
@@ -96,8 +106,8 @@ export default function StoreInfoCard({
                 <Settings size={18} className="text-gray-400" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Tax ID</p>
-                <p className="text-gray-900">{profile.taxId}</p>
+                <p className="text-sm font-medium text-gray-500">Tax ID (GSTIN)</p>
+                <p className="text-gray-900">{profile.businessInfo.gstin || 'Not provided'}</p>
               </div>
             </div>
           </div>

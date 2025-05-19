@@ -78,7 +78,7 @@ const FeaturesFishSection = () => {
 
   return (
     <section className="bg-gradient-to-b from-white to-blue-50/30 px-4 sm:px-6 py-8 sm:py-12">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-0 sm:px-10">
         {/* Header with responsive spacing and alignment */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div>

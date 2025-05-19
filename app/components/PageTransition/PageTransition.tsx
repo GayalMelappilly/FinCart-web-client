@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
+// import { useTransition } from "@react-spring/web";
+// import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 interface PageTransitionProps {
@@ -9,37 +9,46 @@ interface PageTransitionProps {
 }
 
 export default function PageTransition({ children }: PageTransitionProps) {
-  const pathname = usePathname();
+  // const pathname = usePathname();
+
+  // Smooth blur transition effect
+  // const transitions = useTransition(pathname, {
+  //   from: { 
+  //     opacity: 0,
+  //     filter: "blur(8px)",
+  //     position: "absolute",
+  //     width: "100%"
+  //   },
+  //   enter: { 
+  //     opacity: 1,
+  //     filter: "blur(0px)",
+  //     position: "relative",
+  //     width: "100%" 
+  //   },
+  //   leave: { 
+  //     opacity: 0,
+  //     filter: "blur(8px)",
+  //     position: "absolute",
+  //     width: "100%"
+  //   },
+  //   config: { 
+  //     duration: 300 
+  //   },
+  //   exitBeforeEnter: false
+  // });
 
   return (
-    <div className="overflow-hidden">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={pathname}
-          initial={{ 
-            opacity: 0.9,
-            filter: "blur(4px)",
-            rotateY: "1deg"
-          }}
-          animate={{ 
-            opacity: 1,
-            filter: "blur(0px)",
-            rotateY: "0deg"
-          }}
-          exit={{ 
-            opacity: 0.9,
-            filter: "blur(4px)",
-            rotateY: "-1deg"
-          }}
-          transition={{ 
-            duration: 0.2, 
-            ease: [0.21, 0.67, 0.25, 1.01]
-          }}
-          className="min-h-screen w-full transform-gpu"
-        >
+    <div className="overflow-hidden relative">
+      {/* {transitions((style, item) => (
+        item === pathname && (
+          <animated.div
+            style={style}
+            className="w-full min-h-screen will-change-opacity"
+          >
+          </animated.div>
+          )
+          ))} */}
           {children}
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 }
