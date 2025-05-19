@@ -1,6 +1,6 @@
 import { FishProduct } from "../components/Seller/Products/AddOrEditProduct/Form"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
-import { SellerData } from "../types/seller/types"
+import { SellerData } from "../types/seller/sellerDetails/types"
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
 
@@ -259,6 +259,33 @@ export const getSellerProducts = async () => {
 
     } catch (error) {
         console.error('Error fetching the seller list : ', error);
+        throw error;
+    }
+}
+
+export const updateSellerProfile = async (updatedData: SellerData) => {
+    console.log("Product details : ",updatedData)
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/update-profile`, {
+            method: 'PUT',
+            body: JSON.stringify(updatedData)
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        console.log("DATA : ",data)
+
+        if (!data.success) {
+            throw new Error('Product edit error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error edit fish : ', error);
         throw error;
     }
 }

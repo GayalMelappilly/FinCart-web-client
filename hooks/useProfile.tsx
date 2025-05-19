@@ -1,18 +1,14 @@
+import { useToast } from '@/app/providers/ToastProvider';
+import { updateSellerProfile } from '@/app/services/sellerAuthServices';
 import { 
   Address, 
   BusinessInfo, 
   ContactInfo, 
   SellerData, 
-  SellerMetrics,
-  TopFishListing,
   SellerSettings,
-  SellerPaymentSettings,
-  SellerSalesHistory,
-  SalesChartData,
-  TopSellingProduct,
-  RecentOrder,
-  Location
+  SellerPaymentSettings
 } from '@/app/types/seller/sellerDetails/types';
+import { useMutation } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 
 export interface DashboardMetric {
@@ -44,11 +40,25 @@ export function useProfile() {
   const [notification, setNotification] = useState<NotificationType>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const {showToast} = useToast()
+
+  const mutation = useMutation({
+    mutationFn: updateSellerProfile,
+    onSuccess: (data) => {
+      console.log(data)
+      showToast('success', 'Profile updated')
+    },
+    onError: (err) => {
+      console.log('Profile update failed : ', err)
+      showToast('error', 'Failed to update profile')
+    }
+  })
+
   // Load data from localStorage on component mount
   useEffect(() => {
     const loadProfileFromLocalStorage = () => {
       try {
-        const sellerDataString = localStorage.getItem('sellerData');
+        const sellerDataString = localStorage.getItem('seller');
         if (sellerDataString) {
           const sellerData = JSON.parse(sellerDataString);
           setProfile(sellerData);
@@ -77,13 +87,13 @@ export function useProfile() {
     
     try {
       // In a real application, this would be an API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      mutation.mutate(editableProfile)
       
       // Update the profile with the edited values
       setProfile(editableProfile);
       
       // Save updated profile to localStorage
-      localStorage.setItem('sellerData', JSON.stringify(editableProfile));
+      localStorage.setItem('seller', JSON.stringify(editableProfile));
       
       setActiveTab('view');
       showNotification('success', 'Profile updated successfully!');

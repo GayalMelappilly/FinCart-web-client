@@ -56,7 +56,7 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
                             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
                         <Link href="/seller/profile" className="flex items-center">
-                            {sellerData?.businessInfo.logo_url ? <Image src={sellerData?.businessInfo.logo_url as string} alt='profile-image' className='rounded-full hover:scale-105 h-8 w-8' width={1000} height={1000} /> : <User size={18} />}
+                            {sellerData?.businessInfo.logoUrl ? <Image src={sellerData?.businessInfo.logoUrl as string} alt='profile-image' className='rounded-full hover:scale-105 h-8 w-8' width={1000} height={1000} /> : <User size={18} />}
                         </Link>
                     </div>
                 </div>

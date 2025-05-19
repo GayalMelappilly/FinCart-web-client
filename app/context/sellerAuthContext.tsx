@@ -3,13 +3,13 @@
 import { createContext, useContext, useState } from "react";
 
 interface BusinessInfo {
-    business_name: string;
-    business_type: string;
-    legal_business_name: string;
-    display_name: string;
-    store_description: string;
-    logo_url: string;
-    website_url: string;
+    businessName: string;
+    businessType: string;
+    legalBusinessName: string;
+    displayName: string;
+    storeDescription: string;
+    logoUrl: string;
+    websiteUrl: string;
     gstin: string;
     status: string;
 }
@@ -17,50 +17,50 @@ interface BusinessInfo {
 interface ContactInfo {
     email: string;
     phone: string;
-    alternate_phone: string;
+    alternatePhone: string;
 }
 
 interface Location {
     city: string | undefined;
     state: string | undefined;
     country: string | undefined;
-    pin_code: string | undefined;
+    pinCode: string | undefined;
 }
 
 interface Address {
-    address_line1: string;
-    address_line2: string;
+    addressLine1: string;
+    addressLine2: string;
     landmark: string;
-    address_type: string;
+    addressType: string;
     location: Location;
 }
 
 interface Metrics {
-    total_sales: number;
-    total_orders: number;
-    avg_rating: number;
-    total_listings: number;
-    active_listings: number;
-    last_calculated_at: Date;
+    totalSales: number;
+    totalOrders: number;
+    avgRating: number;
+    totalListings: number;
+    activeListings: number;
+    lastCalculatedAt: Date;
 }
 
 interface Settings {
-    auto_accept_orders: boolean;
-    default_warranty_period: number;
-    return_window: number;
-    shipping_provider: string | null;
-    min_order_value: number;
+    autoAcceptOrders: boolean;
+    defaultWarrantyPeriod: number;
+    returnWindow: number;
+    shippingProvider: string | null;
+    minOrderValue: number;
 }
 
 interface PaymentSettings {
-    payment_cycle: string;
-    min_payout_amount: number;
+    paymentCycle: string;
+    minPayoutAmount: number;
 }
 
 interface SalesHistory {
-    daily_sales: number;
-    order_count: number;
-    new_customers: number;
+    dailySales: number;
+    orderCount: number;
+    newCustomers: number;
     cancellations: number;
 }
 
@@ -73,9 +73,9 @@ interface Business {
     settings: Settings[];
     paymentSettings: PaymentSettings[];
     recentSales: SalesHistory[]; 
-    commission_rate: number;
-    created_at: Date;
-    updated_at: Date;
+    commissionRate: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 type SellerAuthContextType = {
