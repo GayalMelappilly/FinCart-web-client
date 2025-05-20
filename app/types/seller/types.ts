@@ -68,7 +68,7 @@ export interface FormErrors {
   [key: string]: string | undefined;
 }
 
-export interface SellerData {
+export interface SellerDataCreate {
   business_name: string;
   business_type: string;
   email: string;

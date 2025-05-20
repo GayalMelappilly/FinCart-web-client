@@ -9,15 +9,13 @@ interface StoreInfoCardProps {
   editableProfile: SellerData | null;
   isEditMode: boolean;
   onProfileChange: (profile: SellerData | null) => void;
-  onAvatarChange: () => void;
 }
 
 export default function StoreInfoCard({ 
   profile, 
   editableProfile, 
   isEditMode, 
-  onProfileChange,
-  onAvatarChange
+  onProfileChange
 }: StoreInfoCardProps) {
   // Handle business info changes specifically
   const handleBusinessInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +41,8 @@ export default function StoreInfoCard({
           src={profile.businessInfo.logoUrl || ''} 
           name={profile.businessInfo.businessName} 
           editable={isEditMode}
-          onAvatarChange={onAvatarChange}
+          editableProfile={profile}
+          onProfileChange={onProfileChange}
         />
         
         <div className="mt-4 text-center">

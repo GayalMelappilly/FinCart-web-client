@@ -25,11 +25,6 @@ export default function ProfilePage() {
     showNotification
   } = useProfile();
 
-  const handleAvatarChange = () => {
-    // In a real app, this would open a file picker dialog
-    showNotification('info', 'Avatar upload functionality would be implemented here');
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {notification && (
@@ -53,7 +48,6 @@ export default function ProfilePage() {
               editableProfile={editableProfile}
               isEditMode={activeTab === 'edit'}
               onProfileChange={setEditableProfile}
-              onAvatarChange={handleAvatarChange}
             />
           </div>
           

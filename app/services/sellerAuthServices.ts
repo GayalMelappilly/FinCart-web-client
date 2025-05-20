@@ -1,10 +1,11 @@
 import { FishProduct } from "../components/Seller/Products/AddOrEditProduct/Form"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
 import { SellerData } from "../types/seller/sellerDetails/types"
+import { SellerDataCreate } from "../types/seller/types"
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
 
-export const createSellerProfile = async (formData: SellerData) => {
+export const createSellerProfile = async (formData: SellerDataCreate) => {
 
     console.log("FORM DATA : ", formData)
     console.log("REACHED")

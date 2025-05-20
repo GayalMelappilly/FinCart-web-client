@@ -7,7 +7,7 @@ import BusinessInfoStep from './BusinessInfoStep';
 import FormNavigation from './FormNavigation';
 import AddressStep from './AddressStep';
 import AccountStep from './AccountStep';
-import { FormData, FormErrors, SellerData } from '@/app/types/seller/types';
+import { FormData, FormErrors, SellerDataCreate } from '@/app/types/seller/types';
 import { useMutation } from '@tanstack/react-query';
 import { createSellerProfile } from '@/app/services/sellerAuthServices';
 
@@ -232,7 +232,7 @@ const SignupForm: FC<Props> = ({
 
     try {
       // Transform the data to match API expectations
-      const sellerData: SellerData = {
+      const sellerData: SellerDataCreate = {
         business_name: formData.businessName,
         business_type: formData.businessType,
         email: formData.email,
