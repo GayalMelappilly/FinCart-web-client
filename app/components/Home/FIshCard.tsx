@@ -86,7 +86,7 @@ const FishCard: FC<Props> = ({ fish }) => {
             onClick={HandleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group w-full h-full cursor-pointer transform transition-all duration-300 hover:translate-y-1"
+            className="group w-full h-full cursor-pointer transform transition-all duration-300 active:scale-95 active:bg-blue-600"
         >
             <div className="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all duration-300 h-full flex flex-col border border-gray-100">
                 {/* Image container with improved height scaling */}
