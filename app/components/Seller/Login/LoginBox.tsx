@@ -1,5 +1,6 @@
 'use client'
 
+import { useSellerAuth } from '@/app/context/sellerAuthContext'
 import { useToast } from '@/app/providers/ToastProvider'
 import { loginUser } from '@/app/services/authServices'
 import { useMutation } from '@tanstack/react-query'
@@ -15,6 +16,7 @@ const LoginBox = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const { setIsLoggedIn, setProfileUrl } = useSellerAuth()
 
     const {showToast} = useToast()
 
@@ -28,9 +30,12 @@ const LoginBox = () => {
             }
             if (data.accessToken) {
                 showToast('success', 'Logged in successfully')
+                console.log('data: ',data)
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('sellerAccessToken', data.accessToken as string)
                     localStorage.setItem('seller-loggedIn', 'true')
+                    setProfileUrl(data.profileUrl)
+                    setIsLoggedIn(true)
                 }
                 router.push('/seller/dashboard');
             }

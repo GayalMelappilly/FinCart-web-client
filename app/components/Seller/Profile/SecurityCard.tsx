@@ -3,10 +3,12 @@
 import { PasswordForm } from './types';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { convertTimeago } from '@/app/utils/timeago';
 
 interface SecurityCardProps {
   passwordForm: PasswordForm;
   onPasswordChange: (form: PasswordForm) => void;
+  lastUpdatedAt: string,
   onSubmit: () => void;
   isEditMode: boolean;
   onEditModeChange: () => void;
@@ -16,6 +18,7 @@ interface SecurityCardProps {
 export default function SecurityCard({ 
   passwordForm, 
   onPasswordChange,
+  lastUpdatedAt,
   onSubmit,
   isEditMode,
   onEditModeChange,
@@ -135,7 +138,7 @@ export default function SecurityCard({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gray-900 font-medium">Password</p>
-            <p className="text-gray-500 text-sm">Last changed 3 months ago</p>
+            <p className="text-gray-500 text-sm">{convertTimeago(lastUpdatedAt)}</p>
           </div>
           <button 
             onClick={onEditModeChange}

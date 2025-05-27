@@ -2,7 +2,7 @@ import { useSellerAuth } from '@/app/context/sellerAuthContext';
 import { Bell, Menu, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 type Props = {
     title: string;
@@ -11,9 +11,12 @@ type Props = {
 
 const Header: FC<Props> = ({ title, toggleSidebar }) => {
 
-    const { isLoggedIn, sellerData } = useSellerAuth()
+    const { isLoggedIn, profileUrl, sellerData } = useSellerAuth()
+    const [profile, setProfile] = useState<string | null>(null)
 
-    console.log(sellerData)
+    useEffect(()=>{
+        setProfile(profileUrl || sellerData?.businessInfo.logoUrl || null)
+    },[])
 
     return (
         <header className="bg-white shadow-sm z-10 md:pr-20">
@@ -56,7 +59,7 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
                             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
                         <Link href="/seller/profile" className="flex items-center">
-                            {sellerData?.businessInfo.logoUrl ? <Image src={sellerData?.businessInfo.logoUrl as string} alt='profile-image' className='rounded-full hover:scale-105 h-8 w-8' width={1000} height={1000} /> : <User size={18} />}
+                            {profile ? <Image src={profile as string} alt='profile-image' className='rounded-full hover:scale-105 h-8 w-8' width={1000} height={1000} /> : <User size={18} />}
                         </Link>
                     </div>
                 </div>

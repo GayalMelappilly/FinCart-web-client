@@ -281,12 +281,43 @@ export const updateSellerProfile = async (updatedData: SellerData) => {
         console.log("DATA : ",data)
 
         if (!data.success) {
-            throw new Error('Product edit error');
+            throw new Error('Profile update error');
         }
         return data;
 
     } catch (error) {
-        console.error('Error edit fish : ', error);
+        console.error('Error updating the profile : ', error);
+        throw error;
+    }
+}
+
+export interface PasswordForm {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const updateSellerPassword = async (form: PasswordForm) => {
+    console.log('passwords : ',form.currentPassword, form.confirmPassword)
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/update-password`, {
+            method: 'PUT',
+            body: JSON.stringify(form)
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        if (!data.success) {
+            throw new Error('Password update error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error updating password : ', error);
         throw error;
     }
 }

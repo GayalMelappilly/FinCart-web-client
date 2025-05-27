@@ -1,5 +1,5 @@
 import { useToast } from '@/app/providers/ToastProvider';
-import { updateSellerProfile } from '@/app/services/sellerAuthServices';
+import { updateSellerPassword, updateSellerProfile } from '@/app/services/sellerAuthServices';
 import { 
   Address, 
   BusinessInfo, 
@@ -51,6 +51,18 @@ export function useProfile() {
     onError: (err) => {
       console.log('Profile update failed : ', err)
       showToast('error', 'Failed to update profile')
+    }
+  })
+
+  const passwordMutation = useMutation({
+    mutationFn: updateSellerPassword,
+    onSuccess: (data) => {
+      console.log(data)
+      showToast('success', 'Password updated')
+    },
+    onError: (err) => {
+      console.log('Password update failed : ', err)
+      showToast('error', 'Failed to update password')
     }
   })
 
@@ -208,7 +220,7 @@ export function useProfile() {
     
     try {
       // In a real application, this would be an API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      passwordMutation.mutate(passwordForm)
       
       // Reset the password form
       setPasswordForm({

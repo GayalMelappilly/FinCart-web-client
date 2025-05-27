@@ -70,6 +70,7 @@ export default function ProfilePage() {
             <SecurityCard 
               passwordForm={passwordForm}
               onPasswordChange={setPasswordForm}
+              lastUpdatedAt={profile?.updatedAt as string}
               onSubmit={handlePasswordChange}
               isEditMode={activeTab === 'edit'}
               onEditModeChange={() => setActiveTab('edit')}

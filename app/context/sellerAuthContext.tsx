@@ -83,6 +83,8 @@ type SellerAuthContextType = {
     setSellerData: (sellerData: Business | null) => void;
     isLoggedIn: boolean;
     setIsLoggedIn: (isLoggedIn: boolean) => void;
+    profileUrl: string | null;
+    setProfileUrl: (profileUrl: string | null) => void;
 };
 
 const SellerAuthContext = createContext<SellerAuthContextType | null>(null);
@@ -90,9 +92,10 @@ const SellerAuthContext = createContext<SellerAuthContextType | null>(null);
 export const SellerAuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [sellerData, setSellerData] = useState<Business | null>(null)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+    const [profileUrl, setProfileUrl] = useState<string | null>(null)
 
     return (
-        <SellerAuthContext.Provider value={{ sellerData, setSellerData, isLoggedIn, setIsLoggedIn }}>
+        <SellerAuthContext.Provider value={{ sellerData, setSellerData, isLoggedIn, setIsLoggedIn, profileUrl, setProfileUrl }}>
             {children}
         </SellerAuthContext.Provider>
     );
