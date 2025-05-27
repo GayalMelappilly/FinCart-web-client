@@ -16,7 +16,7 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
 
     useEffect(()=>{
         setProfile(profileUrl || sellerData?.businessInfo.logoUrl || null)
-    },[])
+    },[profileUrl, sellerData?.businessInfo.logoUrl])
 
     return (
         <header className="bg-white shadow-sm z-10 md:pr-20">

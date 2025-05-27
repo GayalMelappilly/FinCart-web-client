@@ -23,7 +23,7 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
         if (typeof window !== 'undefined') {
             setAccessToken(localStorage.getItem('sellerAccessToken') || '');
         }
-    }, [localStorage]);
+    }, []);
 
     // Move the useQuery hook to the component level
     const { data, isLoading, error, refetch } = useQuery({

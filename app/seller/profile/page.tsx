@@ -22,7 +22,7 @@ export default function ProfilePage() {
     isLoading,
     handleProfileUpdate,
     handlePasswordChange,
-    showNotification
+    // showNotification
   } = useProfile();
 
   return (
