@@ -23,6 +23,10 @@ const Page: React.FC = () => {
     useEffect(() => {
         try {
             const storageData = typeof window !== 'undefined' ? localStorage.getItem('user') : ''
+            const guestCart = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('guestCartItems') as string) : null
+            if(guestCart){
+                setCartItems(guestCart)
+            }
             const userData = storageData ? JSON.parse(storageData) : ''
             setIsLoading(true);
             if (userData) {
@@ -50,7 +54,7 @@ const Page: React.FC = () => {
             <main className="container mx-auto px-4 md:px-30 py-8 mb-10">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Cart items */}
-                    <div className="w-full lg:w-8/12">
+                    <div className="w-full">
                         {cartItems && cartItems.length > 0 ? (
                             <CartItems cartItems={cartItems} setCartItems={setCartItems} />
                         ) : (
@@ -61,7 +65,6 @@ const Page: React.FC = () => {
                 </div>
                 {/* <RelatedProducts cartItems={cartItems} /> */}
             </main>
-
             <Footer />
         </div>
     );

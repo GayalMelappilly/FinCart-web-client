@@ -101,18 +101,18 @@ const SignupForm: FC<Props> = ({
         isValid = false;
       }
 
-      if (formData.gstin && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(formData.gstin)) {
-        newErrors.gstin = 'Please enter a valid GSTIN';
-        isValid = false;
-      }
+      // if (formData.gstin && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(formData.gstin)) {
+      //   newErrors.gstin = 'Please enter a valid GSTIN';
+      //   isValid = false;
+      // }
 
-      if (formData.panCard?.trim() === '') {
-        newErrors.panCard = 'PAN Card is required';
-        isValid = false;
-      } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.panCard)) {
-        newErrors.panCard = 'Please enter a valid PAN Card number';
-        isValid = false;
-      }
+      // if (formData.panCard?.trim() === '') {
+      //   newErrors.panCard = 'PAN Card is required';
+      //   isValid = false;
+      // } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.panCard)) {
+      //   newErrors.panCard = 'Please enter a valid PAN Card number';
+      //   isValid = false;
+      // }
 
       if (formData.legalBusinessName?.trim() === '') {
         newErrors.legalBusinessName = 'Legal business name is required';

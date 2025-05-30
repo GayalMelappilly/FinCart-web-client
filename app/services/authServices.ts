@@ -1,3 +1,5 @@
+'use client'
+
 import { AuthResponse, LoginCredentials } from "@/app/types/auth/types"
 import { ProfileFormData } from "@/app/types/types"
 import { fetchWithAuth } from "../lib/fetchWithAuth"
@@ -5,6 +7,7 @@ import { FishListFilters, FishListResponse } from "../types/list/fishList"
 import { config } from "dotenv"
 import { SellerProfileResponse } from "../types/sellerProfile/type"
 import { StandardResponse } from "../types/cart/type"
+import Cookies from 'js-cookie';
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -120,7 +123,7 @@ export const loginUser = async (formData: LoginCredentials) => {
   }
 
   try {
-    const response = await fetch('/api/seller/login', {
+    const response = await fetch('/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -167,7 +170,7 @@ export const logoutUser = async () => {
 // Get current user
 export const getCurrentUser = async (accessToken: string) => {
 
-  if(!accessToken){
+  if (!accessToken) {
     return {
       success: false,
       message: 'AccessToken not found'
@@ -268,6 +271,8 @@ export const getBreederInfo = async (id: string): Promise<SellerProfileResponse>
 export const addToCart = async (item: { fishId: string | undefined, quantity: number }) => {
 
   const accessToken = localStorage.getItem('accessToken')
+  const refreshToken = Cookies.get('refreshToken')
+  console.log('refresh-token : ', refreshToken)
   console.log(item)
 
   if (!accessToken) {
@@ -285,11 +290,42 @@ export const addToCart = async (item: { fishId: string | undefined, quantity: nu
     console.log(data)
 
     if (!data.success) {
-      throw new Error('Failed to fetch breeder profile');
+      throw new Error('Failed to add item to cart');
     }
     return data;
   } catch (error) {
-    console.error('Fetch user breeder error:', error);
+    console.error('Add to cart error:', error);
+    throw error;
+  }
+}
+
+// Add to cart - Guest
+export const addToCartGuest = async (item: { fishId: string | undefined, quantity: number }) => {
+
+  const guestCartItems = localStorage.getItem('guestCartItems')
+  if(!guestCartItems){
+    localStorage.setItem('guestCartItems', JSON.stringify([]))
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/guest/cart/add-item`, {
+      method: 'POST',
+      headers: {
+            'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item)
+    })
+
+    const data = await response.json();
+
+    console.log(data)
+
+    if (!data.success) {
+      throw new Error('Failed to add item to cart');
+    }
+    return data;
+  } catch (error) {
+    console.error('Add to cart error:', error);
     throw error;
   }
 }
@@ -361,7 +397,7 @@ export const addToWishlist = async (id: string) => {
   try {
     const response = await fetchWithAuth(`${apiUrl}/wishlist/add-item`, {
       method: 'POST',
-      body: JSON.stringify({id})
+      body: JSON.stringify({ id })
     }, accessToken, 'user')
 
     const data = await response;

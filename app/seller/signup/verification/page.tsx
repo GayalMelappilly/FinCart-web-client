@@ -7,7 +7,7 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col justify-center items-center px-4">
+      <div className="min-h-screen flex flex-col justify-center items-center px-4">
         <Head>
           <title>Verify OTP | Fincart</title>
           <link rel="icon" href="/favicon.ico" />

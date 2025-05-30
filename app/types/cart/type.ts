@@ -10,7 +10,7 @@
 //     size: string;
 //     images: string[];
 //   }
-  
+
 //   export type CartItem = {
 //     id: string; // unique cart item ID
 //     fish_listing_id: string;
@@ -18,10 +18,29 @@
 //     quantity: number;
 //     added_at: string; // ISO date string
 //   }
-  
-  export type StandardResponse = {
-    success: boolean,
-    message: string
-  }
 
-  
+
+// Guest cart items
+export type GuestCartItems = {
+  guestCartItems: CartItems[]
+}
+
+export type CartItems = {
+  fishListings: {
+    breed: string,
+    color: string,
+    description: string,
+    id: string,
+    images: string[],
+    name: string,
+    price: string,
+    size: string
+  },
+  quantity: number
+}
+
+export type StandardResponse = {
+  success: boolean,
+  message: string
+}
+

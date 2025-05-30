@@ -177,7 +177,7 @@ const LoginBox = () => {
                         </div>
                     </div>
 
-                    <Link href="/signup">
+                    <Link href="/seller/signup">
                         <button
                             type="button"
                             className="w-full bg-gray-100 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-200 focus:outline-none transition-colors font-medium flex items-center justify-center"

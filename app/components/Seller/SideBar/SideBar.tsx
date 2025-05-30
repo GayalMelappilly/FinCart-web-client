@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react'
 import Spinner from '../../LoadingSpinner/Spinner';
+import { useToast } from '@/app/providers/ToastProvider';
 
 type Props = {
     navigationItems: NavigationItem[];
@@ -18,6 +19,8 @@ type Props = {
 const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
     const [accessToken, setAccessToken] = useState('');
     const router = useRouter();
+
+    const {showToast} = useToast()
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -34,6 +37,7 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
 
     useEffect(() => {
         if (error) {
+            showToast('error', 'Logout unsuccessful')
             console.log("ERROR HEADER COMP : ", error);
             if (typeof window !== 'undefined') {
                 localStorage.setItem('seller-loggedIn', 'false');
@@ -41,9 +45,11 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
         }
 
         if (data) {
+            showToast('success', 'Logout successful')
             if (typeof window !== 'undefined') {
-                localStorage.setItem('sellerAccessToken', '')
-                localStorage.setItem('seller-loggedIn', 'false')
+                localStorage.removeItem('sellerAccessToken')
+                localStorage.removeItem('seller-loggedIn')
+                localStorage.removeItem('seller-email-address')
             }
             router.push('/');
         }

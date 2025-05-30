@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react'
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
-import { addToCart, addToWishlist } from '@/app/services/authServices';
+import { addToCart, addToCartGuest, addToWishlist } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
+import { fishListings } from '@/app/datasets/breedersListings';
 
 type Props = {
     fish: FishListing
@@ -43,6 +44,26 @@ const FishCard: FC<Props> = ({ fish }) => {
         }
     })
 
+    const guestCartMutation = useMutation({
+        mutationFn: addToCartGuest,
+        onSuccess: (data) => {
+            const item = data.data
+            if (typeof window !== 'undefined') {
+                const cart = JSON.parse(localStorage.getItem('guestCartItems') as string)
+                cart.push(item)
+                console.log("Cart items : ",cart, item)
+                localStorage.removeItem('guestCartItems')
+                localStorage.setItem('guestCartItems', JSON.stringify(cart))
+            }
+            showToast('success', 'Item added to cart')
+            console.log(data)
+        },
+        onError: (err) => {
+            showToast('error', 'Failed to add item to cart')
+            console.log('User profile error : ', err)
+        }
+    })
+
 
     const HandleClick = () => {
         if (typeof window !== 'undefined') {
@@ -67,7 +88,12 @@ const FishCard: FC<Props> = ({ fish }) => {
                 fishId: fish?.id,
                 quantity: 1
             }
-            cartMutation.mutate(item)
+            const isGuest = typeof window !== 'undefined' ? localStorage.getItem('guest') : false
+            if (isGuest == 'true') {
+                guestCartMutation.mutate(item)
+            } else {
+                cartMutation.mutate(item)
+            }
         } catch (err) {
             console.log('Error while adding item to wishlist', err)
         }

@@ -13,10 +13,11 @@ const AccountStep: FC<Props> = ({ formData, handleChange, errors, error }) => {
 
     return (
         <div className="space-y-6">
-            <h3 className="text-xl font-medium text-gray-900">Bank Details & Account Setup</h3>
+            {/* <h3 className="text-xl font-medium text-gray-900">Bank Details & Account Setup</h3> */}
+            <h3 className="text-xl font-medium text-gray-900">Create Password</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+                {/* <div>
                     <label htmlFor="bankAccountNumber" className="block text-sm font-medium text-gray-700">Bank Account Number</label>
                     <input
                         id="bankAccountNumber"
@@ -51,11 +52,11 @@ const AccountStep: FC<Props> = ({ formData, handleChange, errors, error }) => {
                         onChange={handleChange}
                         className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     />
-                </div>
+                </div> */}
 
-                <div className="md:col-span-2">
+                {/* <div className="md:col-span-2">
                     <div className="h-px bg-gray-200 my-6"></div>
-                </div>
+                </div> */}
 
                 <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password*</label>

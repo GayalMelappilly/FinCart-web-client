@@ -24,14 +24,15 @@ export default function FincartHomepage() {
     <div className="min-h-screen bg-zinc-100 text-gray-800 overflow-hidden">
       <Header />
       <Hero />
+      {/* Featured Fish moved above SearchBar */}
+      <FeaturesFishSection />
       <section className="pb-12 relative">
         <SearchBar />
       </section>
-      <FeaturesFishSection />
       <Categories />
       <Working />
       {!accessToken && <Join />}
       <Footer />
     </div>
   )
-}   
+}

@@ -23,6 +23,15 @@ const Header = () => {
         if (typeof window !== 'undefined') {
             setAccessToken(localStorage.getItem('accessToken') || '');
         }
+        if (!localStorage.getItem('accessToken')) {
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('guest', 'true')
+            }
+        }else{
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('guest')
+            }
+        }
     }, []);
 
     const { data, isLoading, error } = useQuery({
@@ -46,7 +55,7 @@ const Header = () => {
 
     useEffect(() => {
         if (data?.success) setUser(data?.data)
-
+        console.log(data)
     }, [data])
 
     if (error) console.log("Error fetching user : ", error);
@@ -218,13 +227,13 @@ const Header = () => {
                                     {user ? (
                                         <div className="rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 shadow-sm">
                                             <div className="flex items-center space-x-3">
-                                                    <button
-                                                        onClick={toggleProfileMenu}
-                                                        className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
-                                                        aria-label="Profile"
-                                                    >
-                                                        {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
-                                                    </button>
+                                                <button
+                                                    onClick={toggleProfileMenu}
+                                                    className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
+                                                    aria-label="Profile"
+                                                >
+                                                    {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
+                                                </button>
                                                 <div>
                                                     <p className="font-semibold text-gray-900">{user.fullName}</p>
                                                     <Link href="/profile" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center">

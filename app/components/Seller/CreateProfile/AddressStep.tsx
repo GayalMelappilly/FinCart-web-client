@@ -1,4 +1,5 @@
 import { AddressFormData } from '@/app/types/seller/types';
+import { indianStates } from '@/app/utils/states';
 import React, { FC } from 'react'
 
 interface FormErrors {
@@ -80,7 +81,7 @@ const AddressStep: FC<Props> = ({ formData, handleChange, errors }) => {
                     {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
                 </div>
 
-                <div>
+                {/* <div>
                     <label htmlFor="state" className="block text-sm font-medium text-gray-700">State*</label>
                     <input
                         id="state"
@@ -91,7 +92,26 @@ const AddressStep: FC<Props> = ({ formData, handleChange, errors }) => {
                         className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     />
                     {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
+                </div> */}
+
+                <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700">State*</label>
+                    <select
+                        id="state"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    >
+                        <option value="">Select a state</option>
+                        {indianStates.map(state => (
+                            <option key={state} value={state}>{state}</option>
+                        ))}
+                    </select>
+
+                    {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
                 </div>
+
 
                 <div>
                     <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country*</label>

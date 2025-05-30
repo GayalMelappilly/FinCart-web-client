@@ -17,6 +17,8 @@ type Props = {
 const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
     const [originalQuantities, setOriginalQuantities] = useState<Record<string, number>>({});
     const [itemsToUpdate, setItemsToUpdate] = useState<Record<string, boolean>>({});
+    const [isGuest, setIsGuest] = useState(false)
+    const [showUpdate, setShowUpdate] = useState(false)
 
     const { showToast } = useToast()
 
@@ -24,12 +26,16 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
     useEffect(() => {
         if (!cartItems || cartItems.length === 0) return;
 
+        if (typeof window !== 'undefined') {
+            setIsGuest(localStorage.getItem('guest') ? true : false)
+        }
+
         const quantities: Record<string, number> = {};
         cartItems.forEach(item => {
             quantities[item.fishListings.id] = item.quantity;
         });
         setOriginalQuantities(quantities);
-    }, [cartItems]);
+    },[]);
 
     const deleteMutation = useMutation({
         mutationFn: deleteCartItem,
@@ -66,6 +72,8 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
 
         // Check if the new quantity is different from original
         const shouldShowUpdate = newQuantity !== originalQuantities[id];
+        console.log(shouldShowUpdate, newQuantity, originalQuantities[id])
+        setShowUpdate(shouldShowUpdate)
         
         // Update the items that need update buttons
         setItemsToUpdate(prev => ({
@@ -154,7 +162,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                                                 <FiPlus className="h-4 w-4" />
                                             </button>
                                         </div>
-                                        {itemsToUpdate[item.fishListings.id] && (
+                                        {itemsToUpdate[item.fishListings.id] && showUpdate && (
                                             <button 
                                                 className='bg-green-600 px-3 py-1 rounded-md text-white'
                                                 onClick={() => handleUpdate(item)}

@@ -26,6 +26,7 @@ const BusinessInfoStep: FC<Props> = ({ formData, handleChange, setFormData, erro
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>()
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -128,12 +129,12 @@ const BusinessInfoStep: FC<Props> = ({ formData, handleChange, setFormData, erro
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email*</label>
           <input
+            disabled
             id="email"
             name="email"
             type="email"
             value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 cursor-not-allowed"
           />
           {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
         </div>
@@ -164,7 +165,7 @@ const BusinessInfoStep: FC<Props> = ({ formData, handleChange, setFormData, erro
           {errors.alternatePhone && <p className="mt-1 text-sm text-red-600">{errors.alternatePhone}</p>}
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="gstin" className="block text-sm font-medium text-gray-700">GSTIN</label>
           <input
             id="gstin"
@@ -175,9 +176,9 @@ const BusinessInfoStep: FC<Props> = ({ formData, handleChange, setFormData, erro
             className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           />
           {errors.gstin && <p className="mt-1 text-sm text-red-600">{errors.gstin}</p>}
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <label htmlFor="panCard" className="block text-sm font-medium text-gray-700">PAN Card*</label>
           <input
             id="panCard"
@@ -188,7 +189,7 @@ const BusinessInfoStep: FC<Props> = ({ formData, handleChange, setFormData, erro
             className="w-full px-4 py-2 border text-gray-800 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           />
           {errors.panCard && <p className="mt-1 text-sm text-red-600">{errors.panCard}</p>}
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="legalBusinessName" className="block text-sm font-medium text-gray-700">Legal Business Name*</label>

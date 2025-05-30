@@ -1,5 +1,6 @@
 'use client'
 
+import { useToast } from '@/app/providers/ToastProvider';
 import { confirmSellerOtp } from '@/app/services/sellerAuthServices';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -17,12 +18,12 @@ const VerificationBox = () => {
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const router = useRouter();
 
-    
-    
-    useEffect(()=>{
+    const {showToast} = useToast()
+
+    useEffect(() => {
         const emailAddress = typeof window !== 'undefined' ? localStorage.getItem('seller-email-address') : ''
-        if(emailAddress) setEmail(emailAddress)
-    },[])
+        if (emailAddress) setEmail(emailAddress)
+    }, [])
 
     const mutation = useMutation({
         mutationFn: confirmSellerOtp,
@@ -33,7 +34,10 @@ const VerificationBox = () => {
                 setError(true)
             }
             if (data.success) {
-                console.log('OTP verified')
+                showToast('success', 'OTP verified')
+                if (typeof window !== 'undefined') {
+                    localStorage.removeItem('svt')
+                }
                 router.push('/seller/create-profile');
             }
         },
@@ -111,11 +115,11 @@ const VerificationBox = () => {
             });
 
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to resend verification code');
             }
-            
+
             // Clear the input fields
             setOtp(['', '', '', '', '', '']);
             if (inputRefs.current[0]) {

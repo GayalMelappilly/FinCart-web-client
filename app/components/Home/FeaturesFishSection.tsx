@@ -84,8 +84,8 @@ const FeaturesFishSection = () => {
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Featured Fish</h2>
           </div>
-          <Link 
-            href="/fish" 
+          <Link
+            href="/fish"
             className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium flex items-center bg-white/80 py-1.5 px-2.5 sm:px-3 rounded-full shadow-sm hover:shadow transition-all"
           >
             View all
@@ -94,16 +94,16 @@ const FeaturesFishSection = () => {
         </div>
 
         {/* Card grid with improved responsive layout */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 sm:gap-6">
-          {data.fishListings.slice(0, 4).map((fish: FishListing) => (
-            <FishCard key={fish.id} fish={fish} />
+        <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-4">
+          {data.fishListings.map((fish: FishListing) => (
+              <FishCard fish={fish} />
           ))}
         </div>
-        
+
         {/* Mobile-only call to action */}
         <div className="sm:hidden text-center mt-6">
-          <Link 
-            href="/fish" 
+          <Link
+            href="/fish"
             className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2 text-sm font-medium shadow-sm hover:from-blue-700 hover:to-blue-800 transition-all"
           >
             Explore All Fish
