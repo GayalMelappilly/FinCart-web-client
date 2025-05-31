@@ -26,6 +26,10 @@ export default function FincartHomepage() {
       <Hero />
       {/* Featured Fish moved above SearchBar */}
       <FeaturesFishSection />
+      <FeaturesFishSection />
+      <FeaturesFishSection />
+      <FeaturesFishSection />
+      <FeaturesFishSection />
       <section className="pb-12 relative">
         <SearchBar />
       </section>

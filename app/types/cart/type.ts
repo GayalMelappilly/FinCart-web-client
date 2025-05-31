@@ -22,25 +22,28 @@
 
 // Guest cart items
 export type GuestCartItems = {
-  guestCartItems: CartItems[]
+  guestCartItems: GuestCartItem[]
 }
 
-export type CartItems = {
+export type GuestCartItem = {
   fishListings: {
-    breed: string,
-    color: string,
-    description: string,
-    id: string,
-    images: string[],
-    name: string,
-    price: string,
+    breed: string;
+    color: string;
+    description: string;
+    id: string;
+    images: string[];
+    name: string;
+    price: string;
     size: string
-  },
-  quantity: number
+  };
+  quantity: number;
+  fishListingId: string;
+  id: string;
+  addedAt: Record<string, unknown>;
 }
 
 export type StandardResponse = {
-  success: boolean,
+  success: boolean;
   message: string
 }
 

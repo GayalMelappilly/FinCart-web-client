@@ -2,11 +2,11 @@
 
 import { confirmOtp } from '@/app/services/authServices';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import { FiShield } from 'react-icons/fi';
 
-const VerificationBox = () => {
+const ForgotPasswordVerificationBox = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<boolean>(false)
@@ -17,12 +17,14 @@ const VerificationBox = () => {
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const router = useRouter();
 
-    
-    
-    useEffect(()=>{
-        const emailAddress = typeof window !== 'undefined' ? localStorage.getItem('email-address') : ''
-        if(emailAddress) setEmail(emailAddress)
-    },[])
+
+
+    const searchParams = useSearchParams();
+    const emailAddress = searchParams?.get('email')
+
+    useEffect(() => {
+        setEmail(emailAddress as string)
+    }, [emailAddress])
 
     const mutation = useMutation({
         mutationFn: confirmOtp,
@@ -34,7 +36,7 @@ const VerificationBox = () => {
             }
             if (data.success) {
                 console.log('OTP verified')
-                router.push('/create-profile');
+                router.push('/change-password');
             }
         },
         onError: (err) => {
@@ -111,11 +113,11 @@ const VerificationBox = () => {
             });
 
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to resend verification code');
             }
-            
+
             // Clear the input fields
             setOtp(['', '', '', '', '', '']);
             if (inputRefs.current[0]) {
@@ -153,8 +155,8 @@ const VerificationBox = () => {
         try {
             const data = {
                 code: String(otp.join('')) as string,
-                type: 'auth'
-            } 
+                type: 'forgotPassword'
+            }
             mutation.mutate(data)
 
         } catch (error) {
@@ -258,4 +260,4 @@ const VerificationBox = () => {
     )
 }
 
-export default VerificationBox
+export default ForgotPasswordVerificationBox

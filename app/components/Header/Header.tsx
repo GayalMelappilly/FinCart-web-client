@@ -46,6 +46,7 @@ const Header = () => {
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('user');
                 localStorage.removeItem('accessToken')
+                localStorage.removeItem('email-address')
                 setAccessToken('')
             }
             setUser(null)

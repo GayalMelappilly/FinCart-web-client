@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { deleteCartItem, editCartItem } from '@/app/services/authServices'
 import { CartItem } from '@/app/types/user/type'
 import { useToast } from '@/app/providers/ToastProvider'
+import { GuestCartItem } from '@/app/types/cart/type'
 
 type Props = {
     cartItems: CartItem[],
@@ -35,7 +36,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
             quantities[item.fishListings.id] = item.quantity;
         });
         setOriginalQuantities(quantities);
-    },[]);
+    }, []);
 
     const deleteMutation = useMutation({
         mutationFn: deleteCartItem,
@@ -72,9 +73,9 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
 
         // Check if the new quantity is different from original
         const shouldShowUpdate = newQuantity !== originalQuantities[id];
-        console.log(shouldShowUpdate, newQuantity, originalQuantities[id])
+        console.log(shouldShowUpdate, newQuantity, id)
         setShowUpdate(shouldShowUpdate)
-        
+
         // Update the items that need update buttons
         setItemsToUpdate(prev => ({
             ...prev,
@@ -84,22 +85,44 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
 
     // Handle update button click
     const handleUpdate = (item: CartItem) => {
-        const cartItem = {
-            id: item?.id,
-            quantity: item.quantity
+        if (isGuest) {
+            const cartItems = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('guestCartItems') as string) : null
+            const product = cartItems.find((cartItem: GuestCartItem) => cartItem.fishListingId === item.fishListingId)
+            product.quantity = item.quantity
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('guestCartItems', JSON.stringify(cartItems))
+            }
+            setItemsToUpdate({})
+            showToast('success', 'Quantity updated')
+        } else {
+            const cartItem = {
+                id: item?.id,
+                quantity: item.quantity
+            }
+            console.log(cartItem, cartItems)
+            setItemsToUpdate({})
+            const itemToUpdate = cartItems.find(item => item.id == cartItem.id)
+            if (itemToUpdate) itemToUpdate.quantity = cartItem.quantity
+            console.log(cartItems)
+            editMutation.mutate(cartItem);
         }
-        console.log(cartItem, cartItems)
-        setItemsToUpdate({})
-        const itemToUpdate = cartItems.find(item => item.id == cartItem.id)
-        if(itemToUpdate) itemToUpdate.quantity = cartItem.quantity
-        console.log(cartItems)
-        editMutation.mutate(cartItem);
     };
 
     // Remove item handler
-    const removeItem = (id: string) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
-        deleteMutation.mutate(id);
+    const removeItem = (id: string, fishListingId: string) => {
+        if (isGuest) {
+            const cartItems = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('guestCartItems') as string) : null
+            const newCartItems = cartItems.filter((cartItem: GuestCartItem) => cartItem.fishListingId !== fishListingId)
+            console.log(fishListingId, cartItems[0].fishListingId)
+            setCartItems(cartItems.filter((item: GuestCartItem) => item.id !== id));
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('guestCartItems', JSON.stringify(newCartItems))
+            }
+            showToast('success', 'Removed item from cart')
+        } else {
+            setCartItems(cartItems.filter(item => item.id !== id));
+            deleteMutation.mutate(id);
+        }
     };
 
     return (
@@ -163,7 +186,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                                             </button>
                                         </div>
                                         {itemsToUpdate[item.fishListings.id] && showUpdate && (
-                                            <button 
+                                            <button
                                                 className='bg-green-600 px-3 py-1 rounded-md text-white'
                                                 onClick={() => handleUpdate(item)}
                                                 disabled={editMutation.isPending}
@@ -176,7 +199,7 @@ const CartItems: FC<Props> = ({ cartItems, setCartItems }) => {
                                     <button
                                         type="button"
                                         className="text-gray-500 hover:text-red-500 flex items-center"
-                                        onClick={() => removeItem(item.id)}
+                                        onClick={() => removeItem(item.id, item.fishListingId)}
                                         disabled={deleteMutation.isPending}
                                     >
                                         <FiTrash2 className="h-4 w-4 mr-1" />

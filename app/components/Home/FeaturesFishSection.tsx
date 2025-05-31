@@ -2,11 +2,11 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { getFishList } from '@/app/services/authServices';
 import FishCard from './FIshCard';
 import { FishListing } from '@/app/types/list/fishList';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const FishLoadingSkeleton = () => (
   <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -28,22 +28,68 @@ const ErrorDisplay = ({ message }: { message: string }) => (
 );
 
 const FeaturesFishSection = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
   // Use React Query to fetch featured fish
   const { data, isLoading, error } = useQuery({
     queryKey: ['featured-fish'],
     queryFn: () => getFishList({}),
   });
 
+  // Check scroll position and update button states
+  const checkScrollPosition = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  // Initialize scroll position check
+  useEffect(() => {
+    checkScrollPosition();
+    const handleResize = () => checkScrollPosition();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [data]);
+
+  // Scroll functions
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.querySelector('[data-card]')?.clientWidth || 250;
+      scrollContainerRef.current.scrollBy({
+        left: -(cardWidth + 24), // Card width + gap
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.querySelector('[data-card]')?.clientWidth || 250;
+      scrollContainerRef.current.scrollBy({
+        left: cardWidth + 24, // Card width + gap
+        behavior: 'smooth'
+      });
+    }
+  };
+
   // Handle loading state
   if (isLoading) {
     return (
-      <section className="px-4 sm:px-6 py-8 sm:py-12">
+      <section className="px-4 sm:px-16 py-8 sm:py-12">
         <div className="container mx-auto">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Featured Fish</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 sm:gap-6">
-            {[...Array(4)].map((_, index) => (
-              <FishLoadingSkeleton key={index} />
-            ))}
+          <div className="overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-rows-1 auto-cols-max">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0">
+                  <FishLoadingSkeleton />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -93,11 +139,54 @@ const FeaturesFishSection = () => {
           </Link>
         </div>
 
-        {/* Card grid with improved responsive layout */}
-        <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-4">
-          {data.fishListings.map((fish: FishListing) => (
-              <FishCard fish={fish} />
-          ))}
+        {/* Card grid with scrollable layout */}
+        <div className="relative">
+          <div 
+            ref={scrollContainerRef}
+            className="overflow-x-auto scrollbar-hide pb-4"
+            onScroll={checkScrollPosition}
+            style={{
+              scrollbarWidth: 'none', /* Firefox */
+              msOverflowStyle: 'none', /* Internet Explorer 10+ */
+            }}
+          >
+            {/* Two rows on small screens, one row on large screens */}
+            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-rows-1 auto-cols-max">
+              {data.fishListings.map((fish: FishListing) => (
+                <div 
+                  key={fish.id} 
+                  data-card
+                  className="w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0"
+                >
+                  <FishCard fish={fish} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation buttons - positioned as overlay on both sides */}
+          {!isLoading && data?.fishListings && data.fishListings.length > 0 && (
+            <>
+              {canScrollLeft && (
+                <button
+                  onClick={scrollLeft}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 text-gray-700 hover:bg-white hover:shadow-xl transition-all duration-200"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft size={20} className="sm:w-5 sm:h-5" />
+                </button>
+              )}
+              {canScrollRight && (
+                <button
+                  onClick={scrollRight}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 text-gray-700 hover:bg-white hover:shadow-xl transition-all duration-200"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={20} className="sm:w-5 sm:h-5" />
+                </button>
+              )}
+            </>
+          )}
         </div>
 
         {/* Mobile-only call to action */}

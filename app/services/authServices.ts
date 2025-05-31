@@ -28,6 +28,7 @@ export const signUpUser = async (phoneNumber: string) => {
   return response
 }
 
+// Verify Email
 export const verifyEmail = async (email: string) => {
   const res = await fetch(`${apiUrl}/verify-email/`, {
     method: 'POST',
@@ -43,11 +44,39 @@ export const verifyEmail = async (email: string) => {
   return response
 }
 
-export const confirmOtp = async (code: string) => {
+// Forgot password verify email
+export const forgotPasswordVerifyEmail = async (email: string) => {
+  const res = await fetch(`${apiUrl}/forgot-password/verify-email/`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email }),
+    credentials: "include"
+  })
 
-  console.log('Verification code: ', code)
+  const response = await res.json()
+  console.log(response)
+  return response
+}
 
-  const token = localStorage.getItem('vt')
+type OtpDataType = {
+  code: string,
+  type: string
+}
+// Confirm verification OTP
+export const confirmOtp = async (data: OtpDataType) => {
+
+  console.log('Verification code: ', data.code)
+
+  const code = data.code
+
+  let token;
+  if (data.type === 'auth') {
+    token = localStorage.getItem('vt')
+  } else if (data.type === 'forgotPassword') {
+    token = localStorage.getItem('fpvt')
+  }
 
   if (!token) {
     console.log("No token found")
@@ -66,6 +95,41 @@ export const confirmOtp = async (code: string) => {
   const response = await res.json()
   console.log(response)
   return response
+}
+
+type changePasswordType = {
+  newPassword: string,
+  confirmPassword: string
+}
+// Change password 
+export const changePassword = async (passwordData: changePasswordType) => {
+
+  if (!passwordData.newPassword || !passwordData.confirmPassword) {
+    return Error('Password must be provided')
+  }
+
+  let verificationToken;
+  if (typeof window !== 'undefined') {
+    verificationToken = localStorage.getItem('fpvt')
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/change-password/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({verificationToken, newPassword: passwordData.newPassword})
+    })
+
+    const data = await response.json()
+    console.log("data :", data)
+    return data
+  } catch (error) {
+    console.error('Change password error : ', error)
+    throw error;
+  }
 }
 
 // Create user profile
@@ -303,7 +367,7 @@ export const addToCart = async (item: { fishId: string | undefined, quantity: nu
 export const addToCartGuest = async (item: { fishId: string | undefined, quantity: number }) => {
 
   const guestCartItems = localStorage.getItem('guestCartItems')
-  if(!guestCartItems){
+  if (!guestCartItems) {
     localStorage.setItem('guestCartItems', JSON.stringify([]))
   }
 
@@ -311,7 +375,7 @@ export const addToCartGuest = async (item: { fishId: string | undefined, quantit
     const response = await fetch(`${apiUrl}/guest/cart/add-item`, {
       method: 'POST',
       headers: {
-            'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(item)
     })
