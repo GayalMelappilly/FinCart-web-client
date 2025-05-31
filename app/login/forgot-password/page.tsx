@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Head from 'next/head';
 import Footer from '@/app/components/Footer/Footer';
 import ForgotPasswordVerificationBox from '@/app/components/Verification/ForgetPasswordVerificationBox';
 import EmailConfirmationPage from '@/app/components/ConfirmationPage/EmailConfirmationPage';
+import Spinner from '@/app/components/LoadingSpinner/Spinner';
 
 const Page: React.FC = () => {
 
@@ -17,7 +18,9 @@ const Page: React.FC = () => {
           <title>Verify OTP | Fincart</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        {isConfirmed ? <ForgotPasswordVerificationBox /> : <EmailConfirmationPage setIsConfirmed={setIsConfirmed} type='user' />}
+        <Suspense fallback={<Spinner />}>
+          {isConfirmed ? <ForgotPasswordVerificationBox /> : <EmailConfirmationPage setIsConfirmed={setIsConfirmed} type='user' />}
+        </Suspense>
       </div>
       <Footer />
     </>
