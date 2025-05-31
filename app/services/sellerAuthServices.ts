@@ -5,6 +5,7 @@ import { SellerDataCreate } from "../types/seller/types"
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
 
+// Create seller profile
 export const createSellerProfile = async (formData: SellerDataCreate) => {
 
     console.log("FORM DATA : ", formData)
@@ -34,6 +35,7 @@ export const createSellerProfile = async (formData: SellerDataCreate) => {
     }
 }
 
+// Get seller details
 export const getSellerDetails = async (accessToken: string) => {
 
     try {
@@ -54,11 +56,11 @@ export const getSellerDetails = async (accessToken: string) => {
 }
 
 interface FormData {
-    emailOrMobile: string;
+    identifier: string;
     password: string;
-    rememberMe: boolean;
 }
 
+// Login seller
 export const loginSeller = async (formData: FormData) => {
     console.log("FORM DATA : ", formData)
     console.log("REACHED")
@@ -88,6 +90,7 @@ export const loginSeller = async (formData: FormData) => {
     }
 }
 
+// Verify seller email
 export const verifySellerEmail = async (email: string) => {
   const res = await fetch(`${apiUrl}/seller/verify-email`, {
     method: 'POST',
@@ -103,11 +106,24 @@ export const verifySellerEmail = async (email: string) => {
   return response
 }
 
-export const confirmSellerOtp = async (code: string) => {
+type OtpDataType = {
+  code: string,
+  type: string
+}
 
-  console.log('Verification code: ', code)
+// Confirm seller OTP
+export const confirmSellerOtp = async (data: OtpDataType) => {
 
-  const token = localStorage.getItem('svt')
+  console.log('Verification code: ', data.code)
+
+  const code = data.code
+
+  let token;
+  if (data.type === 'auth') {
+    token = localStorage.getItem('vt')
+  } else if (data.type === 'forgotPassword') {
+    token = localStorage.getItem('fpvt')
+  }
 
   if (!token) {
     console.log("No token found")
@@ -128,6 +144,7 @@ export const confirmSellerOtp = async (code: string) => {
   return response
 }
 
+// Logout seller
 export const logoutSeller = async (accessToken: string) => {
 
     console.log("Logout seller")
@@ -153,6 +170,7 @@ export const logoutSeller = async (accessToken: string) => {
     }
 }
 
+// Add product
 export const addProduct = async (productData: FishProduct) => {
 
     console.log("Product details : ",productData)
@@ -183,6 +201,7 @@ export const addProduct = async (productData: FishProduct) => {
 
 }
 
+// Edit product
 export const editProduct = async (productData: FishProduct) => {
 
     console.log("Product details : ",productData)
@@ -212,6 +231,7 @@ export const editProduct = async (productData: FishProduct) => {
 
 }
 
+// Delete product
 export const deleteProduct = async (productId: string) => {
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
@@ -237,6 +257,7 @@ export const deleteProduct = async (productId: string) => {
     }
 }
 
+// Get seller profile
 export const getSellerProducts = async () => {
 
     console.log("Get seller products")
@@ -264,6 +285,7 @@ export const getSellerProducts = async () => {
     }
 }
 
+// Update seller profile
 export const updateSellerProfile = async (updatedData: SellerData) => {
     console.log("Product details : ",updatedData)
     const accessToken = localStorage.getItem('sellerAccessToken') as string
@@ -297,6 +319,7 @@ export interface PasswordForm {
   confirmPassword: string;
 }
 
+// Update seller password
 export const updateSellerPassword = async (form: PasswordForm) => {
     console.log('passwords : ',form.currentPassword, form.confirmPassword)
     const accessToken = localStorage.getItem('sellerAccessToken') as string
@@ -320,4 +343,38 @@ export const updateSellerPassword = async (form: PasswordForm) => {
         console.error('Error updating password : ', error);
         throw error;
     }
+}
+
+type changePasswordType = {
+  newPassword: string,
+  confirmPassword: string
+}
+// Change seller password (Forgot password)
+export const changeSellerPassword = async (passwordData: changePasswordType) => {
+    if (!passwordData.newPassword || !passwordData.confirmPassword) {
+    return Error('Password must be provided')
+  }
+
+  let verificationToken;
+  if (typeof window !== 'undefined') {
+    verificationToken = localStorage.getItem('fpvt')
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/seller/change-password/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({verificationToken, newPassword: passwordData.newPassword})
+    })
+
+    const data = await response.json()
+    console.log("data :", data)
+    return data
+  } catch (error) {
+    console.error('Change seller password error : ', error)
+    throw error;
+  }
 }

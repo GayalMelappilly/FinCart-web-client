@@ -1,12 +1,12 @@
 'use client'
 
-import { confirmOtp } from '@/app/services/authServices';
+import { confirmSellerOtp } from '@/app/services/sellerAuthServices';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import { FiShield } from 'react-icons/fi';
 
-const ForgotPasswordVerificationBox = () => {
+const SellerForgotPasswordVerificationBox = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<boolean>(false)
@@ -27,7 +27,7 @@ const ForgotPasswordVerificationBox = () => {
     }, [emailAddress])
 
     const mutation = useMutation({
-        mutationFn: confirmOtp,
+        mutationFn: confirmSellerOtp,
         onSuccess: (data) => {
             if (!data.success) {
                 console.log(data)
@@ -36,7 +36,7 @@ const ForgotPasswordVerificationBox = () => {
             }
             if (data.success) {
                 console.log('OTP verified')
-                router.push('/change-password');
+                router.push('/seller/change-password');
             }
         },
         onError: (err) => {
@@ -260,4 +260,4 @@ const ForgotPasswordVerificationBox = () => {
     )
 }
 
-export default ForgotPasswordVerificationBox
+export default SellerForgotPasswordVerificationBox

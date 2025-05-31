@@ -156,7 +156,11 @@ const VerificationBox = () => {
 
         try {
 
-            mutation.mutate(String(otp.join('')) as string)
+            const data = {
+                code: String(otp.join('')) as string,
+                type: 'forgotPassword'
+            } 
+            mutation.mutate(data)
 
         } catch (error) {
             console.error('Error verifying code:', error);

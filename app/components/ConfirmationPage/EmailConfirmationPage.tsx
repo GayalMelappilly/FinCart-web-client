@@ -8,9 +8,10 @@ import { forgotPasswordVerifyEmail } from '@/app/services/authServices'
 
 type Props = {
     setIsConfirmed: (isConfirmed: boolean) => void;
+    type: string;
 }
 
-const EmailConfirmationPage:FC<Props> = ({setIsConfirmed}) => {
+const EmailConfirmationPage:FC<Props> = ({setIsConfirmed, type}) => {
     const [email, setEmail] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string>('')
@@ -23,7 +24,11 @@ const EmailConfirmationPage:FC<Props> = ({setIsConfirmed}) => {
             setEmail(emailAddress)
         } else {
             // Redirect back if no email is provided
-            router.push('/forgot-password')
+            if(type === "seller"){
+                router.push('/seller/forgot-password')
+            }else if(type === 'user'){
+                router.push('/forgot-password')
+            }
         }
     }, [searchParams, router])
 

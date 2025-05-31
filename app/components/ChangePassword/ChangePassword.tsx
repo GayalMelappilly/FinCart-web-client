@@ -2,13 +2,18 @@
 
 import { useToast } from '@/app/providers/ToastProvider';
 import { changePassword } from '@/app/services/authServices';
+import { changeSellerPassword } from '@/app/services/sellerAuthServices';
 // import { updatePassword } from '@/app/services/authServices';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
-const ChangePasswordBox = () => {
+type Props = {
+    type: string
+}
+
+const ChangePasswordBox:FC<Props> = ({ type }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -21,7 +26,7 @@ const ChangePasswordBox = () => {
     const {showToast} = useToast()
 
     const mutation = useMutation({
-        mutationFn: changePassword,
+        mutationFn: type === 'user' ? changePassword : changeSellerPassword,
         onSuccess: (data) => {
             if (!data.success) {
                 setError(data.message || 'Failed to update password');
@@ -29,7 +34,11 @@ const ChangePasswordBox = () => {
             if (data.success) {
                 console.log('Password updated successfully');
                 showToast('success', 'Password updated successfully')
-                router.push('/login'); // or wherever you want to redirect
+                if(type === 'user'){
+                    router.push('/login'); // or wherever you want to redirect
+                }else if(type === 'seller'){
+                    router.push('/seller/login')
+                }
             }
         },
         onError: (err) => {

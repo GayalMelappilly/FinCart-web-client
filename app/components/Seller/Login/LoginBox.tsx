@@ -2,7 +2,7 @@
 
 import { useSellerAuth } from '@/app/context/sellerAuthContext'
 import { useToast } from '@/app/providers/ToastProvider'
-import { loginUser } from '@/app/services/authServices'
+import { loginSeller } from '@/app/services/sellerAuthServices'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -23,7 +23,7 @@ const LoginBox = () => {
     const router = useRouter()
 
     const mutation = useMutation({
-        mutationFn: loginUser,
+        mutationFn: loginSeller,
         onSuccess: (data) => {
             if (!data.success) {
                 setError(true)
@@ -141,7 +141,7 @@ const LoginBox = () => {
                             </label>
                         </div>
                         <div className="text-sm">
-                            <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
+                            <Link href={{pathname: "/seller/login/forgot-password", query: {email: identifier}}} className="font-medium text-blue-600 hover:text-blue-500">
                                 Forgot password?
                             </Link>
                         </div>

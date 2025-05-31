@@ -12,7 +12,9 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
     '/seller/signup',
     '/seller/signup/verification',
     '/seller/create-profile',
-    '/seller/login'
+    '/seller/login',
+    '/seller/login/forgot-password',
+    '/seller/change-password'
   ];
   
   const isPublicPath = publicPaths.some(path => pathname === path);

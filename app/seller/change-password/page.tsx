@@ -2,9 +2,7 @@
 
 import React, { useState } from 'react';
 import Head from 'next/head';
-import Footer from '../components/Footer/Footer';
-import LoginBox from '../components/Login/LoginBox';
-import ChangePasswordBox from '../components/ChangePassword/ChangePassword';
+import ChangePasswordBox from '@/app/components/ChangePassword/ChangePassword';
 
 const Page: React.FC = () => {
   // const [phoneNumber, setPhoneNumber] = useState('');
@@ -17,9 +15,8 @@ const Page: React.FC = () => {
           <title>Sign Up | Fincart</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <ChangePasswordBox type={'user'} />
+        <ChangePasswordBox type={'seller'} />
       </div>
-      <Footer />
     </>
   );
 };
