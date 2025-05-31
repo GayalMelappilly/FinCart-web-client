@@ -7,7 +7,6 @@ import { Heart, ShoppingCart } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { addToCart, addToCartGuest, addToWishlist } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
-import { fishListings } from '@/app/datasets/breedersListings';
 
 type Props = {
     fish: FishListing

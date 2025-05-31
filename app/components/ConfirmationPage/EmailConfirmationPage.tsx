@@ -118,7 +118,7 @@ const EmailConfirmationPage:FC<Props> = ({setIsConfirmed, type}) => {
                                 Confirm Email Address
                             </h3>
                             <p className="text-gray-600 mb-4">
-                                We'll send a verification code to confirm your identity and help you reset your password.
+                                We&apos;ll send a verification code to confirm your identity and help you reset your password.
                             </p>
                             
                             {/* Email display */}
@@ -132,7 +132,7 @@ const EmailConfirmationPage:FC<Props> = ({setIsConfirmed, type}) => {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                                 <p className="text-blue-800 text-sm">
                                     <span className="font-medium">Note:</span> The verification code will expire in 10 minutes. 
-                                    Make sure to check your spam folder if you don't see the email in your inbox.
+                                    Make sure to check your spam folder if you don&apos;t see the email in your inbox.
                                 </p>
                             </div>
                         </div>

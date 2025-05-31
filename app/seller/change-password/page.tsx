@@ -1,12 +1,11 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import ChangePasswordBox from '@/app/components/ChangePassword/ChangePassword';
 
 const Page: React.FC = () => {
   // const [phoneNumber, setPhoneNumber] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>

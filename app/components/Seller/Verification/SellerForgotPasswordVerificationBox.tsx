@@ -24,6 +24,8 @@ const SellerForgotPasswordVerificationBox = () => {
 
     useEffect(() => {
         setEmail(emailAddress as string)
+        setTimer(30) // Remove this line, while working on resending mails
+        setCanResend(false) // Remove this line, while working on resending mails
     }, [emailAddress])
 
     const mutation = useMutation({
