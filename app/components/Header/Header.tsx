@@ -77,11 +77,11 @@ const Header = () => {
     }
 
     return (
-        <header className="bg-white shadow-sm relative">
-            <div className="container mx-auto md:px-30 px-4 py-3">
-                <div className="flex items-center justify-between">
+        <header className="bg-white shadow-sm relative w-screen">
+            <div className="container mx-auto py-3">
+                <div className="flex items-center justify-between w-full px-5">
                     {/* Logo and optional menu button */}
-                    <div className="flex items-center ">
+                    <div className="flex items-center">
                         <button
                             className="sm:hidden text-gray-600 mt-1"
                             onClick={toggleMobileMenu}
@@ -93,7 +93,7 @@ const Header = () => {
                             <Image
                                 src="/splash.png"
                                 alt="Fincart Logo"
-                                className="md:h-6 h-5 object-contain pr-3"
+                                className="md:h-5 lg:h-6 h-5 object-contain pr-3"
                                 width={150}
                                 height={150}
                             />
