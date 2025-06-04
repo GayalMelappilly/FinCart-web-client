@@ -20,17 +20,18 @@ export default function FincartHomepage() {
     }
   }, []);
 
+
   return (
     <div className="min-h-screen bg-zinc-100 text-gray-800 overflow-hidden">
       <Header />
       <Hero />
       
       {/* Featured Fish moved above SearchBar */}
-      <FeaturesFishSection />
-      <FeaturesFishSection />
-      <FeaturesFishSection />
-      <FeaturesFishSection />
-      <FeaturesFishSection />
+      <FeaturesFishSection title={'Featured Fish'} />
+      <FeaturesFishSection title={'Bettas'} />
+      <FeaturesFishSection title={'Guppies'} />
+      <FeaturesFishSection title={'Clownfish'} />
+      <FeaturesFishSection title={'Tetras'} />
       <section className="pb-12 relative">
         <SearchBar />
       </section>

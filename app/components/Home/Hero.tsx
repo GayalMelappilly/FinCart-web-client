@@ -14,12 +14,12 @@ const Hero = () => {
                 <div className="absolute bottom-0 right-0 w-full h-64 bg-cyan-500/5 rounded-full blur-3xl transform translate-y-1/2" />
             </div>
 
-            <div className="container mx-auto px-2 sm:px-0 py-6 sm:py-16 md:py-24 relative z-10">
+            <div className="mx-auto px-2 sm:px-10 py-6 sm:py-16 lg:py-24 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
                     {/* Text Section */}
                     <div className="lg:col-span-5 space-y-4 sm:space-y-6 lg:space-y-8 text-left sm:text-center lg:text-left">
                         {/* Main heading with fancy underline */}
-                        <h1 className="text-[40px] sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-800 leading-tight lg:px-0">
+                        <h1 className="text-[40px] text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold text-slate-800 leading-tight lg:px-0">
                             Discover the
                             <span className="bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent"> Artistry </span>
                             {/* <span className="relative"> */}
@@ -36,13 +36,13 @@ const Hero = () => {
 
                         {/* Interactive elements grid */}
                         <div className="flex flex-row gap-3 sm:gap-4 pt-2 sm:pt-4 w-full justify-center sm:justify-normal sm:max-w-md mx-auto lg:mx-0">
-                            <button className="flex items-center justify-center space-x-1 sm:space-x-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:scale-105 duration-300 text-white text-[16px] py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg group">
-                                <span>Browse Collection</span>
+                            <button className="flex items-center justify-center space-x-1 sm:space-x-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:scale-105 duration-300 text-white text-[16px] w-1/2 py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg group">
+                                <span className='flex gap-1.5'>Browse<span className='hidden sm:block'> Collection</span></span>
                                 <Compass size={16} className="transition-transform" />
                             </button>
 
-                            <Link href={'/seller/dashboard'} className="flex items-center justify-center space-x-1 sm:space-x-2 bg-zinc-200 hover:bg-blue-300/40 font-medium hover:scale-105 duration-300 text-slate-800 text-[16px] py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-slate-200 transition-all">
-                                <span>Sell Your Fish</span>
+                            <Link href={'/seller/dashboard'} className="flex items-center justify-center space-x-1 sm:space-x-2 bg-zinc-200 hover:bg-blue-300/40 font-medium hover:scale-105 duration-300 w-1/2 text-slate-800 text-[16px] py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-slate-200 transition-all">
+                                <span className='flex gap-1.5'>Sell<span className='hidden sm:block'> Your Fish</span></span>
                                 <ShoppingBag size={16} />
                             </Link>
                         </div>

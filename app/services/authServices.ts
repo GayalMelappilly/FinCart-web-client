@@ -120,7 +120,7 @@ export const changePassword = async (passwordData: changePasswordType) => {
         'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body: JSON.stringify({verificationToken, newPassword: passwordData.newPassword})
+      body: JSON.stringify({ verificationToken, newPassword: passwordData.newPassword })
     })
 
     const data = await response.json()
@@ -501,6 +501,87 @@ export const deletewishlistItem = async (id: string): Promise<StandardResponse> 
     return data;
   } catch (error) {
     console.error('Failed to delete item from wishlist:', error);
+    throw error;
+  }
+}
+
+// Get Featured Fishes
+export const getFeaturedFishes = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/product/get-featured-fishes`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    })
+
+    const data = await response.json();
+
+    console.log('data user : ', data)
+
+    return {
+      success: data.success,
+      list: data.data,
+      count: data.count
+    }
+
+  } catch (error) {
+    console.error('Fetch user profile error:', error);
+    throw error;
+  }
+}
+
+// Get fish by category
+export const getFishByCategory = async (id : string) => {
+  try {
+    const response = await fetch(`${apiUrl}/product/get-fishes-by-category/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    })
+
+    const data = await response.json();
+
+    console.log('data user : ', data)
+
+    return {
+      success: data.success,
+      list: data.data,
+      count: data.count
+    }
+
+  } catch (error) {
+    console.error('Fetch user profile error:', error);
+    throw error;
+  }
+}
+
+// Get fish category by name
+export const getFishCategoryByName = async (name : string) => {
+  try {
+    const response = await fetch(`${apiUrl}/product/get-fishes-by-name/${name}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    })
+
+    const data = await response.json();
+
+    console.log('data user : ', data)
+
+    return {
+      success: data.success,
+      list: data.data,
+      count: data.count
+    }
+
+  } catch (error) {
+    console.error('Fetch user profile error:', error);
     throw error;
   }
 }

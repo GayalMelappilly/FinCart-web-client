@@ -2,8 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useRef, useState, useEffect } from 'react';
-import { getFishList } from '@/app/services/authServices';
+import React, { useRef, useState, useEffect, FC } from 'react';
+import { getFeaturedFishes, getFishCategoryByName } from '@/app/services/authServices';
 import FishCard from './FIshCard';
 import { FishListing } from '@/app/types/list/fishList';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
@@ -27,16 +27,35 @@ const ErrorDisplay = ({ message }: { message: string }) => (
   </div>
 );
 
-const FeaturesFishSection = () => {
+type Props = {
+  title: string;
+}
+
+const FeaturesFishSection:FC<Props> = ({ title }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Use React Query to fetch featured fish
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['featured-fish'],
-    queryFn: () => getFishList({}),
+  // Use React Query to fetch fish data
+  const isFeaturedFish = title === 'Featured Fish';
+
+  // Always call both hooks, but enable only one based on condition
+  const featuredFishData = useQuery({
+    queryKey: ['get-featured-fish'],
+    queryFn: () => getFeaturedFishes(),
+    enabled: isFeaturedFish,
   });
+
+  const categorizedFishData = useQuery({
+    queryKey: ['get-categorized-fish', title],
+    queryFn: () => getFishCategoryByName(title),
+    enabled: !isFeaturedFish && !!title,
+  });
+
+  // Use the appropriate data based on the fish type
+  const data = isFeaturedFish ? featuredFishData.data : categorizedFishData.data;
+  const isLoading = isFeaturedFish ? featuredFishData.isLoading : categorizedFishData.isLoading;
+  const error = isFeaturedFish ? featuredFishData.error : categorizedFishData.error;
 
   // Check scroll position and update button states
   const checkScrollPosition = () => {
@@ -81,7 +100,7 @@ const FeaturesFishSection = () => {
     return (
       <section className="px-4 sm:px-16 py-8 sm:py-12">
         <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Featured Fish</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
           <div className="overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-rows-1 auto-cols-max">
               {[...Array(6)].map((_, index) => (
@@ -101,7 +120,7 @@ const FeaturesFishSection = () => {
     return (
       <section className="px-4 sm:px-6 py-8 sm:py-12">
         <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Featured Fish</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
           <ErrorDisplay message={(error as Error)?.message || 'Unknown error occurred'} />
         </div>
       </section>
@@ -109,13 +128,13 @@ const FeaturesFishSection = () => {
   }
 
   // If no featured fish are available
-  if (!data.fishListings || data.fishListings.length === 0) {
+  if (!data.count || data.count === 0) {
     return (
       <section className="px-4 sm:px-6 py-8 sm:py-12">
         <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Featured Fish</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
           <div className="bg-blue-50 p-4 rounded-lg text-center">
-            <p className="text-gray-600">No featured fish available at the moment. Check back soon!</p>
+            <p className="text-gray-600">No {title} available at the moment. Check back soon!</p>
           </div>
         </div>
       </section>
@@ -124,11 +143,11 @@ const FeaturesFishSection = () => {
 
   return (
     <section className="bg-gradient-to-b from-white to-blue-50/30 px-4 sm:px-6 py-8 sm:py-12">
-      <div className="container mx-auto px-0 sm:px-10">
+      <div className="mx-auto px-2 sm:px-16">
         {/* Header with responsive spacing and alignment */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Featured Fish</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
           </div>
           <Link
             href="/fish"
@@ -151,8 +170,8 @@ const FeaturesFishSection = () => {
             }}
           >
             {/* Two rows on small screens, one row on large screens */}
-            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-rows-1 auto-cols-max">
-              {data.fishListings.map((fish: FishListing) => (
+            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 md:grid-rows-1 auto-cols-max">
+              {data.list.map((fish: FishListing) => (
                 <div 
                   key={fish.id} 
                   data-card
@@ -165,7 +184,7 @@ const FeaturesFishSection = () => {
           </div>
 
           {/* Navigation buttons - positioned as overlay on both sides */}
-          {!isLoading && data?.fishListings && data.fishListings.length > 0 && (
+          {!isLoading && data?.list && data.count > 0 && (
             <>
               {canScrollLeft && (
                 <button
