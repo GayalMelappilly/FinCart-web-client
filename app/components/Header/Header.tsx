@@ -5,18 +5,85 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { Heart, Menu, Search, ShoppingBag, ShoppingCart, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
 import { useRouter } from 'next/navigation';
 import { UserType } from '@/app/types/user/type';
 
+const fishCategories = [
+  "Freshwater Fish",
+  "Saltwater Fish",
+  "Tropical Fish",
+  "Cold Water Fish",
+  "Game Fish",
+  "Aquarium Fish",
+  "Commercial Fish",
+  "Endangered Fish",
+  "Cichlids",
+  "Tetras",
+  "Gouramis",
+  "Catfish",
+  "Livebearers",
+  "Barbs",
+  "Rainbowfish",
+  "Killifish",
+  "Pufferfish",
+  "Sturgeon",
+  "Reef Fish",
+  "Pelagic Fish",
+  "Bottom Dwellers",
+  "Sharks & Rays",
+  "Eels",
+  "Groupers",
+  "Snappers",
+  "Tuna",
+  "Marlin",
+  "Seahorses",
+  "Angelfish",
+  "Bettas",
+  "Discus",
+  "Guppies",
+  "Mollies",
+  "Platies",
+  "Swordtails",
+  "Rasboras",
+  "Loaches",
+  "Plecos",
+  "Goldfish",
+  "Koi",
+  "Trout",
+  "Salmon",
+  "Whitefish",
+  "Sticklebacks",
+  "Bitterling",
+  "African Cichlids",
+  "South American Cichlids",
+  "Dwarf Cichlids",
+  "Oscars",
+  "Clownfish",
+  "Tangs",
+  "Butterflyfish",
+  "Angelfish (Marine)",
+  "Wrasses",
+  "Bass",
+  "Trout (Game)",
+  "Salmon (Game)",
+  "Pike",
+  "Tarpon",
+  "Bonefish"
+];
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [searchResults, setSearchResults] = useState<string[]>([]);
+    const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
     const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
-
+    
+    const searchRef = useRef<HTMLDivElement>(null);
+    const mobileSearchRef = useRef<HTMLDivElement>(null);
     const router = useRouter()
 
     useEffect(() => {
@@ -32,6 +99,81 @@ const Header = () => {
                 localStorage.removeItem('guest')
             }
         }
+    }, []);
+
+    // Handle search functionality with flexible matching
+    useEffect(() => {
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase().trim();
+            
+            const filtered = fishCategories.filter(category => {
+                const categoryLower = category.toLowerCase();
+                
+                // Direct substring match
+                if (categoryLower.includes(query)) {
+                    return true;
+                }
+                
+                // Remove spaces and special characters for flexible matching
+                const normalizedCategory = categoryLower.replace(/[\s\-&()]/g, '');
+                const normalizedQuery = query.replace(/[\s\-&()]/g, '');
+                
+                // Check if normalized query matches normalized category
+                if (normalizedCategory.includes(normalizedQuery)) {
+                    return true;
+                }
+                
+                // Split query into words and check if all words exist in category
+                const queryWords = query.split(/\s+/).filter(word => word.length > 0);
+                const categoryWords = categoryLower.split(/\s+/);
+                
+                // Check if every query word has a match in category words
+                const allWordsMatch = queryWords.every(queryWord => 
+                    categoryWords.some(categoryWord => 
+                        categoryWord.includes(queryWord) || queryWord.includes(categoryWord)
+                    )
+                );
+                
+                return allWordsMatch;
+            });
+            
+            // Sort results by relevance (exact matches first, then partial matches)
+            const sortedResults = filtered.sort((a, b) => {
+                const aLower = a.toLowerCase();
+                const bLower = b.toLowerCase();
+                const queryLower = query.toLowerCase();
+                
+                // Exact match gets highest priority
+                if (aLower === queryLower) return -1;
+                if (bLower === queryLower) return 1;
+                
+                // Starts with query gets second priority
+                if (aLower.startsWith(queryLower) && !bLower.startsWith(queryLower)) return -1;
+                if (bLower.startsWith(queryLower) && !aLower.startsWith(queryLower)) return 1;
+                
+                // Contains query gets third priority (already filtered, so just maintain order)
+                return 0;
+            });
+            
+            setSearchResults(sortedResults.slice(0, 8)); // Limit to 8 results
+            setShowSearchDropdown(true);
+        } else {
+            setSearchResults([]);
+            setShowSearchDropdown(false);
+        }
+    }, [searchQuery]);
+
+    // Handle clicks outside search dropdown
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node) &&
+                mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
+                setShowSearchDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     const { data, isLoading, error } = useQuery({
@@ -76,8 +218,21 @@ const Header = () => {
         logoutMutation.mutate()
     }
 
+    const handleSearchSelect = (category: string) => {
+        setSearchQuery(category);
+        setShowSearchDropdown(false);
+        // Navigate to category page or handle search
+        router.push(`/list/${category.toLowerCase().replace(/\s+/g, '-')}`);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery('');
+        setSearchResults([]);
+        setShowSearchDropdown(false);
+    };
+
     return (
-        <header className="bg-white shadow-sm relative w-screen">
+        <header className="bg-white w-screen fixed z-20 shadow-lg shadow-black/10">
             <div className="container mx-auto py-3 lg:px-10">
                 <div className="flex items-center justify-between w-full px-5">
                     {/* Logo and optional menu button */}
@@ -102,13 +257,65 @@ const Header = () => {
 
                     {/* Right side actions */}
                     <div className="flex items-center space-x-2 sm:space-x-4">
-                        <div className="relative hidden md:block w-48 lg:w-64">
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                className="w-full pl-8 pr-4 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 text-black"
-                            />
-                            <Search className="absolute left-2 top-2.5 h-4 w-4 text-black" />
+                        {/* Desktop Search */}
+                        <div className="relative hidden md:block w-48 lg:w-64" ref={searchRef}>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Search fish categories..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full pl-8 pr-8 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white text-black transition-all duration-200"
+                                />
+                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                                {searchQuery && (
+                                    <button
+                                        onClick={clearSearch}
+                                        className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Desktop Search Dropdown */}
+                            {showSearchDropdown && searchResults.length > 0 && (
+                                <div className="absolute top-full mt-1 w-full bg-white rounded-xl p-2 shadow-lg border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
+                                    <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                                        Fish Categories ({searchResults.length})
+                                    </div>
+                                    {searchResults.map((category, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSearchSelect(category)}
+                                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group"
+                                        >
+                                            <div className="w-2 h-2 rounded-full bg-blue-200 group-hover:bg-blue-400 transition-colors duration-150"></div>
+                                            <span className="text-sm text-gray-700 group-hover:text-blue-700 font-medium">
+                                                {category}
+                                            </span>
+                                        </button>
+                                    ))}
+                                    {searchResults.length === 8 && (
+                                        <div className="px-4 py-2 text-xs text-gray-500 border-t border-gray-100 bg-gray-50">
+                                            Showing first 8 results. Refine your search for more specific results.
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* No results message */}
+                            {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+                                <div className="absolute top-full mt-1 w-full p-10 bg-white rounded-xl shadow-lg border border-gray-100 py-4 z-50">
+                                    <div className="text-center">
+                                        <div className="text-gray-400 mb-2">
+                                            <Search size={24} className="mx-auto" />
+                                        </div>
+                                        <p className="text-sm text-gray-600">No fish categories found</p>
+                                        <p className="text-xs text-gray-400 mt-1">Try searching for &quot;tropical&quot; or &quot;freshwater&quot;</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <Link href={'/seller/dashboard'}>
@@ -211,15 +418,61 @@ const Header = () => {
 
                             {/* Content area with gradient background */}
                             <div className="h-full pb-20 overflow-y-auto bg-gradient-to-b from-white to-gray-50">
-                                {/* Search bar - redesigned */}
-                                <div className="mx-4 my-4">
-                                    <div className="relative flex items-center">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Search for fish..."
-                                            className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 text-gray-700 placeholder-gray-400 shadow-sm"
-                                        />
+                                {/* Mobile Search bar - redesigned */}
+                                <div className="mx-4 my-4" ref={mobileSearchRef}>
+                                    <div className="relative">
+                                        <div className="relative flex items-center">
+                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Search fish categories..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="w-full pl-10 pr-10 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white text-gray-700 placeholder-gray-400 shadow-sm transition-all duration-200"
+                                            />
+                                            {searchQuery && (
+                                                <button
+                                                    onClick={clearSearch}
+                                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {/* Mobile Search Dropdown */}
+                                        {showSearchDropdown && searchResults.length > 0 && (
+                                            <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 max-h-60 overflow-y-auto">
+                                                <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                                                    Categories ({searchResults.length})
+                                                </div>
+                                                {searchResults.map((category, index) => (
+                                                    <button
+                                                        key={index}
+                                                        onClick={() => handleSearchSelect(category)}
+                                                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group"
+                                                    >
+                                                        <div className="w-2 h-2 rounded-full bg-blue-200 group-hover:bg-blue-400 transition-colors duration-150"></div>
+                                                        <span className="text-sm text-gray-700 group-hover:text-blue-700 font-medium">
+                                                            {category}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Mobile No results message */}
+                                        {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+                                            <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-4 z-50">
+                                                <div className="text-center">
+                                                    <div className="text-gray-400 mb-2">
+                                                        <Search size={20} className="mx-auto" />
+                                                    </div>
+                                                    <p className="text-sm text-gray-600">No categories found</p>
+                                                    <p className="text-xs text-gray-400 mt-1">Try &quot;tropical&quot; or &quot;freshwater&quot;</p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

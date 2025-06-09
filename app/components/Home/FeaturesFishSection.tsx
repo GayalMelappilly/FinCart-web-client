@@ -142,20 +142,20 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
   }
 
   return (
-    <section className="bg-gradient-to-b from-white to-blue-50/30 px-4 sm:px-6 py-8 sm:py-12">
+    <section id="featuredFish" className="bg-gradient-to-b scroll-smooth from-white to-blue-50/30 px-4 sm:px-6 py-8 sm:py-12">
       <div className="mx-auto px-2 sm:px-16">
         {/* Header with responsive spacing and alignment */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
           </div>
-          <Link
+          {/* <Link
             href="/fish"
             className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium flex items-center bg-white/80 py-1.5 px-2.5 sm:px-3 rounded-full shadow-sm hover:shadow transition-all"
           >
             View all
             <ChevronRight size={16} className="ml-0.5" />
-          </Link>
+          </Link> */}
         </div>
 
         {/* Card grid with scrollable layout */}

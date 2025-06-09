@@ -3,13 +3,11 @@ import Link from 'next/link';
 import React from 'react';
 
 const Footer = () => {
-    const categories = ['Tropical', 'Freshwater', 'Saltwater', 'Pond', 'Aquatic Plants'];
-
     return (
         <footer className="bg-gray-800 text-white py-6 px-4 sm:py-8 md:py-10 lg:py-12">
             <div className="container mx-auto  px-2 sm:px-10">
                 {/* Main footer content */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {/* Logo and description */}
                     <div className="mb-6 sm:mb-0">
                         <div className="flex justify-start mb-4">
@@ -23,20 +21,6 @@ const Footer = () => {
                             />
                         </div>
                         <p className="text-gray-400 text-sm sm:text-base text-left">Your trusted marketplace for ornamental fish and aquatic plants.</p>
-                    </div>
-
-                    {/* Categories */}
-                    <div className="mb-6 sm:mb-0">
-                        <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-left">Categories</h4>
-                        <ul className="space-y-1 sm:space-y-2">
-                            {categories.map((category, index) => (
-                                <li key={index} className="text-left">
-                                    <Link href={`/category/${category.toLowerCase()}`} className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">
-                                        {category}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
                     </div>
 
                     {/* Help */}

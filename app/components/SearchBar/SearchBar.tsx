@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, Filter, ChevronDown, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ModernSearchBarProps {
     initialFilter?: string;
@@ -21,16 +22,14 @@ export default function SearchBar({
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+    const router = useRouter()
+
     const filters: string[] = ["All", "Tropical", "Coldwater", "Marine", "Cichlids", "Rare Species"];
 
     const popularTags: string[] = ["Angelfish", "Discus", "Guppies", "Goldfish", "Bettas", "Coral Compatible"];
 
     const handleTagClick = (tag: string): void => {
-        if (selectedTags.includes(tag)) {
-            setSelectedTags(selectedTags.filter(t => t !== tag));
-        } else {
-            setSelectedTags([...selectedTags, tag]);
-        }
+        router.push(`/list/${tag.toLowerCase().replace(/\s+/g, '-')}`);
     };
 
     const removeTag = (tag: string): void => {
@@ -50,6 +49,7 @@ export default function SearchBar({
                 tags: selectedTags
             });
         }
+        router.push(`/list/${searchTerm.toLowerCase().replace(/\s+/g, '-')}`);
     };
 
     return (
