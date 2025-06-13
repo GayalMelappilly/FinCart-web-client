@@ -11,66 +11,66 @@ import { useRouter } from 'next/navigation';
 import { UserType } from '@/app/types/user/type';
 
 const fishCategories = [
-  "Freshwater Fish",
-  "Saltwater Fish",
-  "Tropical Fish",
-  "Cold Water Fish",
-  "Game Fish",
-  "Aquarium Fish",
-  "Commercial Fish",
-  "Endangered Fish",
-  "Cichlids",
-  "Tetras",
-  "Gouramis",
-  "Catfish",
-  "Livebearers",
-  "Barbs",
-  "Rainbowfish",
-  "Killifish",
-  "Pufferfish",
-  "Sturgeon",
-  "Reef Fish",
-  "Pelagic Fish",
-  "Bottom Dwellers",
-  "Sharks & Rays",
-  "Eels",
-  "Groupers",
-  "Snappers",
-  "Tuna",
-  "Marlin",
-  "Seahorses",
-  "Angelfish",
-  "Bettas",
-  "Discus",
-  "Guppies",
-  "Mollies",
-  "Platies",
-  "Swordtails",
-  "Rasboras",
-  "Loaches",
-  "Plecos",
-  "Goldfish",
-  "Koi",
-  "Trout",
-  "Salmon",
-  "Whitefish",
-  "Sticklebacks",
-  "Bitterling",
-  "African Cichlids",
-  "South American Cichlids",
-  "Dwarf Cichlids",
-  "Oscars",
-  "Clownfish",
-  "Tangs",
-  "Butterflyfish",
-  "Angelfish (Marine)",
-  "Wrasses",
-  "Bass",
-  "Trout (Game)",
-  "Salmon (Game)",
-  "Pike",
-  "Tarpon",
-  "Bonefish"
+    "Freshwater Fish",
+    "Saltwater Fish",
+    "Tropical Fish",
+    "Cold Water Fish",
+    "Game Fish",
+    "Aquarium Fish",
+    "Commercial Fish",
+    "Endangered Fish",
+    "Cichlids",
+    "Tetras",
+    "Gouramis",
+    "Catfish",
+    "Livebearers",
+    "Barbs",
+    "Rainbowfish",
+    "Killifish",
+    "Pufferfish",
+    "Sturgeon",
+    "Reef Fish",
+    "Pelagic Fish",
+    "Bottom Dwellers",
+    "Sharks & Rays",
+    "Eels",
+    "Groupers",
+    "Snappers",
+    "Tuna",
+    "Marlin",
+    "Seahorses",
+    "Angelfish",
+    "Bettas",
+    "Discus",
+    "Guppies",
+    "Mollies",
+    "Platies",
+    "Swordtails",
+    "Rasboras",
+    "Loaches",
+    "Plecos",
+    "Goldfish",
+    "Koi",
+    "Trout",
+    "Salmon",
+    "Whitefish",
+    "Sticklebacks",
+    "Bitterling",
+    "African Cichlids",
+    "South American Cichlids",
+    "Dwarf Cichlids",
+    "Oscars",
+    "Clownfish",
+    "Tangs",
+    "Butterflyfish",
+    "Angelfish (Marine)",
+    "Wrasses",
+    "Bass",
+    "Trout (Game)",
+    "Salmon (Game)",
+    "Pike",
+    "Tarpon",
+    "Bonefish"
 ];
 
 const Header = () => {
@@ -81,7 +81,7 @@ const Header = () => {
     const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
     const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
-    
+
     const searchRef = useRef<HTMLDivElement>(null);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
     const router = useRouter()
@@ -94,7 +94,7 @@ const Header = () => {
             if (typeof window !== 'undefined') {
                 localStorage.setItem('guest', 'true')
             }
-        }else{
+        } else {
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('guest')
             }
@@ -105,56 +105,56 @@ const Header = () => {
     useEffect(() => {
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase().trim();
-            
+
             const filtered = fishCategories.filter(category => {
                 const categoryLower = category.toLowerCase();
-                
+
                 // Direct substring match
                 if (categoryLower.includes(query)) {
                     return true;
                 }
-                
+
                 // Remove spaces and special characters for flexible matching
                 const normalizedCategory = categoryLower.replace(/[\s\-&()]/g, '');
                 const normalizedQuery = query.replace(/[\s\-&()]/g, '');
-                
+
                 // Check if normalized query matches normalized category
                 if (normalizedCategory.includes(normalizedQuery)) {
                     return true;
                 }
-                
+
                 // Split query into words and check if all words exist in category
                 const queryWords = query.split(/\s+/).filter(word => word.length > 0);
                 const categoryWords = categoryLower.split(/\s+/);
-                
+
                 // Check if every query word has a match in category words
-                const allWordsMatch = queryWords.every(queryWord => 
-                    categoryWords.some(categoryWord => 
+                const allWordsMatch = queryWords.every(queryWord =>
+                    categoryWords.some(categoryWord =>
                         categoryWord.includes(queryWord) || queryWord.includes(categoryWord)
                     )
                 );
-                
+
                 return allWordsMatch;
             });
-            
+
             // Sort results by relevance (exact matches first, then partial matches)
             const sortedResults = filtered.sort((a, b) => {
                 const aLower = a.toLowerCase();
                 const bLower = b.toLowerCase();
                 const queryLower = query.toLowerCase();
-                
+
                 // Exact match gets highest priority
                 if (aLower === queryLower) return -1;
                 if (bLower === queryLower) return 1;
-                
+
                 // Starts with query gets second priority
                 if (aLower.startsWith(queryLower) && !bLower.startsWith(queryLower)) return -1;
                 if (bLower.startsWith(queryLower) && !aLower.startsWith(queryLower)) return 1;
-                
+
                 // Contains query gets third priority (already filtered, so just maintain order)
                 return 0;
             });
-            
+
             setSearchResults(sortedResults.slice(0, 8)); // Limit to 8 results
             setShowSearchDropdown(true);
         } else {
@@ -216,6 +216,17 @@ const Header = () => {
 
     const HandleLogout = () => {
         logoutMutation.mutate()
+    }
+
+    const handleSellClick = () => {
+        if (typeof window !== 'undefined') {
+            const isSellerLoggedIn = localStorage.getItem('seller-loggedIn')
+            if(isSellerLoggedIn){
+                router.push('/seller/dashboard')
+            }else{
+                router.push('/seller/signup')
+            }
+        }
     }
 
     const handleSearchSelect = (category: string) => {
@@ -318,11 +329,11 @@ const Header = () => {
                             )}
                         </div>
 
-                        <Link href={'/seller/dashboard'}>
-                            <button className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
-                                Sell
-                            </button>
-                        </Link>
+                        {/* <Link href={'/seller/dashboard'}> */}
+                        <button onClick={handleSellClick} className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
+                            Sell
+                        </button>
+                        {/* </Link> */}
 
                         <Link href={'/wishlist'}>
                             <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 transition-colors rounded-full p-2" aria-label="Wishlist">
@@ -519,10 +530,10 @@ const Header = () => {
 
                                 {/* Sell button */}
                                 <div className="px-4 mb-5">
-                                    <Link href={'/seller/dashboard'} className="flex items-center justify-center space-x-1 sm:space-x-2 bg-zinc-200 hover:bg-blue-300/40 font-medium hover:scale-105 duration-300 text-slate-800 text-sm sm:text-base py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-slate-200 transition-all">
+                                    <button onClick={handleSellClick} className="flex w-full items-center justify-center space-x-1 sm:space-x-2 bg-zinc-200 hover:bg-blue-300/40 font-medium hover:scale-105 duration-300 text-slate-800 text-sm sm:text-base py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-slate-200 transition-all">
                                         <span>Sell Your Fish</span>
                                         <ShoppingBag size={16} />
-                                    </Link>
+                                    </button>
                                 </div>
 
                                 {/* Navigation */}

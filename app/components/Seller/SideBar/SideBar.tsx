@@ -20,7 +20,7 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
     const [accessToken, setAccessToken] = useState('');
     const router = useRouter();
 
-    const {showToast} = useToast()
+    const { showToast } = useToast()
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -50,8 +50,9 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
                 localStorage.removeItem('sellerAccessToken')
                 localStorage.removeItem('seller-loggedIn')
                 localStorage.removeItem('seller-email-address')
+                localStorage.removeItem('seller')
             }
-            router.push('/');
+            window.location.href = '/';
         }
     }, [data, error, router]);
 
