@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
+// import Link from 'next/link';
 import React, { useRef, useState, useEffect, FC } from 'react';
 import { getFeaturedFishes, getFishCategoryByName } from '@/app/services/authServices';
 import FishCard from './FIshCard';
@@ -213,7 +213,7 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
         </div>
 
         {/* Mobile-only call to action */}
-        <div className="sm:hidden text-center mt-6">
+        {/* <div className="sm:hidden text-center mt-6">
           <Link
             href="/fish"
             className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2 text-sm font-medium shadow-sm hover:from-blue-700 hover:to-blue-800 transition-all"
@@ -221,7 +221,7 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
             Explore All Fish
             <ChevronRight size={16} className="ms-1.5" />
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );
