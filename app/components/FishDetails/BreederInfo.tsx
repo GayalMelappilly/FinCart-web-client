@@ -10,24 +10,24 @@ type Props = {
 
 const BreederInfo:FC<Props> = ({breeder}) => {
 
-    console.log(breeder)
+    console.log('breeder info : ',breeder)
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-sm relative">
             <h2 className="text-xl text-gray-800 font-semibold mb-4">About Breeder</h2>
             <div className="flex items-center">
                 { breeder && <Image
-                    src={breeder?.logo_url as string}
-                    alt={`${breeder?.display_name} profile picture`}
+                    src={breeder?.logoUrl as string}
+                    alt={`${breeder?.displayName} profile picture`}
                     width={80}
                     height={80}
                     className="rounded-md object-cover mr-4 "
                 /> }
                 <div className='flex flex-col gap-1'>
-                    <h3 className="font-semibold md:text-lg text-gray-600">{breeder?.display_name}</h3>
+                    <h3 className="font-semibold md:text-lg text-gray-600">{breeder?.displayName}</h3>
                     <div className="flex items-center text-gray-600 mb-1">
                         <MapPin className="h-4 w-4 mr-1" />
-                        <span className='text-sm md:text-base' >{breeder?.seller_addresses.seller_locations.city},{breeder?.seller_addresses.seller_locations.state}</span>
+                        <span className='text-sm md:text-base' >{breeder?.sellerAddresses.sellerLocations.city},{breeder?.sellerAddresses.sellerLocations.state}</span>
                     </div>
                     {/* <div className="flex items-center">
                         <span className="text-gray-600 mr-2 text-sm md:text-md">5 years on Finest Fish</span>

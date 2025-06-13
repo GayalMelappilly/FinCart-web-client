@@ -66,6 +66,10 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
     }
   };
 
+  if(!isFeaturedFish){
+    console.log('Categorized list : ', data)
+  }
+
   // Initialize scroll position check
   useEffect(() => {
     checkScrollPosition();

@@ -16,6 +16,8 @@ const FishCard: FC<Props> = ({ fish }) => {
     const [isHovered, setIsHovered] = useState(false);
     const router = useRouter();
 
+    console.log('fish details : ',fish)
+
     const { showToast } = useToast()
 
     const mutation = useMutation({

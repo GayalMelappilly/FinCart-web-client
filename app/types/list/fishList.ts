@@ -7,10 +7,10 @@ export interface FishCategory {
   
   export interface Seller {
     id: string;
-    display_name: string;
-    logo_url: string | null;
-    seller_addresses: {
-      seller_locations: {
+    displayName: string;
+    logoUrl: string | null;
+    sellerAddresses: {
+      sellerLocations: {
         city: string;
         state: string;
       }
@@ -42,7 +42,7 @@ export interface FishCategory {
     category: FishCategory;
     avgRating: number;
     reviewCount: number;
-    seller: Seller | null;
+    users: Seller | null;
   }
   
   export interface PaginationData {

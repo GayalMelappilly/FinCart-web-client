@@ -46,14 +46,14 @@ export default function Page() {
           <div className='w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6'>
             <Preview images={fishData?.images} />
             <div className="hidden sm:block">
-              <BreederInfo breeder={fishData?.seller} />
+              <BreederInfo breeder={fishData?.users} />
             </div>
           </div>
           
           <div className="w-full lg:w-1/2 flex flex-col gap-4 sm:gap-6">
             <FishInfo fish={fishData} />
             <div className="sm:hidden">
-              <BreederInfo breeder={fishData?.seller} />
+              <BreederInfo breeder={fishData?.users} />
             </div>
             <CareInfo />
           </div>
