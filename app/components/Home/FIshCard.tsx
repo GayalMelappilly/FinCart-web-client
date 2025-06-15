@@ -2,7 +2,7 @@
 import { FishListing } from '@/app/types/list/fishList';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { addToCart, addToCartGuest, addToWishlist } from '@/app/services/authServices';
@@ -14,9 +14,16 @@ type Props = {
 
 const FishCard: FC<Props> = ({ fish }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isGuest, setIsGuest] = useState(false)
     const router = useRouter();
 
-    console.log('fish details : ',fish)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
+        }
+    }, []);
+
+    console.log('fish details : ', fish)
 
     const { showToast } = useToast()
 
@@ -52,7 +59,7 @@ const FishCard: FC<Props> = ({ fish }) => {
             if (typeof window !== 'undefined') {
                 const cart = JSON.parse(localStorage.getItem('guestCartItems') as string)
                 cart.push(item)
-                console.log("Cart items : ",cart, item)
+                console.log("Cart items : ", cart, item)
                 localStorage.removeItem('guestCartItems')
                 localStorage.setItem('guestCartItems', JSON.stringify(cart))
             }
@@ -121,7 +128,7 @@ const FishCard: FC<Props> = ({ fish }) => {
                     {fish.images && fish.images.length > 0 ? (
                         <div className="w-full h-full relative">
                             {/* Heart button - improved for mobile */}
-                            <button
+                            {!isGuest && (<button
                                 className={`absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-red-500 
                                 transition-all duration-200 rounded-full p-2 z-10 shadow-sm transform 
                                 ${isHovered ? 'opacity-100 scale-105' : 'opacity-80'}`}
@@ -129,7 +136,7 @@ const FishCard: FC<Props> = ({ fish }) => {
                                 onClick={HandleAddToWishlist}
                             >
                                 <Heart size={18} className={`transition-all duration-300 ${mutation.isSuccess ? 'text-red-500 fill-red-500' : ''}`} />
-                            </button>
+                            </button>)}
 
                             <Image
                                 src={fish.images[0]}
