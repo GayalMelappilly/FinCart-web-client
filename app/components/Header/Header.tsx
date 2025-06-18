@@ -2,13 +2,14 @@
 
 import { getCurrentUser, logoutUser } from '@/app/services/authServices';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Heart, Menu, Search, ShoppingBag, ShoppingCart, User, X } from 'lucide-react'
+import { Heart, Menu, Search, ShoppingBag, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
 import { useRouter } from 'next/navigation';
 import { UserType } from '@/app/types/user/type';
+import CartIcon from './CartIcon';
 
 const fishCategories = [
     "Freshwater Fish",
@@ -81,10 +82,17 @@ const Header = () => {
     const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
     const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
+    const [isGuest, setIsGuest] = useState(false)
 
     const searchRef = useRef<HTMLDivElement>(null);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
     const router = useRouter()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
+        }
+    }, []);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -221,9 +229,9 @@ const Header = () => {
     const handleSellClick = () => {
         if (typeof window !== 'undefined') {
             const isSellerLoggedIn = localStorage.getItem('seller-loggedIn')
-            if(isSellerLoggedIn){
+            if (isSellerLoggedIn) {
                 router.push('/seller/dashboard')
-            }else{
+            } else {
                 router.push('/seller/signup')
             }
         }
@@ -335,17 +343,13 @@ const Header = () => {
                         </button>
                         {/* </Link> */}
 
-                        <Link href={'/wishlist'}>
+                        {!isGuest && <Link href={'/wishlist'}>
                             <button className="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-800 transition-colors rounded-full p-2" aria-label="Wishlist">
                                 <Heart size={18} />
                             </button>
-                        </Link>
+                        </Link>}
 
-                        <Link href={'/cart'}>
-                            <button className="bg-gray-100 hover:bg-amber-50 hover:text-amber-600 text-gray-800 transition-colors rounded-full p-2" aria-label="Cart">
-                                <ShoppingCart size={18} />
-                            </button>
-                        </Link>
+                        <CartIcon />
 
                         {/* Profile section */}
                         <div className="relative">

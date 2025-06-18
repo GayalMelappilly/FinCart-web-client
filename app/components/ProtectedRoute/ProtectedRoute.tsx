@@ -26,6 +26,11 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
     if (!loggedIn && !isPublicPath) {
       router.replace('/seller/signup');
     }
+
+    if(loggedIn && isPublicPath) {
+      router.replace('/seller/dashboard')
+    }
+
   }, [pathname, router, isPublicPath]);
 
   // Return null while waiting for client-side check

@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { CreditCard, Heart, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 type Props = {
     fish: FishListing | undefined
@@ -19,8 +19,15 @@ const FishInfo: FC<Props> = ({ fish }) => {
     const id = params?.id as string;
 
     const [quantity, setQuantity] = useState(1);
-
-    const {showToast} = useToast()
+    const [isGuest, setIsGuest] = useState(false)
+    
+    const { showToast } = useToast()
+    
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
+        }
+    }, []);
 
     const mutation = useMutation({
         mutationFn: addToCart,
@@ -87,9 +94,9 @@ const FishInfo: FC<Props> = ({ fish }) => {
                 <span className={`font-medium ${fish && fish?.quantityAvailable > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {fish && fish?.quantityAvailable > 0 ? 'In Stock' : 'Out of Stock'}
                 </span>
-                {fish && fish?.quantityAvailable > 0 && (
+                {/* {fish && fish?.quantityAvailable > 0 && (
                     <span className="ml-2 text-gray-500">({fish?.quantityAvailable} available)</span>
-                )}
+                )} */}
             </div>
 
             <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -129,12 +136,12 @@ const FishInfo: FC<Props> = ({ fish }) => {
                     Buy Now
                 </Link>
 
-                <button
+                {!isGuest && <button
                     onClick={addToWishlist}
                     className="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md transition-colors"
                 >
                     <Heart size={20} />
-                </button>
+                </button>}
             </div>
 
             {/* Shipping & Guarantee */}

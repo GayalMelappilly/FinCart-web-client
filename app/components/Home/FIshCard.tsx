@@ -1,21 +1,25 @@
-
 import { FishListing } from '@/app/types/list/fishList';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react'
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Heart, ShoppingCart, Award, Star } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { addToCart, addToCartGuest, addToWishlist } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
+import { CartItem } from '@/app/types/user/type';
 
 type Props = {
-    fish: FishListing
+    fish: FishListing,
+    isFeatured?: boolean
 }
 
-const FishCard: FC<Props> = ({ fish }) => {
+const FishCard: FC<Props> = ({ fish, isFeatured }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isGuest, setIsGuest] = useState(false)
     const router = useRouter();
+
+    // Check if fish is featured (either from prop or fish.isFeatured)
+    const isFeatureFish = isFeatured || fish.isFeatured;
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -39,7 +43,6 @@ const FishCard: FC<Props> = ({ fish }) => {
         }
     });
 
-
     const cartMutation = useMutation({
         mutationFn: addToCart,
         onSuccess: (data) => {
@@ -55,23 +58,55 @@ const FishCard: FC<Props> = ({ fish }) => {
     const guestCartMutation = useMutation({
         mutationFn: addToCartGuest,
         onSuccess: (data) => {
-            const item = data.data
+            const newItem = data.data;
+
             if (typeof window !== 'undefined') {
-                const cart = JSON.parse(localStorage.getItem('guestCartItems') as string)
-                cart.push(item)
-                console.log("Cart items : ", cart, item)
-                localStorage.removeItem('guestCartItems')
-                localStorage.setItem('guestCartItems', JSON.stringify(cart))
+                try {
+                    // Get existing cart items or initialize empty array
+                    const existingCart = JSON.parse(localStorage.getItem('guestCartItems') || '[]');
+
+                    // Find if item already exists in cart
+                    const existingItemIndex = existingCart.findIndex(
+                        (cartItem: CartItem) => cartItem.fishListingId === newItem.fishListingId
+                    );
+
+                    let updatedCart;
+
+                    if (existingItemIndex !== -1) {
+                        // Item exists - update quantity
+                        updatedCart = existingCart.map((cartItem: CartItem, index: string) =>
+                            index === existingItemIndex
+                                ? { ...cartItem, quantity: cartItem.quantity + newItem.quantity }
+                                : cartItem
+                        );
+
+                        console.log(`Updated quantity for ${newItem.fishListings.breed}. New quantity: ${updatedCart[existingItemIndex].quantity}`);
+                    } else {
+                        // Item doesn't exist - add new item
+                        updatedCart = [...existingCart, newItem];
+                        console.log(`Added new item to cart: ${newItem.fishListings.breed}`);
+                    }
+
+                    // Update localStorage with the updated cart
+                    localStorage.setItem('guestCartItems', JSON.stringify(updatedCart));
+
+                    console.log("Updated cart items:", updatedCart);
+
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                    showToast('error', 'Failed to update cart');
+                    return;
+                }
             }
-            showToast('success', 'Item added to cart')
-            console.log(data)
+
+            showToast('success', 'Item added to cart');
+            console.log('Cart operation successful:', data);
         },
         onError: (err) => {
-            showToast('error', 'Failed to add item to cart')
-            console.log('User profile error : ', err)
+            showToast('error', 'Failed to add item to cart');
+            console.error('Guest cart mutation error:', err);
         }
-    })
-
+    });
 
     const HandleClick = () => {
         if (typeof window !== 'undefined') {
@@ -108,7 +143,11 @@ const FishCard: FC<Props> = ({ fish }) => {
     }
 
     const PlaceholderImage = () => (
-        <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded-t-xl">
+        <div className={`flex items-center justify-center w-full h-full rounded-t-xl ${
+            isFeatureFish 
+                ? 'bg-gradient-to-br from-amber-50 to-yellow-50' 
+                : 'bg-gray-100'
+        }`}>
             <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
@@ -120,37 +159,60 @@ const FishCard: FC<Props> = ({ fish }) => {
             onClick={HandleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group w-full h-full cursor-pointer transform transition-all duration-300 active:scale-95 active:bg-blue-600"
+            className={`group w-full h-full cursor-pointer transform transition-all duration-300 active:scale-95 relative 
+                    hover:scale-102
+            `}
         >
-            <div className="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all duration-300 h-full flex flex-col border border-gray-100">
+            {/* Premium Glow Effect for Featured Fish */}
+            {isFeatureFish && (
+                <div className={`absolute -inset-0.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 rounded-xl opacity-20 group-hover:opacity-40 transition-all duration-500 ${
+                    isHovered ? 'animate-pulse' : ''
+                }`}></div>
+            )}
+
+            {/* Main Card Container */}
+            <div className={`relative rounded-xl overflow-hidden transition-all duration-300 h-full flex flex-col ${
+                isFeatureFish 
+                    ? 'bg-gradient-to-br from-white via-amber-50/30 to-white' 
+                    : 'bg-white shadow hover:shadow-lg border border-gray-100'
+            }`}>
+
                 {/* Image container with improved height scaling */}
-                <div className="h-36 xs:h-40 sm:h-44 md:h-48 lg:h-52 overflow-hidden relative">
+                <div className={`h-36 xs:h-40 sm:h-44 md:h-48 lg:h-52 overflow-hidden relative ${
+                    isFeatureFish ? 'bg-gradient-to-br from-amber-50 to-yellow-50' : ''
+                }`}>
                     {fish.images && fish.images.length > 0 ? (
                         <div className="w-full h-full relative">
                             {/* Heart button - improved for mobile */}
-                            {!isGuest && (<button
-                                className={`absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-red-500 
-                                transition-all duration-200 rounded-full p-2 z-10 shadow-sm transform 
-                                ${isHovered ? 'opacity-100 scale-105' : 'opacity-80'}`}
-                                aria-label="Add to favorites"
-                                onClick={HandleAddToWishlist}
-                            >
-                                <Heart size={18} className={`transition-all duration-300 ${mutation.isSuccess ? 'text-red-500 fill-red-500' : ''}`} />
-                            </button>)}
+                            {!isGuest && (
+                                <button
+                                    className={`absolute top-3 right-3 backdrop-blur-sm transition-all duration-200 rounded-full p-2 z-10 shadow-sm transform ${
+                                        isFeatureFish 
+                                            ? 'bg-amber-100/90 text-amber-700 hover:text-red-500 hover:bg-white/90' 
+                                            : 'bg-white/90 text-gray-700 hover:text-red-500'
+                                    } ${isHovered ? 'opacity-100 scale-105' : 'opacity-80'}`}
+                                    aria-label="Add to favorites"
+                                    onClick={HandleAddToWishlist}
+                                >
+                                    <Heart size={18} className={`transition-all duration-300 ${mutation.isSuccess ? 'text-red-500 fill-red-500' : ''}`} />
+                                </button>
+                            )}
 
                             <Image
                                 src={fish.images[0]}
                                 alt={fish.name}
                                 fill
                                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                                className={`object-cover object-center transition-transform duration-500 ease-out ${isHovered ? 'scale-110' : 'scale-100'}`}
+                                className={`object-cover object-center transition-transform duration-500 ease-out ${
+                                    isHovered ? 'scale-110' : 'scale-100'
+                                }`}
                                 onError={(e) => {
                                     const target = e.target;
                                     if (target instanceof HTMLImageElement) {
                                         target.onerror = null;
                                         target.style.display = 'none';
                                         if (target.parentElement) {
-                                            target.parentElement.classList.add('bg-gray-100');
+                                            target.parentElement.classList.add(isFeatureFish ? 'bg-gradient-to-br from-amber-50 to-yellow-50' : 'bg-gray-100');
                                             const placeholder = document.createElement('div');
                                             placeholder.className = "flex items-center justify-center w-full h-full";
                                             placeholder.innerHTML = `<svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -163,65 +225,93 @@ const FishCard: FC<Props> = ({ fish }) => {
                             />
 
                             {/* Enhanced gradient overlay */}
-                            <div className={`absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}></div>
+                            <div className={`absolute inset-0 transition-opacity duration-300 ${
+                                isHovered ? 'opacity-100' : 'opacity-0'
+                            } ${
+                                isFeatureFish 
+                                    ? 'bg-gradient-to-t from-amber-900/20 to-transparent' 
+                                    : 'bg-gradient-to-t from-black/30 to-transparent'
+                            }`}></div>
                         </div>
                     ) : (
                         <PlaceholderImage />
                     )}
 
-                    {/* Featured badge - improved mobile visibility */}
-                    {fish.isFeatured && (
-                        <div className="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-sm">
-                            Featured
+                    {/* Standard Featured badge - improved mobile visibility */}
+                    {isFeatureFish && (
+                        <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
+                            <Award size={12} />
+                            <span>Featured</span>
                         </div>
                     )}
                 </div>
 
                 {/* Content section with better responsive spacing */}
-                <div className="p-3 xs:p-4 flex flex-col flex-grow">
+                <div className={`p-3 xs:p-4 flex flex-col flex-grow ${
+                    isFeatureFish ? 'bg-gradient-to-br from-white via-amber-50/20 to-white' : ''
+                }`}>
                     <div className="mb-1.5">
-                        <h3 className="font-semibold text-sm xs:text-base sm:text-lg text-gray-800 line-clamp-1">{fish.name}</h3>
-                        <p className="text-xs sm:text-sm text-gray-500 line-clamp-1">{fish.breed}</p>
+                        <h3 className={`font-semibold text-sm xs:text-base sm:text-lg line-clamp-1 transition-colors ${
+                            isFeatureFish 
+                                ? 'text-gray-900 group-hover:text-amber-800' 
+                                : 'text-gray-800'
+                        }`}>
+                            {fish.name}
+                        </h3>
+                        <p className={`text-xs sm:text-sm line-clamp-1 ${
+                            isFeatureFish ? 'text-amber-700 font-medium' : 'text-gray-500'
+                        }`}>
+                            {fish.breed}
+                        </p>
                     </div>
 
                     {/* Rating and Price - improved mobile alignment */}
                     <div className="mt-auto pt-1.5">
                         <div className="flex items-center justify-between">
-                            {/* Star rating - better mobile sizing */}
+                            {/* Star rating - enhanced for featured fish */}
                             <div className="flex items-center space-x-0.5">
                                 {[...Array(5)].map((_, i) => (
-                                    <svg
+                                    <Star
                                         key={i}
-                                        className={`w-3 h-3 xs:w-3.5 xs:h-3.5 ${i < Math.round(fish.avgRating) ? 'text-yellow-400' : 'text-gray-200'}`}
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
+                                        className={`w-3 h-3 xs:w-3.5 xs:h-3.5 ${
+                                            i < Math.round(fish.avgRating) 
+                                                ? (isFeatureFish ? 'text-amber-400 fill-amber-400' : 'text-yellow-400 fill-yellow-400')
+                                                : 'text-gray-200 fill-gray-200'
+                                        }`}
+                                    />
                                 ))}
-                                {/* Show rating value on larger screens */}
-                                {/* <span className="hidden sm:inline-block text-xs text-gray-500 ml-1">
-                                    ({fish.avgRating.toFixed(1)})
-                                </span> */}
                             </div>
 
-                            {/* Price - with currency symbol */}
-                            <p className="font-bold text-sm xs:text-base text-gray-800">₹{Number(fish.price).toFixed(2)}</p>
+                            {/* Price - enhanced styling for featured fish */}
+                            <div className={`font-bold text-sm xs:text-base transition-colors ${
+                                isFeatureFish 
+                                    ? 'text-amber-800 px-2 py-1 rounded-md' 
+                                    : 'text-gray-800'
+                            }`}>
+                                ₹{Number(fish.price).toFixed(2)}
+                            </div>
                         </div>
 
-                        {/* Add to cart button - more touch-friendly */}
+                        {/* Add to cart button - enhanced for featured fish */}
                         <button
-                            className="mt-2.5 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
-                            text-white py-2 xs:py-2.5 rounded-lg text-xs xs:text-sm font-medium transition-all duration-300 
-                            flex items-center justify-center shadow-sm hover:shadow group cursor-pointer"
+                            className={`mt-2.5 w-full py-2 xs:py-2.5 rounded-lg text-xs xs:text-sm font-medium transition-all duration-300 
+                            flex items-center justify-center shadow-sm hover:shadow group cursor-pointer ${
+                                isFeatureFish 
+                                    ? 'bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white' 
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white'
+                            }`}
                             onClick={HandleAddToCart}
                         >
                             <ShoppingCart size={16} className="mr-1.5 group-hover:animate-pulse" />
-                            Add to Cart
+                             Add to Cart
                         </button>
                     </div>
                 </div>
+
+                {/* Subtle shine effect for featured fish */}
+                {isFeatureFish && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none"></div>
+                )}
             </div>
         </div>
     )
