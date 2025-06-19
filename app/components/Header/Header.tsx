@@ -355,10 +355,10 @@ const Header = () => {
                         <div className="relative">
                             <button
                                 onClick={toggleProfileMenu}
-                                className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
+                                className={`${user?.profilePictureUrl ? 'h-8 w-8 flex' : 'rounded-full p-2 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors'}`}
                                 aria-label="Profile"
                             >
-                                {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
+                                {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full lg:hover:scale-105' width={32} height={32} /> : <User size={18} />}
                             </button>
 
                             {/* Profile dropdown menu */}
