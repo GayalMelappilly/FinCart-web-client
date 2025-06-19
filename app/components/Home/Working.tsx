@@ -4,7 +4,7 @@ import React from 'react'
 const Working = () => {
     return (
         <section className="py-16">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 md:px-20">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-4">How Fincarts Works</h2>
                 <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">Join thousands of fish enthusiasts who are already buying and selling on our platform.</p>
 

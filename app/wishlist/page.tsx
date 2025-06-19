@@ -46,7 +46,7 @@ const Page: React.FC = () => {
                 </Head>
                 <Header />
                 <ContinueShoppingButton />
-                <main className="container mx-auto px-4 md:px-30 py-8">
+                <main className="container mx-auto px-4 md:px-32 py-8">
                     {wishlistItems && wishlistItems.length > 0 ? (
                         <>
                             <ShareWishlist wishlistItems={wishlistItems} />

@@ -124,7 +124,7 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
     return (
       <section className="px-4 sm:px-6 py-8 sm:py-12">
         <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
+          <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800`}>{title}</h2>
           <ErrorDisplay message={(error as Error)?.message || 'Unknown error occurred'} />
         </div>
       </section>
@@ -147,11 +147,16 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
 
   return (
     <section id="featuredFish" className={`bg-gradient-to-b scroll-smooth from-white to-blue-50/30 sm:px-6 py-8 lg:pl-12 sm:py-12`}>
+      {isFeaturedFish && (
+        <div className='mb-10 border w-3/5 flex mx-auto'>
+          <hr />
+        </div>
+      )}
       <div className="mx-auto sm:px-16">
         {/* Header with responsive spacing and alignment */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div className='pl-4 sm:pl-0'>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold ${isFeaturedFish ? 'bg-blue-300/30 p-2 rounded-lg text-blue-600' : 'text-gray-800'}`}>{title}</h2>
           </div>
           {/* <Link
             href="/fish"
