@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
     Home,
@@ -43,6 +43,19 @@ export default function Layout({ children }: LayoutProps) {
             setAccessToken(localStorage.getItem('sellerAccessToken') || '');
         }
     }, []);
+
+
+    const innerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        // Scroll outer scrollbar (browser window)
+        window.scrollTo({ top: 0, behavior: 'auto' })
+
+        // Scroll inner container
+        if (innerRef.current) {
+            innerRef.current.scrollTo({ top: 0, behavior: 'auto' })
+        }
+    }, [pathname])
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['get-seller-details'],

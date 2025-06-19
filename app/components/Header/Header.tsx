@@ -6,10 +6,10 @@ import { Heart, Menu, Search, ShoppingBag, User, X } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'
-import Spinner from '../LoadingSpinner/Spinner';
 import { useRouter } from 'next/navigation';
 import { UserType } from '@/app/types/user/type';
 import CartIcon from './CartIcon';
+import { ResponsiveHeaderSkeleton } from './Loading/HeaderSkeleton';
 
 const fishCategories = [
     "Freshwater Fish",
@@ -82,7 +82,7 @@ const Header = () => {
     const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
     const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
-    const [isGuest, setIsGuest] = useState(false)
+    const [isGuest, setIsGuest] = useState(true)
 
     const searchRef = useRef<HTMLDivElement>(null);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
@@ -210,7 +210,7 @@ const Header = () => {
     }, [data])
 
     if (error) console.log("Error fetching user : ", error);
-    if (isLoading || logoutMutation.isPending) return <Spinner />
+    if ((isLoading &&  accessToken) || logoutMutation.isPending) return <ResponsiveHeaderSkeleton />
 
     const categories: string[] = [''];
 

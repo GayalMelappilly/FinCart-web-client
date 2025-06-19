@@ -19,7 +19,7 @@ const Header: FC<Props> = ({ title, toggleSidebar }) => {
     },[profileUrl, sellerData?.businessInfo.logoUrl])
 
     return (
-        <header className="bg-white shadow-sm z-10 md:pr-20">
+        <header className="bg-white md:pr-20 shadow-lg shadow-black/10 z-50">
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {!isLoggedIn ?

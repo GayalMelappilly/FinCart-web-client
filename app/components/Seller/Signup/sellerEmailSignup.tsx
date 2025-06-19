@@ -2,18 +2,16 @@
 
 import { verifySellerEmail } from '@/app/services/sellerAuthServices'
 import { useMutation } from '@tanstack/react-query'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { HiOutlineShieldCheck } from 'react-icons/hi'
-import { HiOutlineMail } from 'react-icons/hi'
+import { HiOutlineShieldCheck, HiOutlineMail, HiOutlineArrowRight } from 'react-icons/hi'
 
 const EmailSignUpBox = () => {
-
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [email, setEmail] = useState<string>("")
     const [error, setError] = useState<string>('')
-    // const [password, setPassword] = useState<string>()
 
     const router = useRouter()
 
@@ -51,30 +49,61 @@ const EmailSignUpBox = () => {
     };
 
     return (
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-            {/* Top gradient banner */}
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-600 py-8 px-6">
-                <h2 className="text-center text-white text-2xl font-bold">Fincarts</h2>
-                {/* <p className="text-center text-blue-100 text-sm mt-1">Where Fins Belong</p> */}
+        <div className="w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 px-8 py-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20"></div>
+                <div className="relative z-10">
+                    <div className="flex items-center justify-center mb-3">
+                        <div className="w-16 h-12 bg- backdrop-blur-sm rounded-xl flex items-center justify-center">
+                            <Image
+                                src={'/erasebg-transformed.png'}
+                                alt='fincarts'
+                                height={1000}
+                                width={1000}
+                                className="w-16 h-10"
+                            />
+                        </div>
+                    </div>
+                    <h2 className="text-center text-white text-2xl font-bold mb-2">
+                        Start Your Business Journey
+                    </h2>
+                    <p className="text-center text-blue-100 text-sm">
+                        Join Fincarts Seller Hub and reach millions of customers
+                    </p>
+                </div>
             </div>
 
-            <div className="p-8">
-                <h3 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-                    Join Fincarts
-                </h3>
-
-                <div className="mb-8 text-center text-gray-500 text-sm">
-                    <p>Create an account to start your journey with us</p>
+            <div className="px-8 py-8">
+                <div className="mb-6">
+                    <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+                        Create Seller Account
+                    </h3>
+                    <p className="text-center text-gray-600 text-sm">
+                        Enter your business email to get started
+                    </p>
                 </div>
+
+                {/* Quick Benefits */}
+                {/* <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100">
+                    <div className="text-center">
+                        <p className="text-sm font-medium text-blue-900 mb-2">✨ What you get:</p>
+                        <div className="flex justify-center space-x-4 text-xs text-blue-700">
+                            <span>• Free listing</span>
+                            <span>• 24/7 support</span>
+                            <span>• Analytics dashboard</span>
+                        </div>
+                    </div>
+                </div> */}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-3">
                             Email Address
                         </label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <HiOutlineMail className="h-5 w-5 text-gray-400" />
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <HiOutlineMail className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
                             </div>
                             <input
                                 id="email"
@@ -84,52 +113,89 @@ const EmailSignUpBox = () => {
                                     setEmail(e.target.value)
                                     setError('')
                                 }}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                                placeholder="you@example.com"
+                                className="w-full pl-12 pr-4 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white text-gray-900 placeholder:text-xs placeholder:sm:text-base placeholder-gray-500 transition-all"
+                                placeholder="Email address"
                                 required
                             />
                         </div>
+                        <p className="mt-2 text-xs text-gray-500">
+                            We&apos;ll send a verification code to this email
+                        </p>
                     </div>
 
                     {error && (
-                        <p className="mt-2 text-red-600 text-sm">{error}</p>
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-red-700 text-sm font-medium">{error}</p>
+                        </div>
                     )}
 
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-md flex items-center justify-center font-medium"
+                        className="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-3 sm:py-4 px-6 rounded-xl hover:from-blue-700 hover:via-blue-800 hover:to-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/25 transition-all shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed font-semibold text-xs md:text-base flex items-center justify-center group"
                     >
                         {isLoading ? (
-                            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
+                            <>
+                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Sending verification code...
+                            </>
                         ) : (
-                            <HiOutlineShieldCheck className="mr-2 h-5 w-5" />
+                            <>
+                                <HiOutlineShieldCheck className="mr-2 h-5 w-5" />
+                                Verify Email & Continue
+                                <HiOutlineArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                            </>
                         )}
-                        {isLoading ? 'Sending OTP...' : 'Verify Email'}
                     </button>
 
-                    <div className="relative flex items-center">
+                    {/* Divider */}
+                    <div className="relative flex items-center my-6">
                         <div className="flex-grow border-t border-gray-200"></div>
-                        <span className="flex-shrink mx-4 text-gray-400 text-sm">or</span>
+                        <span className="flex-shrink mx-4 text-gray-400 text-sm font-medium bg-white px-2">
+                            Already registered?
+                        </span>
                         <div className="flex-grow border-t border-gray-200"></div>
                     </div>
 
+                    {/* Login Link */}
                     <Link href={'/seller/login'} className="block w-full">
-                        <button type="button" className="w-full bg-white text-blue-600 py-3 px-4 rounded-lg border border-blue-200 hover:bg-blue-50 focus:outline-none transition-colors shadow-sm font-medium flex items-center justify-center">
-                            Already have an account? Sign In
+                        <button 
+                            type="button" 
+                            className="w-full bg-white text-blue-700 py-3 sm:py-4 px-2 sm:px-6 rounded-xl border-2 border-blue-200 hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-500/25 transition-all font-semibold text-xs md:text-base flex items-center justify-center group"
+                        >
+                            Sign In to Seller Dashboard
+                            <HiOutlineArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                     </Link>
                 </form>
 
-                <div className="text-center text-xs text-gray-500 mt-8">
-                    <p>By continuing, you agree to Fincart&apos;s</p>
+                {/* Security Note */}
+                {/* <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="flex items-start space-x-3">
+                        <HiOutlineShieldCheck className="w-5 h-5 text-green-600 mt-0.5" />
+                        <div>
+                            <p className="text-sm font-medium text-gray-900">Secure & Protected</p>
+                            <p className="text-xs text-gray-600 mt-1">
+                                Your information is encrypted and secure. We never share your data with third parties.
+                            </p>
+                        </div>
+                    </div>
+                </div> */}
+
+                {/* Terms */}
+                <div className="text-center text-xs text-gray-500 mt-6 leading-relaxed">
+                    <p>By continuing, you agree to Fincarts</p>
                     <p className="mt-1">
-                        <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Terms of Service</a>
-                        {" "}&{" "}
-                        <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Privacy Policy</a>
+                        <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                            Seller Terms & Conditions
+                        </a>
+                        {" "} and {" "}
+                        <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                            Privacy Policy
+                        </a>
                     </p>
                 </div>
             </div>
