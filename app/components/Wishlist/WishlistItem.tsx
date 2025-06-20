@@ -2,11 +2,6 @@ import { WishlistItem as WishlistItemType } from '@/app/types/user/type'
 import Image from 'next/image'
 import React, { FC } from 'react'
 import { FiTrash2 } from 'react-icons/fi'
-import { toNumber } from '@/app/utils/toNumber'
-import { useMutation } from '@tanstack/react-query'
-import { deletewishlistItem } from '@/app/services/authServices'
-import { useToast } from '@/app/providers/ToastProvider'
-import { useUserData } from '@/app/context/userDataContext'
 
 type Props = {
     wishlistItems: WishlistItemType,

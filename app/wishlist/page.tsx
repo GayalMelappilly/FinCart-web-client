@@ -5,7 +5,7 @@ import Head from 'next/head';
 import Header from '../components/Header/Header';
 import ContinueShoppingButton from '../components/ContinueShoppingButton/ContinueShoppingButton';
 import Footer from '../components/Footer/Footer';
-import ShareWishlist from '../components/Wishlist/ShareWishlist';
+// import ShareWishlist from '../components/Wishlist/ShareWishlist';
 import WishlistItem from '../components/Wishlist/WishlistItem';
 import EmptyWishlist from '../components/Wishlist/EmptyWishlist';
 import DiscoverButton from '../components/Wishlist/DiscoverButton';
