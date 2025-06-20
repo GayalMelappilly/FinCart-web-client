@@ -8,16 +8,132 @@ import FishCard from './FIshCard';
 import { FishListing } from '@/app/types/list/fishList';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
-const FishLoadingSkeleton = () => (
-  <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-    <div className="h-40 sm:h-48 bg-gray-200 animate-pulse"></div>
-    <div className="p-3 sm:p-4">
-      <div className="h-3 sm:h-4 bg-gray-200 rounded animate-pulse mb-2 w-3/4"></div>
-      <div className="h-3 sm:h-4 bg-gray-200 rounded animate-pulse w-1/2 mb-2"></div>
-      <div className="h-3 sm:h-4 bg-gray-200 rounded animate-pulse w-1/4 mt-3"></div>
+// Professional Fish Card Skeleton Component
+const FishCardSkeleton = ({ isFeatured = false }) => {
+  return (
+    <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 ${
+      isFeatured ? 'ring-2 ring-amber-100' : ''
+    }`}>
+      {/* Image Skeleton */}
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-pulse"></div>
+        
+        {/* Featured badge skeleton */}
+        {isFeatured && (
+          <div className="absolute top-2 right-2 w-6 h-6 bg-white/80 rounded-full animate-pulse">
+            <div className="w-3 h-3 bg-gray-200 rounded-sm m-1.5"></div>
+          </div>
+        )}
+        
+        {/* Price badge skeleton */}
+        <div className="absolute bottom-2 left-2 px-2 py-1 bg-white/90 rounded-md animate-pulse">
+          <div className="h-3 w-12 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+
+      {/* Content Skeleton */}
+      <div className="p-3 sm:p-4">
+        {/* Title */}
+        <div className="h-4 sm:h-5 w-3/4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-pulse rounded mb-2"></div>
+        
+        {/* Subtitle/Description */}
+        <div className="space-y-1.5 mb-3">
+          <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+          <div className="h-3 w-2/3 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+        
+        {/* Details row */}
+        <div className="flex items-center justify-between text-xs sm:text-sm">
+          <div className="flex items-center space-x-1">
+            <div className="w-3 h-3 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-3 w-12 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+          <div className="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+        
+        {/* Bottom row with rating and availability */}
+        <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
+          <div className="flex items-center space-x-1">
+            {/* Star ratings skeleton */}
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-3 h-3 bg-gray-200 rounded-sm animate-pulse"></div>
+            ))}
+          </div>
+          <div className="h-2.5 w-8 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+// Professional Fish Section Skeleton Component
+const FishSectionSkeleton = ({ isFeaturedFish = false, title = "" }) => {
+  return (
+    <section className={`bg-gradient-to-b scroll-smooth from-white to-blue-50/30 sm:px-6 py-8 lg:pl-12 sm:py-12`}>
+      {isFeaturedFish && (
+        <div className='mb-10 border w-3/5 flex mx-auto'>
+          <hr />
+        </div>
+      )}
+      
+      <div className="mx-auto sm:px-16">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
+          <div className='pl-4 sm:pl-0'>
+            <div className={`transition-all duration-200 ${
+              isFeaturedFish
+                ? 'px-4 py-2 bg-white rounded-lg border-l-4 border-l-gray-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]'
+                : ''
+            }`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  {/* Show actual title while loading or skeleton if no title */}
+                  {title ? (
+                    <span className={`text-xl sm:text-2xl font-medium ${isFeaturedFish ? 'text-gray-900' : 'text-gray-600'}`}>
+                      {title}
+                    </span>
+                  ) : (
+                    <div className="h-6 sm:h-8 w-32 sm:w-40 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-pulse rounded"></div>
+                  )}
+                </div>
+                {isFeaturedFish && (
+                  <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center animate-pulse">
+                    <div className="w-3 h-3 bg-gray-200 rounded-sm"></div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Cards Grid Skeleton */}
+        <div className="relative">
+          <div className="overflow-x-auto scrollbar-hide pb-4">
+            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 md:grid-rows-1 auto-cols-max pl-5 sm:pl-0 sm:px-8 sm:py-4">
+              {/* Generate 8 skeleton cards */}
+              {[...Array(8)].map((_, index) => (
+                <div
+                  key={index}
+                  className="w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0"
+                >
+                  <FishCardSkeleton isFeatured={isFeaturedFish} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation Button Skeletons */}
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-2.5 bg-white/50 rounded-full shadow-lg border border-gray-100 animate-pulse">
+            <div className="w-5 h-5 bg-gray-200 rounded"></div>
+          </div>
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-2.5 bg-white/50 rounded-full shadow-lg border border-gray-100 animate-pulse">
+            <div className="w-5 h-5 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 // Error component with better mobile styling
 const ErrorDisplay = ({ message }: { message: string }) => (
@@ -31,7 +147,7 @@ type Props = {
   title: string;
 }
 
-const FeaturesFishSection:FC<Props> = ({ title }) => {
+const FeaturesFishSection: FC<Props> = ({ title }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -66,7 +182,7 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
     }
   };
 
-  if(!isFeaturedFish){
+  if (!isFeaturedFish) {
     console.log('Categorized list : ', data)
   }
 
@@ -99,24 +215,9 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
     }
   };
 
-  // Handle loading state
+  // Handle loading state with professional skeleton
   if (isLoading) {
-    return (
-      <section className="px-4 sm:px-16 py-8 sm:py-12">
-        <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
-          <div className="overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 lg:grid-rows-1 auto-cols-max">
-              {[...Array(6)].map((_, index) => (
-                <div key={index} className="w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0">
-                  <FishLoadingSkeleton />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    return <FishSectionSkeleton isFeaturedFish={isFeaturedFish} title={title} />;
   }
 
   // Handle error state
@@ -155,8 +256,25 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
       <div className="mx-auto sm:px-16">
         {/* Header with responsive spacing and alignment */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
+
           <div className='pl-4 sm:pl-0'>
-            <h2 className={`text-xl sm:text-2xl font-bold ${isFeaturedFish ? 'bg-blue-300/30 p-2 rounded-lg text-blue-600' : 'text-gray-800'}`}>{title}</h2>
+            <h2 className={`text-xl sm:text-2xl font-medium transition-all duration-200 ${isFeaturedFish
+                ? 'relative text-gray-900 px-4 py-2 bg-white rounded-lg border-l-4 border-l-amber-500 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]'
+                : 'text-gray-600 hover:text-gray-900'
+              }`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className={isFeaturedFish ? 'text-gray-900' : ''}>{title}</span>
+                </div>
+                {isFeaturedFish && (
+                  <div className="w-6 h-6 bg-amber-50 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            </h2>
           </div>
           {/* <Link
             href="/fish"
@@ -169,7 +287,7 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
 
         {/* Card grid with scrollable layout */}
         <div className="relative">
-          <div 
+          <div
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide pb-4"
             onScroll={checkScrollPosition}
@@ -181,8 +299,8 @@ const FeaturesFishSection:FC<Props> = ({ title }) => {
             {/* Two rows on small screens, one row on large screens */}
             <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 md:grid-rows-1 auto-cols-max pl-5 sm:pl-0 sm:px-8 sm:py-4">
               {data.list.map((fish: FishListing) => (
-                <div 
-                  key={fish.id} 
+                <div
+                  key={fish.id}
                   data-card
                   className="w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0"
                 >
