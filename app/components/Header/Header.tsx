@@ -7,9 +7,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation';
-import { UserType } from '@/app/types/user/type';
 import CartIcon from './CartIcon';
 import { ResponsiveHeaderSkeleton } from './Loading/HeaderSkeleton';
+import { useUserData } from '@/app/context/userDataContext';
 
 const fishCategories = [
     "Freshwater Fish",
@@ -80,9 +80,10 @@ const Header = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
-    const [user, setUser] = useState<UserType | null>()
     const [accessToken, setAccessToken] = useState('');
     const [isGuest, setIsGuest] = useState(true)
+
+    const { userData, setUserData } = useUserData()
 
     const searchRef = useRef<HTMLDivElement>(null);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
@@ -199,13 +200,13 @@ const Header = () => {
                 localStorage.removeItem('email-address')
                 setAccessToken('')
             }
-            setUser(null)
+            setUserData(null)
             router.refresh();
         }
     });
 
     useEffect(() => {
-        if (data?.success) setUser(data?.data)
+        if (data?.success) setUserData(data?.data)
         console.log(data)
     }, [data])
 
@@ -355,16 +356,16 @@ const Header = () => {
                         <div className="relative">
                             <button
                                 onClick={toggleProfileMenu}
-                                className={`${user?.profilePictureUrl ? 'h-8 w-8 flex' : 'rounded-full p-2 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors'}`}
+                                className={`${userData?.profilePictureUrl ? 'h-8 w-8 flex' : 'rounded-full p-2 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors'}`}
                                 aria-label="Profile"
                             >
-                                {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full lg:hover:scale-105' width={32} height={32} /> : <User size={18} />}
+                                {userData?.profilePictureUrl ? <Image src={userData.profilePictureUrl} alt='profile-image' className='rounded-full lg:hover:scale-105' width={32} height={32} /> : <User size={18} />}
                             </button>
 
                             {/* Profile dropdown menu */}
                             {profileMenuOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                    {user ? (
+                                    {userData ? (
                                         <>
                                             <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 Your Profile
@@ -493,18 +494,18 @@ const Header = () => {
 
                                 {/* Profile section in mobile menu */}
                                 <div className="px-4 mb-5">
-                                    {user ? (
+                                    {userData ? (
                                         <div className="rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 p-4 shadow-sm">
                                             <div className="flex items-center space-x-3">
                                                 <button
                                                     onClick={toggleProfileMenu}
-                                                    className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${user?.profilePictureUrl ? 'my-2' : 'p-2'}`}
+                                                    className={`bg-gray-100 hover:bg-indigo-100 hover:text-indigo-600 text-gray-800 transition-colors rounded-full ${userData?.profilePictureUrl ? 'my-2' : 'p-2'}`}
                                                     aria-label="Profile"
                                                 >
-                                                    {user?.profilePictureUrl ? <Image src={user.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
+                                                    {userData?.profilePictureUrl ? <Image src={userData.profilePictureUrl} alt='profile-image' className='rounded-full hover:scale-105' width={32} height={32} /> : <User size={18} />}
                                                 </button>
                                                 <div>
-                                                    <p className="font-semibold text-gray-900">{user.fullName}</p>
+                                                    <p className="font-semibold text-gray-900">{userData.fullName}</p>
                                                     <Link href="/profile" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center">
                                                         View Profile
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -562,7 +563,7 @@ const Header = () => {
                                         ))}
                                     </div>
 
-                                    {user && (
+                                    {userData && (
                                         <div className="pt-2 border-t border-gray-200">
                                             <h3 className="text-lg font-semibold text-gray-900 mb-3 mt-4 flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
