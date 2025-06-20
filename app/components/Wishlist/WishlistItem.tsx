@@ -5,32 +5,15 @@ import { FiTrash2 } from 'react-icons/fi'
 import { toNumber } from '@/app/utils/toNumber'
 import { useMutation } from '@tanstack/react-query'
 import { deletewishlistItem } from '@/app/services/authServices'
+import { useToast } from '@/app/providers/ToastProvider'
+import { useUserData } from '@/app/context/userDataContext'
 
 type Props = {
     wishlistItems: WishlistItemType,
+    removeFromWishlist: (id: string) => void
 }
 
-const WishlistItem: FC<Props> = ({wishlistItems}) => {
-
-    const mutation = useMutation({
-        mutationFn: deletewishlistItem,
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (err) => {
-            console.log('Delete item from cart error : ', err);
-        }
-    });
-
-    const removeFromWishlist = (id: string) => {
-        mutation.mutate(id)
-    };
-
-    if(wishlistItems) console.log('items : ',wishlistItems)
-    
-    // const addToCart = (item: WishlistItemInterface) => {
-    //     console.log(`Added ${item.name} to cart`);
-    // };
+const WishlistItem: FC<Props> = ({wishlistItems, removeFromWishlist}) => {
 
     return (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
@@ -69,7 +52,7 @@ const WishlistItem: FC<Props> = ({wishlistItems}) => {
 
             <div className="bg-gray-50 p-4 border-t border-gray-100">
                 <div className="flex justify-between items-center">
-                    <span className="font-bold text-gray-800">₹{toNumber(wishlistItems.fishListings.price).toFixed(2)}</span>
+                    <span className="font-bold text-gray-800">₹{wishlistItems.fishListings.price}</span>
                     {/* <button
                         onClick={() => addToCart(item)}
                         disabled={!item.inStock}
