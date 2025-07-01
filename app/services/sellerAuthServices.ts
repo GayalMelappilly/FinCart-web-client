@@ -118,10 +118,12 @@ export const confirmSellerOtp = async (data: OtpDataType) => {
 
   let token;
   if (data.type === 'auth') {
-    token = localStorage.getItem('svt')
+    token = typeof window !== 'undefined' ? localStorage.getItem('svt') : null
   } else if (data.type === 'forgotPassword') {
-    token = localStorage.getItem('fpvt')
+    token = typeof window !== 'undefined' ? localStorage.getItem('fpvt') : null
   }
+
+  console.log("tokken : ",token)
 
   if (!token) {
     console.log("No token found")

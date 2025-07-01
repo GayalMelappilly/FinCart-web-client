@@ -158,7 +158,7 @@ const VerificationBox = () => {
 
             const data = {
                 code: String(otp.join('')) as string,
-                type: 'forgotPassword'
+                type: 'auth'
             } 
             mutation.mutate(data)
 
