@@ -11,20 +11,19 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 // Professional Fish Card Skeleton Component
 const FishCardSkeleton = ({ isFeatured = false }) => {
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 ${
-      isFeatured ? 'ring-2 ring-amber-100' : ''
-    }`}>
+    <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 ${isFeatured ? 'ring-2 ring-amber-100' : ''
+      }`}>
       {/* Image Skeleton */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-pulse"></div>
-        
+
         {/* Featured badge skeleton */}
         {isFeatured && (
           <div className="absolute top-2 right-2 w-6 h-6 bg-white/80 rounded-full animate-pulse">
             <div className="w-3 h-3 bg-gray-200 rounded-sm m-1.5"></div>
           </div>
         )}
-        
+
         {/* Price badge skeleton */}
         <div className="absolute bottom-2 left-2 px-2 py-1 bg-white/90 rounded-md animate-pulse">
           <div className="h-3 w-12 bg-gray-200 rounded"></div>
@@ -35,13 +34,13 @@ const FishCardSkeleton = ({ isFeatured = false }) => {
       <div className="p-3 sm:p-4">
         {/* Title */}
         <div className="h-4 sm:h-5 w-3/4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-pulse rounded mb-2"></div>
-        
+
         {/* Subtitle/Description */}
         <div className="space-y-1.5 mb-3">
           <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
           <div className="h-3 w-2/3 bg-gray-200 rounded animate-pulse"></div>
         </div>
-        
+
         {/* Details row */}
         <div className="flex items-center justify-between text-xs sm:text-sm">
           <div className="flex items-center space-x-1">
@@ -50,7 +49,7 @@ const FishCardSkeleton = ({ isFeatured = false }) => {
           </div>
           <div className="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
         </div>
-        
+
         {/* Bottom row with rating and availability */}
         <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
           <div className="flex items-center space-x-1">
@@ -75,16 +74,15 @@ const FishSectionSkeleton = ({ isFeaturedFish = false, title = "" }) => {
           <hr />
         </div>
       )}
-      
+
       <div className="mx-auto sm:px-16">
         {/* Header Skeleton */}
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div className='pl-4 sm:pl-0'>
-            <div className={`transition-all duration-200 ${
-              isFeaturedFish
-                ? 'px-4 py-2 bg-white rounded-lg border-l-4 border-l-gray-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]'
-                : ''
-            }`}>
+            <div className={`transition-all duration-200 ${isFeaturedFish
+              ? 'px-4 py-2 bg-white rounded-lg border-l-4 border-l-gray-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]'
+              : ''
+              }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   {/* Show actual title while loading or skeleton if no title */}
@@ -235,11 +233,38 @@ const FeaturesFishSection: FC<Props> = ({ title }) => {
   // If no featured fish are available
   if (!data.count || data.count === 0) {
     return (
-      <section className="px-4 sm:px-6 py-8 sm:py-12">
-        <div className="container mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">{title}</h2>
+      <section id="featuredFish" className={`bg-gradient-to-b scroll-smooth from-white to-blue-100/20 sm:px-6 py-8 lg:pl-12 sm:py-12`}>
+        {isFeaturedFish && (
+          <div className='mb-10 border w-3/5 flex mx-auto'>
+            <hr />
+          </div>
+        )}
+        <div className="mx-auto sm:px-16">
+          {/* Header with responsive spacing and alignment */}
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+
+            <div className='pl-4 sm:pl-0'>
+              <h2 className={`text-xl sm:text-2xl font-medium transition-all duration-200 ${isFeaturedFish
+                ? 'relative text-gray-900 px-4 py-2 bg-white rounded-lg border-l-4 border-l-amber-500 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className={isFeaturedFish ? 'text-gray-900' : ''}>{title}</span>
+                  </div>
+                  {isFeaturedFish && (
+                    <div className="w-6 h-6 bg-amber-50 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              </h2>
+            </div>
+          </div>
           <div className="bg-blue-50 p-4 rounded-lg text-center">
-            <p className="text-gray-600">No {title} available at the moment. Check back soon!</p>
+            <p className="text-gray-600 text-xs sm:text-base">No {title} available at the moment. Check back soon!</p>
           </div>
         </div>
       </section>
@@ -259,8 +284,8 @@ const FeaturesFishSection: FC<Props> = ({ title }) => {
 
           <div className='pl-4 sm:pl-0'>
             <h2 className={`text-xl sm:text-2xl font-medium transition-all duration-200 ${isFeaturedFish
-                ? 'relative text-gray-900 px-4 py-2 bg-white rounded-lg border-l-4 border-l-amber-500 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]'
-                : 'text-gray-600 hover:text-gray-900'
+              ? 'relative text-gray-900 px-4 py-2 bg-white rounded-lg border-l-4 border-l-amber-500 shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)]'
+              : 'text-gray-600 hover:text-gray-900'
               }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
