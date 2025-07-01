@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import Footer from '@/app/components/Footer/Footer';
 import SellerVerificationBox from '@/app/components/Seller/Verification/SellerVerificationBox';
 
 const Page: React.FC = () => {
@@ -14,7 +13,6 @@ const Page: React.FC = () => {
         </Head>
         <SellerVerificationBox />
       </div>
-      <Footer />
     </>
   );
 };

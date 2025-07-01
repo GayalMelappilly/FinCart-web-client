@@ -58,5 +58,6 @@ export const categories: { id: number; name: string }[] = [
   {id: 57, name: "Salmon (Game)"},
   {id: 58, name: "Pike"},
   {id: 59, name: "Tarpon"},
-  {id: 60, name: "Bonefish"}
+  {id: 60, name: "Bonefish"},
+  {id: 61, name: 'Arowana'}
 ]

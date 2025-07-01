@@ -114,13 +114,11 @@ type OtpDataType = {
 // Confirm seller OTP
 export const confirmSellerOtp = async (data: OtpDataType) => {
 
-  console.log('Verification code: ', data.code)
-
   const code = data.code
 
   let token;
   if (data.type === 'auth') {
-    token = localStorage.getItem('vt')
+    token = localStorage.getItem('svt')
   } else if (data.type === 'forgotPassword') {
     token = localStorage.getItem('fpvt')
   }
@@ -130,7 +128,7 @@ export const confirmSellerOtp = async (data: OtpDataType) => {
     return
   }
 
-  const res = await fetch(`${apiUrl}/seller/confirm-verification-code/`, {
+  const res = await fetch(`${apiUrl}/seller/confirm-verification-code`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
