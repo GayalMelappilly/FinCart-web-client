@@ -13,6 +13,23 @@ export type FormDataType = {
     nameOnCard: string,
 }
 
+export type ShippingDetailsType = {
+    fullName: string,
+    address: string,
+    aptSuite: string,
+    city: string,
+    state: string,
+    zip: string,
+    email: string,
+    phone: string,
+}
+
+export type PaymentDetailsType = {
+    cardNumber: string,
+    expDate: string,
+    nameOnCard: string,
+}
+
 export type OrderDetailsType = {
     items: OrderDetailsItemsType[],
     subtotal: number,
@@ -75,24 +92,24 @@ export type ProductView = 'list' | 'add' | 'edit' | 'view';
 // set-profile
 
 export type ProfileFormData = {
-  fullName: string;
-  email: string;
-  phone: string;
-  password: string;
-  profileImage: string | null;
-  userType: 'customer' | 'breeder' | 'admin';
-  emailVerified: boolean;
-  phoneVerified: boolean;
-  pointsBalance: number;
-  address: {
-    addressLine1: string,
-    addressLine2: string ,
-    city: string;
-    state: string;
-    pincode: string;
-    country: string;
-    isDefault: boolean;
-    latitude: string;
-    longitude: string;
-  };
+    fullName: string;
+    email: string;
+    phone: string;
+    password: string;
+    profileImage: string | null;
+    userType: 'customer' | 'breeder' | 'admin';
+    emailVerified: boolean;
+    phoneVerified: boolean;
+    pointsBalance: number;
+    address: {
+        addressLine1: string,
+        addressLine2: string,
+        city: string;
+        state: string;
+        pincode: string;
+        country: string;
+        isDefault: boolean;
+        latitude: string;
+        longitude: string;
+    };
 }

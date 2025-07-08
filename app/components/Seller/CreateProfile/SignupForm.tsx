@@ -239,7 +239,7 @@ const SignupForm: FC<Props> = ({
         phone: formData.phone,
         alternate_phone: formData.alternatePhone || null,
         gstin: formData.gstin || null,
-        pan_card: formData.panCard,
+        pan_card: formData.panCard || null,
         legal_business_name: formData.legalBusinessName,
         display_name: formData.displayName,
         store_description: formData.storeDescription || null,

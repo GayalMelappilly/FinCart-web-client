@@ -3,8 +3,8 @@
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation } from '@tanstack/react-query';
-import { DollarSign, FileImage, Info, X } from 'lucide-react';
-import React, { FC, useState } from 'react';
+import { IndianRupee, FileImage, Info, X } from 'lucide-react';
+import React, { FC, useEffect, useState } from 'react';
 
 // Updated types based on fish_listings schema
 export interface FishProduct {
@@ -53,7 +53,9 @@ const Form: FC<Props> = ({
 
     const [uploading, setUploading] = useState<boolean>(false)
 
-    console.log(editableProduct)
+    useEffect(()=>{
+        console.log('Edit products while editing : ',editableProduct)
+    },[editableProduct])
 
     const addMutation = useMutation({
         mutationFn: addProduct,
@@ -299,7 +301,7 @@ const Form: FC<Props> = ({
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price ($)*</label>
+                                                <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price (₹)*</label>
                                                 <div className="relative">
                                                     <input
                                                         type="number"
@@ -312,7 +314,7 @@ const Form: FC<Props> = ({
                                                         value={editableProduct?.price || ''}
                                                         onChange={handleInputChange}
                                                     />
-                                                    <DollarSign className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                                                    <IndianRupee className="absolute left-2 top-2.5 h-5 w-4 text-gray-400" />
                                                 </div>
                                             </div>
 

@@ -5,6 +5,7 @@ import React, { FC, useState } from 'react'
 import { FishProduct } from '../AddOrEditProduct/Form'
 import formatCareInstructions from '@/app/utils/formatCareInstructions'
 import Image from 'next/image'
+import { roboto } from '@/app/components/Fonts/Fonts'
 
 type Props = {
     product: FishProduct
@@ -71,7 +72,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
                         </div>
 
                         <div className="mt-6">
-                            <div className="text-3xl font-bold text-gray-900">${Number(product.price).toFixed(2)}</div>
+                            <div className={`text-3xl font-bold text-gray-900 ${roboto.className}`}>₹{Number(product.price).toFixed(2)}</div>
                             <div className="mt-2 flex items-center">
                                 <Tag className="h-5 w-5 text-gray-400 mr-1" />
                                 <span className="text-sm text-gray-500">{product.category}</span>

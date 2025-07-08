@@ -6,6 +6,7 @@ import { FishProduct } from '../AddOrEditProduct/Form'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import { deleteProduct } from '@/app/services/sellerAuthServices'
+import { roboto } from '@/app/components/Fonts/Fonts'
 
 type Props = {
     products: FishProduct[] | undefined,
@@ -55,13 +56,13 @@ const TableProducts:FC<Props> = ({products, setProducts, product, handleViewProd
                 </div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">${Number(product.price).toFixed(2)}</div>
+                <div className={`text-sm text-gray-900 ${roboto.className}`}>₹{Number(product.price).toFixed(2)}</div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">{product.quantity_available}</div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">{product.category}</div>
+                <div className="text-sm text-gray-900">{product.fish_categories?.name}</div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.listing_status === 'active' ? 'bg-green-100 text-green-800' :

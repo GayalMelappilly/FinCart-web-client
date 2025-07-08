@@ -1,20 +1,27 @@
 'use client'
 
 import { FishListing } from '@/app/types/list/fishList';
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Spinner from '../LoadingSpinner/Spinner';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { roboto } from '../Fonts/Fonts';
 
-export const OrderSummary = () => {
-    const [orderSummary, setOrderSummary] = useState<FishListing | undefined>();
+type Props = {
+    orderSummary: FishListing | undefined,
+    setOrderSummary: (orderSummary: FishListing | undefined) => void,
+    quantity: number,
+    setQuantity: (quantity: number) => void,
+}
+
+export const OrderSummary:FC<Props> = ({orderSummary, setOrderSummary, quantity, setQuantity}) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [quantity, setQuantity] = useState<number>(1)
 
     const url = useParams()
     const decoded = decodeURIComponent(url?.id as string)
     const valueAfterAmp = decoded.split('&')[1];
+
+    const price = orderSummary && orderSummary.price && (Number(orderSummary?.price/10))
 
     useEffect(() => {
         setIsLoading(true);
@@ -55,7 +62,7 @@ export const OrderSummary = () => {
                     </div>
                     <div className="ml-4">
                         <h3 className="text-black font-medium">{orderSummary?.name}</h3>
-                        <p className="text-gray-600">₹{Number(orderSummary?.price).toFixed(2)}</p>
+                        <p className="text-gray-600">₹{price?.toFixed(2)}</p>
                         <p className="text-gray-500">Quantity: {quantity}</p>
                     </div>
                 </div>
@@ -64,8 +71,8 @@ export const OrderSummary = () => {
                 {/* Order Calculations */}
                 <div className="border-t border-zinc-300 pt-4 mt-4">
                     <div className="flex justify-between mb-2">
-                        <span className="text-gray-600">Subtotal : {orderSummary?.price} x {quantity}</span>
-                        { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{orderSummary?.price * quantity}</span> }
+                        <span className="text-gray-600">Subtotal : {price} x {quantity}</span>
+                        { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{price && price * quantity}</span> }
                     </div>
                     <div className="text-sm text-gray-500 mb-4">
                         Shipping calculated at checkout
@@ -80,11 +87,11 @@ export const OrderSummary = () => {
                     <div className="border-t border-zinc-300 pt-4">
                         <div className="flex justify-between mb-2">
                             <span className="text-gray-600">Total</span>
-                            { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{orderSummary?.price * quantity}</span> }
+                            { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{price && (price * quantity).toFixed(2)}</span> }
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">To be paid</span>
-                            { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{orderSummary?.price * quantity}</span> }
+                            { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{price && (price * quantity).toFixed(2)}</span> }
                         </div>
                     </div>
                 </div>

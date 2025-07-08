@@ -1,15 +1,15 @@
 'use client'
 
-import { FormDataType } from '@/app/types/types';
+import { PaymentDetailsType } from '@/app/types/types';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { FC, useState } from 'react'
 
 type Props = {
-    formData: FormDataType,
-    setFormData: (formData: FormDataType) => void
+    paymentDetails: PaymentDetailsType,
+    setPaymentDetails: (paymentDetails: PaymentDetailsType) => void
 }
 
-const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
+const PaymentSection: FC<Props> = ({ paymentDetails, setPaymentDetails }) => {
 
     // const [paymentMethod, setPaymentMethod] = useState('Credit card');
     const [isPaymentExpanded, setIsPaymentExpanded] = useState(true);
@@ -21,8 +21,8 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setPaymentDetails({
+            ...paymentDetails,
             [name]: value,
         });
     };
@@ -61,7 +61,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             type="text"
                             name="cardNumber"
                             placeholder="Card number"
-                            value={formData.cardNumber}
+                            value={paymentDetails.cardNumber}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required
@@ -70,7 +70,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             type="text"
                             name="expDate"
                             placeholder="MM / YY"
-                            value={formData.expDate}
+                            value={paymentDetails.expDate}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required
@@ -82,7 +82,7 @@ const PaymentSection: FC<Props> = ({ formData, setFormData }) => {
                             type="text"
                             name="nameOnCard"
                             placeholder="Name on card"
-                            value={formData.nameOnCard}
+                            value={paymentDetails.nameOnCard}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                             required

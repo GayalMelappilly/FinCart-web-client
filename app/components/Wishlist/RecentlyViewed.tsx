@@ -26,7 +26,7 @@ const RecentlyViewed = () => {
                         <div className="p-3">
                             <h3 className="font-medium text-gray-800 text-sm truncate">Guppy - Fancy Mix</h3>
                             <div className="mt-1 flex justify-between items-center">
-                                <span className="font-semibold text-gray-800 text-sm">$8.99</span>
+                                <span className="font-semibold text-gray-800 text-sm">₹8.99</span>
                                 <button className="text-xs bg-blue-600 p-2 rounded-md text-white hover:bg-blue-700 font-medium flex">
                                     <FiShoppingCart className="mr-1 h-4 w-4" />
                                     Add to Cart

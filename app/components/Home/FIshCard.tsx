@@ -8,6 +8,7 @@ import { addToCart, addToCartGuest, addToWishlist } from '@/app/services/authSer
 import { useToast } from '@/app/providers/ToastProvider';
 import { CartItem } from '@/app/types/user/type';
 import { useUserData } from '@/app/context/userDataContext';
+import { roboto } from '../Fonts/Fonts';
 
 type Props = {
     fish: FishListing,
@@ -280,7 +281,7 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                             </div>
 
                             {/* Price - enhanced styling for featured fish */}
-                            <div className={`font-bold text-sm xs:text-base transition-colors ${isFeatureFish
+                            <div className={`font-bold text-base xs:text-base transition-colors ${roboto.className} ${isFeatureFish
                                     ? 'text-amber-800 px-2 py-1 rounded-md'
                                     : 'text-gray-800'
                                 }`}>

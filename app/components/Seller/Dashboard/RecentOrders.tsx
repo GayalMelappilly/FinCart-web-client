@@ -51,7 +51,7 @@ const RecentOrders = () => {
                                     {order.date}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    ${order.amount.toFixed(2)}
+                                    ₹{order.amount.toFixed(2)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span

@@ -8,6 +8,7 @@ import { CreditCard, Heart, ShieldCheck, ShoppingCart, Truck } from 'lucide-reac
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React, { FC, useEffect, useState } from 'react'
+import { roboto } from '../Fonts/Fonts'
 
 type Props = {
     fish: FishListing | undefined
@@ -85,7 +86,7 @@ const FishInfo: FC<Props> = ({ fish }) => {
                 <span className="ml-2 text-gray-600">{fish?.avgRating} ({fish?.reviewCount} reviews)</span>
             </div>
 
-            <div className="text-2xl font-bold text-blue-600 mb-6">₹{Number(fish?.price).toFixed(2)}</div>
+            <div className={`text-2xl font-bold text-blue-600 mb-6 ${roboto.className}`}>₹{fish && fish.price && (Number(fish?.price).toFixed(2))}</div>
 
             <p className="text-gray-700 mb-6">{fish?.description}</p>
 

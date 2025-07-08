@@ -34,7 +34,7 @@ const RelatedProducts:FC<Props> = ({ products, selectedProduct, handleViewProduc
                             <div className="p-3">
                                 <h4 className="font-medium text-gray-900 truncate">{product.name}</h4>
                                 <div className="mt-1 flex justify-between items-center">
-                                    <div className="text-blue-600 font-bold">${product.price.toFixed(2)}</div>
+                                    <div className="text-blue-600 font-bold">₹{product.price.toFixed(2)}</div>
                                     <button
                                         onClick={() => handleViewProduct(product)}
                                         className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-600"

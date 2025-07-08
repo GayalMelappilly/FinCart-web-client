@@ -1,17 +1,17 @@
-import { FormDataType } from '@/app/types/types'
+import { ShippingDetailsType } from '@/app/types/types'
 import React, { FC } from 'react'
 
 type Props = {
-    formData: FormDataType,
-    setFormData: (formData: FormDataType) => void
+    shippingDetails: ShippingDetailsType,
+    setshippingDetails: (shippingDetails: ShippingDetailsType) => void
 }
 
-const ShippingSection:FC<Props> = ({formData, setFormData}) => {
+const ShippingSection:FC<Props> = ({shippingDetails, setshippingDetails}) => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setshippingDetails({
+            ...shippingDetails,
             [name]: value,
         });
     };
@@ -26,7 +26,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="fullName"
                         placeholder="Full name"
-                        value={formData.fullName}
+                        value={shippingDetails.fullName}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -38,7 +38,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="address"
                         placeholder="Address"
-                        value={formData.address}
+                        value={shippingDetails.address}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -47,7 +47,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="aptSuite"
                         placeholder="Apt, suite, etc. (optional)"
-                        value={formData.aptSuite}
+                        value={shippingDetails.aptSuite}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                     />
@@ -58,7 +58,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="city"
                         placeholder="City"
-                        value={formData.city}
+                        value={shippingDetails.city}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -70,7 +70,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="state"
                         placeholder="State"
-                        value={formData.state}
+                        value={shippingDetails.state}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -79,7 +79,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="text"
                         name="zip"
                         placeholder="Zip"
-                        value={formData.zip}
+                        value={shippingDetails.zip}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -91,7 +91,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="email"
                         name="email"
                         placeholder="Email"
-                        value={formData.email}
+                        value={shippingDetails.email}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required
@@ -100,7 +100,7 @@ const ShippingSection:FC<Props> = ({formData, setFormData}) => {
                         type="tel"
                         name="phone"
                         placeholder="Phone"
-                        value={formData.phone}
+                        value={shippingDetails.phone}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 placeholder:text-gray-400 text-black"
                         required

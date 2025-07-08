@@ -75,7 +75,7 @@ export interface SellerDataCreate {
   phone: string;
   alternate_phone: string | null;
   gstin: string | null;
-  pan_card: string;
+  pan_card: string | null;
   legal_business_name: string;
   display_name: string;
   store_description: string | null;
