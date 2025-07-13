@@ -36,7 +36,7 @@ export default function Dashboard() {
                 <SalesChart />
                 <TopSellingProducts data={seller?.topSellingProducts} />
             </div>
-            <RecentOrders />
+            <RecentOrders recentOrder={seller?.recentOrders} />
         </>
     );
 }

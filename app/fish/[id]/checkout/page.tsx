@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Header from '@/app/components/Header/Header';
@@ -10,23 +10,22 @@ import PaymentSection from '@/app/components/Checkout/PaymentSection';
 import { OrderSummary } from '@/app/components/Checkout/OrderSummary';
 import Footer from '@/app/components/Footer/Footer';
 import { FishListing } from '@/app/types/list/fishList';
+import { useMutation } from '@tanstack/react-query';
+import { productCheckout } from '@/app/services/authServices';
+import { useToast } from '@/app/providers/ToastProvider';
 
 const Page = () => {
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
     const [orderSummary, setOrderSummary] = useState<FishListing | undefined>();
-    // const [orderDetails, setOrderDetails] = useState({
-    //     fishId: '',
-    //     quantity: 1,
-    //     subtotal: 0,
-    //     total: 0
-    // })
     const [quantity, setQuantity] = useState<number>(1)
+    const [isGuest, setIsGuest] = useState(false)
     const [shippingDetails, setShippingDetails] = useState({
         fullName: '',
         address: '',
         aptSuite: '',
         city: '',
         state: '',
+        country: 'India',
         zip: '',
         email: '',
         phone: '',
@@ -37,32 +36,49 @@ const Page = () => {
         nameOnCard: '',
     })
 
-    // useEffect(()=>{
-    //     const orderDetails = {
-    //         items: [
-                
-    //         ]
-    //     }
-    // }, [orderSummary, quantity])
+    const { showToast } = useToast()
 
-    const orderDetails = {
-        items: [
-            {
-                id: 1,
-                name: 'Pleco fish',
-                price: 10.0,
-                quantity: 2,
-                image: '/images/pleco.jpg',
-            },
-        ],
-        subtotal: 20.0,
-        total: 20.0,
-    };
+    const mutation = useMutation({
+        mutationFn: productCheckout,
+        onSuccess: (data) => {
+            showToast('success', 'Order placed successfully')
+            console.log(data)
+        },
+        onError: (err) => {
+            showToast('error', 'Failed to place the order')
+            console.log('Error placing order : ', err)
+        }
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsGuest(localStorage.getItem('guest') ? true : false)
+        }
+    }, []);
+
+    const handleCheckout = (e: React.FormEvent) => {
         e.preventDefault();
         // Process order logic would go here
-        console.log('Order submitted', { shippingDetails, paymentDetails, orderDetails: { fishId: orderSummary?.id, quantity: quantity, total: orderSummary?.price && (orderSummary?.price * quantity).toFixed(2) }});
+        const details = {
+            orderItems : [{ fishId: orderSummary?.id, quantity: quantity }],
+            shippingDetails,
+            paymentDetails,
+            couponCode: null,
+            pointsToUse: null,
+            orderNotes: null,
+            guestInfo: null
+        }
+        let guestInfo;
+        if(isGuest){
+            guestInfo = {
+                email: shippingDetails.email,
+                fullName: shippingDetails.fullName,
+                phoneNumber: shippingDetails.phone
+            }
+        }else{
+            mutation.mutate( details )
+        }
+        console.log('Order submitted', { shippingDetails, guestInfo, paymentDetails, orderItems : { fishId: orderSummary?.id, quantity: quantity } });
     };
 
     const toggleOrderSummary = () => {
@@ -89,7 +105,7 @@ const Page = () => {
                     >
                         <div>
                             <span className="font-medium text-lg text-gray-500">Order Summary</span>
-                            <span className="ml-2 font-semibold text-gray-700">₹{orderDetails.total.toFixed(2)}</span>
+                            <span className="ml-2 font-semibold text-gray-700">₹{orderSummary?.price && (orderSummary?.price * quantity).toFixed(2)}</span>
                         </div>
                         {isOrderSummaryOpen ? <ChevronUp size={20} className='text-gray-700' /> : <ChevronDown size={20} className='text-gray-700' />}
                     </button>
@@ -103,7 +119,7 @@ const Page = () => {
 
                 <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
                     <div className="w-full lg:w-2/3">
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleCheckout} className="space-y-6">
                             <ShippingSection shippingDetails={shippingDetails} setshippingDetails={setShippingDetails} />
                             <PaymentSection paymentDetails={paymentDetails} setPaymentDetails={setPaymentDetails} />
                             <button

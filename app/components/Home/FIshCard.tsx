@@ -32,7 +32,7 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
     }, []);
 
     useEffect(()=>{
-        const wishList = userData?.wishlists[0].wishlistItems
+        const wishList = userData?.wishlists[0]?.wishlistItems
         const idSet = new Set(wishList?.map(item => item.fishListings.id));
         console.log(wishList, idSet, fish.id)
         const isListed = idSet.has(fish.id)

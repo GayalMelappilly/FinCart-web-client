@@ -19,6 +19,7 @@ export type ShippingDetailsType = {
     aptSuite: string,
     city: string,
     state: string,
+    country: string,
     zip: string,
     email: string,
     phone: string,

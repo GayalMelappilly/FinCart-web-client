@@ -8,6 +8,7 @@ import { config } from "dotenv"
 import { SellerProfileResponse } from "../types/sellerProfile/type"
 import { StandardResponse } from "../types/cart/type"
 import Cookies from 'js-cookie';
+import { OrderDetailsType, ShippingDetailsType } from "../types/checkout/type"
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -533,7 +534,7 @@ export const getFeaturedFishes = async () => {
 }
 
 // Get fish by category
-export const getFishByCategory = async (id : string) => {
+export const getFishByCategory = async (id: string) => {
   try {
     const response = await fetch(`${apiUrl}/product/get-fishes-by-category/${id}`, {
       headers: {
@@ -560,7 +561,7 @@ export const getFishByCategory = async (id : string) => {
 }
 
 // Get fish category by name
-export const getFishCategoryByName = async (name : string) => {
+export const getFishCategoryByName = async (name: string) => {
   try {
     const response = await fetch(`${apiUrl}/product/get-fishes-by-name/${name}`, {
       headers: {
@@ -584,4 +585,53 @@ export const getFishCategoryByName = async (name : string) => {
     console.error('Fetch user profile error:', error);
     throw error;
   }
+}
+
+type GuestInfoType = {
+  email: string,
+  fullName: string,
+  phone: string
+}
+
+// Place order as user
+export const productCheckout = async (details: { orderItems: OrderDetailsType[], shippingDetails: ShippingDetailsType, couponCode: string | null, pointsToUse: string | null, orderNotes: string | null, guestInfo: GuestInfoType | null }) => {
+
+  console.log('Product checkout reached bud!')
+
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) {
+    throw new Error('Failed to add to cart');
+  }
+
+  const orderItems = details.orderItems
+  const shippingDetails = details.shippingDetails
+  const couponCode = details.couponCode
+  const pointsToUse = details.pointsToUse
+  const orderNotes = details.orderNotes
+  const guestInfo = details.guestInfo
+  
+  try {
+    const response = await fetchWithAuth(`${apiUrl}/order/place-order`, {
+      method: 'POST',
+      body: JSON.stringify({ orderItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes })
+    }, accessToken, 'user')
+
+    const data = await response;
+
+    console.log("Order place data from services : ",data)
+
+    if (!data.success) {
+      throw new Error('Failed to place order');
+    }
+    return data;
+  } catch (error) {
+    console.error('Place order error:', error);
+    throw error;
+  }
+}
+
+// Place single order as guest
+export const productCheckoutGuest = async () => {
+
 }

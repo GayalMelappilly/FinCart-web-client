@@ -46,6 +46,8 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
 
             const response = await res.json()
 
+            console.log(`${url} response : `, response)
+
             return response
 
         } catch (err) {
@@ -54,7 +56,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}, acce
         }
     }
 
-    console.log('response fetch with auth : ',res)
+    console.log('response fetch with auth : ',res ,url)
 
     if (!res.ok) {
         throw new Error(`Request failed with status ${res.status}`);

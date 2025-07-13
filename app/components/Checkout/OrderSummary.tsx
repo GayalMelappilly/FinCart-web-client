@@ -21,7 +21,7 @@ export const OrderSummary:FC<Props> = ({orderSummary, setOrderSummary, quantity,
     const decoded = decodeURIComponent(url?.id as string)
     const valueAfterAmp = decoded.split('&')[1];
 
-    const price = orderSummary && orderSummary.price && (Number(orderSummary?.price/10))
+    const price = orderSummary && orderSummary.price && (Number(orderSummary?.price))
 
     useEffect(() => {
         setIsLoading(true);

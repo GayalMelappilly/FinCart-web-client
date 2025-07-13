@@ -1,14 +1,20 @@
+import { RecentOrder } from '@/app/types/seller/sellerDetails/types';
 import { ChevronRight } from 'lucide-react';
-import React from 'react'
+import React, { FC } from 'react'
 
-const recentOrders = [
-    { id: '#ORD-7392', customer: 'John Cooper', date: '12 Apr 2025', amount: 120.50, status: 'Delivered' },
-    { id: '#ORD-7393', customer: 'Emma Watson', date: '11 Apr 2025', amount: 85.25, status: 'Shipped' },
-    { id: '#ORD-7394', customer: 'Michael Brown', date: '10 Apr 2025', amount: 210.75, status: 'Processing' },
-    { id: '#ORD-7395', customer: 'Sarah Miller', date: '09 Apr 2025', amount: 45.60, status: 'Delivered' },
-];
+// const recentOrders = [
+//     { id: '#ORD-7392', customer: 'John Cooper', date: '12 Apr 2025', amount: 120.50, status: 'Delivered' },
+//     { id: '#ORD-7393', customer: 'Emma Watson', date: '11 Apr 2025', amount: 85.25, status: 'Shipped' },
+//     { id: '#ORD-7394', customer: 'Michael Brown', date: '10 Apr 2025', amount: 210.75, status: 'Processing' },
+//     { id: '#ORD-7395', customer: 'Sarah Miller', date: '09 Apr 2025', amount: 45.60, status: 'Delivered' },
+// ];
 
-const RecentOrders = () => {
+type Props = {
+    recentOrder: RecentOrder[] | undefined
+}
+
+const RecentOrders:FC<Props> = ({ recentOrder }) => {
+    console.log("Recent orders : ", recentOrder)
     return (
         <div className="mt-6 bg-white rounded-lg shadow overflow-hidden">
             <div className="flex justify-between items-center p-6">
@@ -39,7 +45,7 @@ const RecentOrders = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {recentOrders.map((order) => (
+                        {recentOrder?.map((order) => (
                             <tr key={order.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                                     {order.id}
