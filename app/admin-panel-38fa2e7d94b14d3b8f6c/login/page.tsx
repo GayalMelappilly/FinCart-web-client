@@ -1,9 +1,9 @@
 import AdminLogin from '@/app/components/admin/LoginPage'
 import React from 'react'
 
-type Props = {}
+// type Props = {}
 
-const page = (props: Props) => {
+const page = () => {
   return (
     <div>
         <AdminLogin />

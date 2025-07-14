@@ -23,6 +23,7 @@ const Page = () => {
     const [isGuest, setIsGuest] = useState(false)
     const [successData, setSucessData] = useState<PostOrderDetails>()
     const [isOrderSuccess, setIsOrderSuccess] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [shippingDetails, setShippingDetails] = useState({
         fullName: '',
         address: '',
@@ -48,6 +49,7 @@ const Page = () => {
             showToast('success', 'Order placed successfully')
             console.log(data)
             setSucessData(data.data)
+            setIsLoading(false)
             setIsOrderSuccess(true)
         },
         onError: (err) => {
@@ -82,6 +84,7 @@ const Page = () => {
                 phoneNumber: shippingDetails.phone
             }
         }else{
+            setIsLoading(true)
             mutation.mutate( details )
         }
         console.log('Order submitted', { shippingDetails, guestInfo, paymentDetails, orderItems : { fishId: orderSummary?.id, quantity: quantity } });
@@ -134,7 +137,7 @@ const Page = () => {
                                 type="submit"
                                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-md transition-colors"
                             >
-                                Complete purchase
+                                {isLoading ? 'Please wait...' : 'Complete purchase'}
                             </button>
                         </form>
                     </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { CheckCircle, Package, Truck, Mail, ArrowRight, Download, Share2, Calendar, Clock, MapPin } from 'lucide-react';
+import React from 'react';
+import { CheckCircle, Package, Truck, Mail, ArrowRight, Calendar, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { PostOrderDetails, ShippingDetailsType } from '@/app/types/types';
 import { FishListing } from '@/app/types/list/fishList';
@@ -11,10 +11,10 @@ type Props = {
     details: PostOrderDetails | undefined
 }
 
-const OrderSuccessPage: React.FC<Props> = ({shippingDetails, orderSummary, quantity, details}) => {
-    const [showContent, setShowContent] = useState(false);
-    const [currentStep, setCurrentStep] = useState(0);
-    const [playSound, setPlaySound] = useState(false);
+const OrderSuccessPage: React.FC<Props> = ({shippingDetails, quantity, details}) => {
+    // const [showContent, setShowContent] = useState(false);
+    // const [currentStep, setCurrentStep] = useState(0);
+    // const [playSound, setPlaySound] = useState(false);
 
     const orderDetails = {
         orderNumber: details?.orderId,
@@ -25,47 +25,47 @@ const OrderSuccessPage: React.FC<Props> = ({shippingDetails, orderSummary, quant
         shippingAddress: `${shippingDetails.address}`
     };
 
-    const steps = [
-        { icon: CheckCircle, title: "Order Confirmed", status: "completed" },
-        { icon: Package, title: "Preparing", status: "current" },
-        { icon: Truck, title: "Shipped", status: "pending" },
-        { icon: Mail, title: "Delivered", status: "pending" }
-    ];
+    // const steps = [
+    //     { icon: CheckCircle, title: "Order Confirmed", status: "completed" },
+    //     { icon: Package, title: "Preparing", status: "current" },
+    //     { icon: Truck, title: "Shipped", status: "pending" },
+    //     { icon: Mail, title: "Delivered", status: "pending" }
+    // ];
 
-    useEffect(() => {
-        // Trigger entrance animation
-        const timer = setTimeout(() => {
-            setShowContent(true);
-        }, 300);
+    // useEffect(() => {
+    //     // Trigger entrance animation
+    //     const timer = setTimeout(() => {
+    //         setShowContent(true);
+    //     }, 300);
 
-        // Simulate progress steps
-        const stepTimer = setInterval(() => {
-            setCurrentStep((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
-        }, 1500);
+    //     // Simulate progress steps
+    //     const stepTimer = setInterval(() => {
+    //         setCurrentStep((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
+    //     }, 1500);
 
-        // Play success sound effect (simulated)
-        setPlaySound(true);
+    //     // Play success sound effect (simulated)
+    //     setPlaySound(true);
 
-        return () => {
-            clearTimeout(timer);
-            clearInterval(stepTimer);
-        };
-    }, []);
+    //     return () => {
+    //         clearTimeout(timer);
+    //         clearInterval(stepTimer);
+    //     };
+    // }, []);
 
-    const handleDownloadReceipt = () => {
-        // Simulate download
-        console.log('Downloading receipt...');
-    };
+    // const handleDownloadReceipt = () => {
+    //     // Simulate download
+    //     console.log('Downloading receipt...');
+    // };
 
-    const handleShareOrder = () => {
-        // Simulate sharing
-        console.log('Sharing order...');
-    };
+    // const handleShareOrder = () => {
+    //     // Simulate sharing
+    //     console.log('Sharing order...');
+    // };
 
-    const handleContinueShopping = () => {
-        // Navigate to shop
-        console.log('Continue shopping...');
-    };
+    // const handleContinueShopping = () => {
+    //     // Navigate to shop
+    //     console.log('Continue shopping...');
+    // };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center p-2 sm:p-4 lg:p-6">
@@ -75,7 +75,8 @@ const OrderSuccessPage: React.FC<Props> = ({shippingDetails, orderSummary, quant
                 <div className="absolute bottom-10 right-5 sm:bottom-20 sm:right-20 w-40 h-40 sm:w-80 sm:h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
             </div>
 
-            <div className={`relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl w-full transition-all duration-1000 transform ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className={`relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl w-full transition-all duration-1000 transform `}>
+                {/* ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} */}
                 {/* Main success card */}
                 <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-2xl p-4 sm:p-6 md:p-8 lg:p-12 backdrop-blur-sm border border-gray-100">
                     {/* Success header */}

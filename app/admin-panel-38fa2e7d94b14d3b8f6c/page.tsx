@@ -1,9 +1,9 @@
 import React from 'react'
 import AdminPanel from '../components/admin/Panel'
 
-type Props = {}
+// type Props = {}
 
-const page = (props: Props) => {
+const page = () => {
   return (
     <div>
         <AdminPanel />
