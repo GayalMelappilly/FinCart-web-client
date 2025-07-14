@@ -114,3 +114,12 @@ export type ProfileFormData = {
         longitude: string;
     };
 }
+
+export type PostOrderDetails = {
+    orderId: string,
+    orderStatus: string,
+    totalAmount: string,
+    estimatedDelivery: string,
+    pointsEarned: string,
+    isGuestOrder: string
+}

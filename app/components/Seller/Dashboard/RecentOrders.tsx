@@ -48,7 +48,7 @@ const RecentOrders:FC<Props> = ({ recentOrder }) => {
                         {recentOrder?.map((order) => (
                             <tr key={order.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                                    {order.id}
+                                    {order.orderId}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {order.customer}

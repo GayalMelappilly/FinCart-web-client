@@ -146,6 +146,7 @@ export interface TopFishListing {
 // Recent order data
 export interface RecentOrder {
   id: string;
+  orderId: string;
   customer: string;
   date: string;
   amount: number;

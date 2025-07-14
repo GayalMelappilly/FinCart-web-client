@@ -13,12 +13,16 @@ import { FishListing } from '@/app/types/list/fishList';
 import { useMutation } from '@tanstack/react-query';
 import { productCheckout } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
+import OrderSuccessPage from '@/app/components/Checkout/OrderSuccessPage';
+import { PostOrderDetails } from '@/app/types/types';
 
 const Page = () => {
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
     const [orderSummary, setOrderSummary] = useState<FishListing | undefined>();
     const [quantity, setQuantity] = useState<number>(1)
     const [isGuest, setIsGuest] = useState(false)
+    const [successData, setSucessData] = useState<PostOrderDetails>()
+    const [isOrderSuccess, setIsOrderSuccess] = useState(false)
     const [shippingDetails, setShippingDetails] = useState({
         fullName: '',
         address: '',
@@ -43,6 +47,8 @@ const Page = () => {
         onSuccess: (data) => {
             showToast('success', 'Order placed successfully')
             console.log(data)
+            setSucessData(data.data)
+            setIsOrderSuccess(true)
         },
         onError: (err) => {
             showToast('error', 'Failed to place the order')
@@ -84,6 +90,8 @@ const Page = () => {
     const toggleOrderSummary = () => {
         setIsOrderSummaryOpen(!isOrderSummaryOpen);
     };
+
+    if(isOrderSuccess) return <OrderSuccessPage shippingDetails={shippingDetails} orderSummary={orderSummary} quantity={quantity} details={successData} />
 
     return (
         <div className="min-h-screen bg-gray-50">
