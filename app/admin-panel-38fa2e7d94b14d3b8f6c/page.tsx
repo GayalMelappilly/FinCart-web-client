@@ -1,14 +1,18 @@
-import React from 'react'
-import AdminPanel from '@/app/components/admin/Panel'
+'use client';
 
-// type Props = {}
+import React from 'react';
+import dynamic from 'next/dynamic';
 
-const page = () => {
+const AdminPanel = dynamic(() => import('@/app/components/admin/Panel'), {
+  ssr: false,
+});
+
+const Page = () => {
   return (
     <div>
-        <AdminPanel />
+      <AdminPanel />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
