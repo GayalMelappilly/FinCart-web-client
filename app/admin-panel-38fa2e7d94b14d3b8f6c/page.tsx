@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminPanel from '@/app/components/admin/LoginPage'
+import AdminPanel from '@/app/components/admin/Panel'
 
 // type Props = {}
 
