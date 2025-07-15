@@ -15,6 +15,7 @@ import { productCheckout } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
 import OrderSuccessPage from '@/app/components/Checkout/OrderSuccessPage';
 import { PostOrderDetails } from '@/app/types/types';
+import { GuestOrder } from '@/app/types/checkout/type';
 
 const Page = () => {
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
@@ -51,6 +52,58 @@ const Page = () => {
             setSucessData(data.data)
             setIsLoading(false)
             setIsOrderSuccess(true)
+            if (isGuest) {
+                const orderData = {
+                    orderId: data.orderId,
+                    orderStatus: data.orderStatus,
+                    totalAmount: data.totalAmount,
+                    estimatedDelivery: data.estimatedDelivery,
+                    pointsEarned: data.pointsEarned,
+                    isGuestOrder: data.isGuestOrder,
+                    orderItems: data.orderItems,
+                    shippingDetails: shippingDetails,
+                    couponCode: data.couponCode,
+                    pointsToUse: data.pointsToUse,
+                    orderNotes: data.orderNotes,
+                    createdAt: new Date().toISOString()
+                };
+
+                if (typeof window !== 'undefined') {
+                    try {
+                        // Get existing guest orders or initialize empty array
+                        const existingOrders = JSON.parse(localStorage.getItem('guestOrderItems') || '[]');
+
+                        // Check if order already exists (prevent duplicates)
+                        const existingOrderIndex = existingOrders.findIndex(
+                            (order: GuestOrder) => order.orderId === orderData.orderId
+                        );
+
+                        let updatedOrders;
+
+                        if (existingOrderIndex !== -1) {
+                            // Order exists - update it
+                            updatedOrders = existingOrders.map((order: GuestOrder, index: number) =>
+                                index === existingOrderIndex ? { ...order, ...orderData } : order
+                            );
+                            console.log(`Updated existing order: ${orderData.orderId}`);
+                        } else {
+                            // New order - add to beginning of array (most recent first)
+                            updatedOrders = [orderData, ...existingOrders];
+                            console.log(`Added new order: ${orderData.orderId}`);
+                        }
+
+                        // Update localStorage with the updated orders
+                        localStorage.setItem('guestOrderItems', JSON.stringify(updatedOrders));
+
+                        console.log("Updated guest orders:", updatedOrders);
+
+                    } catch (error) {
+                        console.error('Error storing guest order:', error);
+                        showToast('error', 'Failed to store order details');
+                        return;
+                    }
+                }
+            }
         },
         onError: (err) => {
             showToast('error', 'Failed to place the order')
@@ -67,34 +120,45 @@ const Page = () => {
     const handleCheckout = (e: React.FormEvent) => {
         e.preventDefault();
         // Process order logic would go here
-        const details = {
-            orderItems : [{ fishId: orderSummary?.id, quantity: quantity }],
-            shippingDetails,
-            paymentDetails,
-            couponCode: null,
-            pointsToUse: null,
-            orderNotes: null,
-            guestInfo: null
-        }
-        let guestInfo;
-        if(isGuest){
-            guestInfo = {
-                email: shippingDetails.email,
-                fullName: shippingDetails.fullName,
-                phoneNumber: shippingDetails.phone
+        if (isGuest) {
+            console.log("Reached guest")
+            const details = {
+                orderItems: [{ fishId: orderSummary?.id, quantity: quantity }],
+                shippingDetails,
+                paymentDetails,
+                couponCode: null,
+                pointsToUse: null,
+                orderNotes: null,
+                guestInfo: {
+                    email: shippingDetails.email,
+                    fullName: shippingDetails.fullName,
+                    phoneNumber: shippingDetails.phone
+                }
             }
-        }else{
+            console.log('guest thing : ', details)
+            mutation.mutate(details)
+        } else {
+            console.log("reached users common shit", isGuest)
+            const details = {
+                orderItems: [{ fishId: orderSummary?.id, quantity: quantity }],
+                shippingDetails,
+                paymentDetails,
+                couponCode: null,
+                pointsToUse: null,
+                orderNotes: null,
+                guestInfo: null
+            }
             setIsLoading(true)
-            mutation.mutate( details )
+            mutation.mutate(details)
         }
-        console.log('Order submitted', { shippingDetails, guestInfo, paymentDetails, orderItems : { fishId: orderSummary?.id, quantity: quantity } });
+        console.log('Order submitted', { shippingDetails, guestInfo: { email: shippingDetails.email, fullName: shippingDetails.fullName, phoneNumber: shippingDetails.phone }, paymentDetails, orderItems: { fishId: orderSummary?.id, quantity: quantity } });
     };
 
     const toggleOrderSummary = () => {
         setIsOrderSummaryOpen(!isOrderSummaryOpen);
     };
 
-    if(isOrderSuccess) return <OrderSuccessPage shippingDetails={shippingDetails} orderSummary={orderSummary} quantity={quantity} details={successData} />
+    if (isOrderSuccess) return <OrderSuccessPage shippingDetails={shippingDetails} orderSummary={orderSummary} quantity={quantity} details={successData} />
 
     return (
         <div className="min-h-screen bg-gray-50">

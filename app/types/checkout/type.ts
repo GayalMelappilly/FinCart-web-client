@@ -10,6 +10,20 @@ export type ShippingDetailsType = {
     phone: string,
 }
 
+export type OrderItem = {
+    id: string;
+    fishListingId: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+    fishListings: {
+        id: string;
+        name: string;
+        description: string;
+        images: string[];
+    };
+}
+
 export type PaymentDetailsType = {
     cardNumber: string,
     expDate: string,
@@ -19,4 +33,19 @@ export type PaymentDetailsType = {
 export type OrderDetailsType = {
     fishId: string | undefined,
     quantity: number
+}
+
+export type GuestOrder = {
+    orderId: string;
+    orderStatus: string;
+    totalAmount: number;
+    estimatedDelivery: string | null;
+    pointsEarned: number;
+    isGuestOrder: boolean;
+    orderItems: OrderItem[];
+    shippingDetails: ShippingDetailsType;
+    couponCode: string | null;
+    pointsToUse: number;
+    orderNotes: string | null;
+    createdAt: string;
 }

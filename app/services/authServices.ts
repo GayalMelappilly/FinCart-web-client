@@ -590,18 +590,23 @@ export const getFishCategoryByName = async (name: string) => {
 type GuestInfoType = {
   email: string,
   fullName: string,
-  phone: string
+  phoneNumber: string
 }
 
-// Place order as user
+// Place order
 export const productCheckout = async (details: { orderItems: OrderDetailsType[], shippingDetails: ShippingDetailsType, couponCode: string | null, pointsToUse: string | null, orderNotes: string | null, guestInfo: GuestInfoType | null }) => {
 
   console.log('Product checkout reached bud!')
 
   const accessToken = localStorage.getItem('accessToken')
+  let isGuest = false;
 
   if (!accessToken) {
-    throw new Error('Failed to add to cart');
+    isGuest = true
+    const guestOrderItems = localStorage.getItem('guestOrderItems')
+    if (!guestOrderItems) {
+      localStorage.setItem('guestOrderItems', JSON.stringify([]))
+    }
   }
 
   const orderItems = details.orderItems
@@ -610,28 +615,31 @@ export const productCheckout = async (details: { orderItems: OrderDetailsType[],
   const pointsToUse = details.pointsToUse
   const orderNotes = details.orderNotes
   const guestInfo = details.guestInfo
-  
+
   try {
-    const response = await fetchWithAuth(`${apiUrl}/order/place-order`, {
+    const response = await fetch(`${apiUrl}/order/place-order`, {
       method: 'POST',
-      body: JSON.stringify({ orderItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes })
-    }, accessToken, 'user')
+      body: JSON.stringify({ orderItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: 'include',
+    })
 
-    const data = await response;
+    const data = await response.json();
 
-    console.log("Order place data from services : ",data)
+    console.log("Order place data from services : ", data)
 
     if (!data.success) {
       throw new Error('Failed to place order');
+    }
+    if(isGuest){
+      return {data, orderItems, shippingDetails, couponCode, pointsToUse, orderNotes}
     }
     return data;
   } catch (error) {
     console.error('Place order error:', error);
     throw error;
   }
-}
-
-// Place single order as guest
-export const productCheckoutGuest = async () => {
-
 }
