@@ -49,22 +49,26 @@ const Page = () => {
         onSuccess: (data) => {
             showToast('success', 'Order placed successfully')
             console.log(data)
-            setSucessData(data.data)
+            if(isGuest){
+                setSucessData(data.data.data)
+            }else{
+                setSucessData(data.data)
+            }
             setIsLoading(false)
             setIsOrderSuccess(true)
             if (isGuest) {
                 const orderData = {
-                    orderId: data.orderId,
-                    orderStatus: data.orderStatus,
-                    totalAmount: data.totalAmount,
-                    estimatedDelivery: data.estimatedDelivery,
-                    pointsEarned: data.pointsEarned,
-                    isGuestOrder: data.isGuestOrder,
-                    orderItems: data.orderItems,
+                    orderId: data.data.data.orderId,
+                    orderStatus: data.data.data.orderStatus,
+                    totalAmount: data.data.data.totalAmount,
+                    estimatedDelivery: data.data.data.estimatedDelivery,
+                    pointsEarned: data.data.data.pointsEarned,
+                    isGuestOrder: data.data.data.isGuestOrder,
+                    orderItems: data.data.orderItems,
                     shippingDetails: shippingDetails,
-                    couponCode: data.couponCode,
-                    pointsToUse: data.pointsToUse,
-                    orderNotes: data.orderNotes,
+                    couponCode: data.data.couponCode,
+                    pointsToUse: data.data.pointsToUse,
+                    orderNotes: data.data.orderNotes,
                     createdAt: new Date().toISOString()
                 };
 
