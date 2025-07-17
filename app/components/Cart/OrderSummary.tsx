@@ -3,12 +3,13 @@ import { CartItem } from '@/app/types/user/type';
 import React, { FC, useState } from 'react'
 import { HiOutlineShieldCheck } from 'react-icons/hi'
 import { roboto } from '../Fonts/Fonts';
+import Link from 'next/link';
 
 type Props = {
     cartItems: CartItem[],
 }
 
-const OrderSummary:FC<Props> = ({cartItems}) => {
+const OrderSummary: FC<Props> = ({ cartItems }) => {
 
     const [promoCode, setPromoCode] = useState('');
     const [promoApplied, setPromoApplied] = useState(false);
@@ -101,12 +102,14 @@ const OrderSummary:FC<Props> = ({cartItems}) => {
 
                     {/* Checkout button */}
                     <div className="mt-6">
-                        <button
-                            type="button"
-                            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
-                        >
-                            Proceed to Checkout
-                        </button>
+                        <Link href={'/cart/checkout'}>
+                            <button
+                                type="button"
+                                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
+                            >
+                                Proceed to Checkout
+                            </button>
+                        </Link>
                     </div>
 
                     {/* Trust badges */}

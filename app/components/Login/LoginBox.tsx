@@ -34,6 +34,9 @@ const LoginBox: FC<Props> = ({ isLoading, setIsLoading }) => {
                 showToast('success', 'Logged in successfully')
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('accessToken', data.accessToken as string)
+                    localStorage.removeItem('guest')
+                    localStorage.removeItem('guestCartItems')
+                    localStorage.removeItem('guestOrderItems')
                 }
                 router.push('/');
             }

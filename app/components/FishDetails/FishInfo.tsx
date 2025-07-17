@@ -1,7 +1,7 @@
 'use client'
 
 import { useToast } from '@/app/providers/ToastProvider'
-import { addToCart } from '@/app/services/authServices'
+import { addToCart, addToCartGuest } from '@/app/services/authServices'
 import { FishListing } from '@/app/types/list/fishList'
 import { useMutation } from '@tanstack/react-query'
 import { CreditCard, Heart, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React, { FC, useEffect, useState } from 'react'
 import { roboto } from '../Fonts/Fonts'
+import { CartItem } from '@/app/types/user/type'
 
 type Props = {
     fish: FishListing | undefined
@@ -21,16 +22,16 @@ const FishInfo: FC<Props> = ({ fish }) => {
 
     const [quantity, setQuantity] = useState(1);
     const [isGuest, setIsGuest] = useState(false)
-    
+
     const { showToast } = useToast()
-    
+
     useEffect(() => {
         if (typeof window !== 'undefined') {
             setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
         }
     }, []);
 
-    const mutation = useMutation({
+    const cartMutation = useMutation({
         mutationFn: addToCart,
         onSuccess: (data) => {
             showToast('success', 'Item added to cart')
@@ -41,6 +42,60 @@ const FishInfo: FC<Props> = ({ fish }) => {
             console.log('User profile error : ', err)
         }
     })
+
+    const guestCartMutation = useMutation({
+        mutationFn: addToCartGuest,
+        onSuccess: (data) => {
+            const newItem = data.data;
+
+            if (typeof window !== 'undefined') {
+                try {
+                    // Get existing cart items or initialize empty array
+                    const existingCart = JSON.parse(localStorage.getItem('guestCartItems') || '[]');
+
+                    // Find if item already exists in cart
+                    const existingItemIndex = existingCart.findIndex(
+                        (cartItem: CartItem) => cartItem.fishListingId === newItem.fishListingId
+                    );
+
+                    let updatedCart;
+
+                    if (existingItemIndex !== -1) {
+                        // Item exists - update quantity
+                        updatedCart = existingCart.map((cartItem: CartItem, index: string) =>
+                            index === existingItemIndex
+                                ? { ...cartItem, quantity: cartItem.quantity + newItem.quantity }
+                                : cartItem
+                        );
+
+                        console.log(`Updated quantity for ${newItem.fishListings.breed}. New quantity: ${updatedCart[existingItemIndex].quantity}`);
+                    } else {
+                        // Item doesn't exist - add new item
+                        updatedCart = [...existingCart, newItem];
+                        console.log(`Added new item to cart: ${newItem.fishListings.breed}`);
+                    }
+
+                    // Update localStorage with the updated cart
+                    localStorage.setItem('guestCartItems', JSON.stringify(updatedCart));
+
+                    console.log("Updated cart items:", updatedCart);
+
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                    showToast('error', 'Failed to update cart');
+                    return;
+                }
+            }
+
+            showToast('success', 'Item added to cart');
+            console.log('Cart operation successful:', data);
+        },
+        onError: (err) => {
+            showToast('error', 'Failed to add item to cart');
+            console.error('Guest cart mutation error:', err);
+        }
+    });
+
 
     const incrementQuantity = () => {
         if (fish && quantity < fish.quantityAvailable) {
@@ -54,13 +109,23 @@ const FishInfo: FC<Props> = ({ fish }) => {
         }
     };
 
-    const HandleAddToCart = () => {
-        const item = {
-            fishId: fish?.id,
-            quantity
+    const HandleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        try {
+            const item = {
+                fishId: fish?.id,
+                quantity: 1
+            }
+            const isGuest = typeof window !== 'undefined' ? localStorage.getItem('guest') : false
+            if (isGuest == 'true') {
+                guestCartMutation.mutate(item)
+            } else {
+                cartMutation.mutate(item)
+            }
+        } catch (err) {
+            console.log('Error while adding item to wishlist', err)
         }
-        mutation.mutate(item)
-    };
+    }
 
     const addToWishlist = () => {
         // Logic to add the fish to the wishlist would go here

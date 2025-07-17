@@ -8,11 +8,10 @@ const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.N
 export const getAllCategoriesWithCount = async () => {
     try {
     const response = await fetch(`${apiUrl}/admin/get-categories`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      method: 'GET'
+      }
     })
 
     const data = await response.json();
