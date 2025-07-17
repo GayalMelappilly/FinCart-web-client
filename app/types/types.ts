@@ -123,3 +123,29 @@ export type PostOrderDetails = {
     pointsEarned: string,
     isGuestOrder: string
 }
+
+export type PostCartOrderDetails = {
+    orderIds: string[];
+    orders: {
+        orderId: string;
+        estimatedDelivery: string | null;
+        itemCount: number;
+        orderStatus: string;
+        pointsEarned: number;
+        totalAmount: string;
+        seller: {
+            businessName: string;
+            displayName: string;
+            id: string;
+        };
+    }[];
+    summary: {
+        isGuestOrder: boolean;
+        itemsCheckedOut: number;
+        pointsUsed: number;
+        sellersCount: number;
+        totalAmount: number;
+        totalDiscount: number;
+        totalPointsEarned: number;
+    };
+};

@@ -9,6 +9,7 @@ import { SellerProfileResponse } from "../types/sellerProfile/type"
 import { StandardResponse } from "../types/cart/type"
 import Cookies from 'js-cookie';
 import { OrderDetailsType, ShippingDetailsType } from "../types/checkout/type"
+import { CartItem } from "../types/user/type"
 config()
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVER_API : process.env.NEXT_PUBLIC_LOCAL_HOST_API
@@ -636,6 +637,65 @@ export const productCheckout = async (details: { orderItems: OrderDetailsType[],
     }
     if(isGuest){
       return {data, orderItems, shippingDetails, couponCode, pointsToUse, orderNotes}
+    }
+    return data;
+  } catch (error) {
+    console.error('Place order error:', error);
+    throw error;
+  }
+}
+
+type selectedItemsType = {
+  cartItemId: string,
+  quantity: string
+}
+
+// Cart checkout
+export const cartCheckout = async (details: { cartId: string | null, cartItems: CartItem[] | null, shippingDetails: ShippingDetailsType, couponCode: string | null, pointsToUse: string | null, orderNotes: string | null, guestInfo: GuestInfoType | null, selectedItems: selectedItemsType[] | null }) => {
+
+  console.log('Product checkout reached bud!')
+
+  const accessToken = localStorage.getItem('accessToken')
+  let isGuest = false;
+
+  if (!accessToken) {
+    isGuest = true
+    const guestOrderItems = localStorage.getItem('guestOrderItems')
+    if (!guestOrderItems) {
+      localStorage.setItem('guestOrderItems', JSON.stringify([]))
+    }
+  }
+
+  // const orderItems = details.orderItems
+  const cartId = details.cartId
+  const cartItems = details.cartItems
+  const shippingDetails = details.shippingDetails
+  const couponCode = details.couponCode
+  const pointsToUse = details.pointsToUse
+  const orderNotes = details.orderNotes
+  const guestInfo = details.guestInfo
+  const selectedItems = details.selectedItems
+
+  try {
+    const response = await fetch(`${apiUrl}/order/cart-checkout`, {
+      method: 'POST',
+      body: JSON.stringify({ cartId, cartItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes, selectedItems }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: 'include',
+    })
+
+    const data = await response.json();
+
+    console.log("Order place data from services : ", data)
+
+    if (!data.success) {
+      throw new Error('Failed to place order');
+    }
+    if(isGuest){
+      return {data, cartId, cartItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes, selectedItems }
     }
     return data;
   } catch (error) {

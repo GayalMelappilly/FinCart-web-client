@@ -55,7 +55,7 @@ const Page: React.FC = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Cart items */}
                     <div className="w-full">
-                        {cartItems && cartItems.length > 0 ? (
+                        {!isLoading && cartItems && cartItems.length > 0 ? (
                             <CartItems cartItems={cartItems} setCartItems={setCartItems} />
                         ) : (
                             <CartIsEmpty />
