@@ -594,56 +594,138 @@ type GuestInfoType = {
   phoneNumber: string
 }
 
+export interface RazorpayOrderRequest {
+  amount: number;
+  currency?: string;
+  receipt?: string;
+}
+
+export interface RazorpayOrderResponse {
+  success: boolean;
+  data: {
+    id: string;
+    amount: number;
+    currency: string;
+    receipt: string;
+  };
+}
+
 // Place order
-export const productCheckout = async (details: { orderItems: OrderDetailsType[], shippingDetails: ShippingDetailsType, couponCode: string | null, pointsToUse: string | null, orderNotes: string | null, guestInfo: GuestInfoType | null }) => {
+export const createRazorpayOrder = async (orderData: RazorpayOrderRequest): Promise<RazorpayOrderResponse> => {
+  console.log('Creating Razorpay order...');
+  
+  const accessToken = localStorage.getItem('accessToken');
+  
+  try {
+    const response = await fetch(`${apiUrl}/order/create-razorpay-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+      body: JSON.stringify(orderData),
+      credentials: 'include',
+    });
 
-  console.log('Product checkout reached bud!')
+    const data = await response.json();
+    
+    console.log('Razorpay order response:', data);
+    
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Failed to create payment order');
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Create Razorpay order error:', error);
+    throw error;
+  }
+};
 
-  const accessToken = localStorage.getItem('accessToken')
+export interface PaymentDetailsType {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  payment_method: string;
+}
+
+// Updated product checkout with Razorpay payment details
+export const productCheckout = async (details: {
+  orderItems: OrderDetailsType[];
+  shippingDetails: ShippingDetailsType;
+  paymentDetails: PaymentDetailsType;
+  couponCode: string | null;
+  pointsToUse: number | null;
+  orderNotes: string | null;
+  guestInfo: GuestInfoType | null;
+}) => {
+  console.log('Product checkout reached with Razorpay payment!');
+
+  const accessToken = localStorage.getItem('accessToken');
   let isGuest = false;
 
   if (!accessToken) {
-    isGuest = true
-    const guestOrderItems = localStorage.getItem('guestOrderItems')
+    isGuest = true;
+    const guestOrderItems = localStorage.getItem('guestOrderItems');
     if (!guestOrderItems) {
-      localStorage.setItem('guestOrderItems', JSON.stringify([]))
+      localStorage.setItem('guestOrderItems', JSON.stringify([]));
     }
   }
 
-  const orderItems = details.orderItems
-  const shippingDetails = details.shippingDetails
-  const couponCode = details.couponCode
-  const pointsToUse = details.pointsToUse
-  const orderNotes = details.orderNotes
-  const guestInfo = details.guestInfo
+  const {
+    orderItems,
+    shippingDetails,
+    paymentDetails,
+    couponCode,
+    pointsToUse,
+    orderNotes,
+    guestInfo
+  } = details;
 
   try {
     const response = await fetch(`${apiUrl}/order/place-order`, {
       method: 'POST',
-      body: JSON.stringify({ orderItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes }),
+      body: JSON.stringify({
+        orderItems,
+        guestInfo,
+        shippingDetails,
+        paymentDetails, // This now contains Razorpay payment details
+        couponCode,
+        pointsToUse,
+        orderNotes
+      }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
       credentials: 'include',
-    })
+    });
 
     const data = await response.json();
 
-    console.log("Order place data from services : ", data)
+    console.log('Order place data from services:', data);
 
     if (!data.success) {
-      throw new Error('Failed to place order');
+      throw new Error(data.message || 'Failed to place order');
     }
-    if(isGuest){
-      return {data, orderItems, shippingDetails, couponCode, pointsToUse, orderNotes}
+
+    if (isGuest) {
+      return {
+        data,
+        orderItems,
+        shippingDetails,
+        couponCode,
+        pointsToUse,
+        orderNotes
+      };
     }
+
     return data;
   } catch (error) {
     console.error('Place order error:', error);
     throw error;
   }
-}
+};
 
 type selectedItemsType = {
   cartItemId: string,
@@ -703,3 +785,117 @@ export const cartCheckout = async (details: { cartId: string | null, cartItems: 
     throw error;
   }
 }
+
+// export const cartCheckout = async (details: {
+//   cartId: string | null;
+//   cartItems: any[] | null;
+//   shippingDetails: ShippingDetailsType;
+//   paymentDetails: PaymentDetailsType;
+//   couponCode: string | null;
+//   pointsToUse: number | null;
+//   orderNotes: string | null;
+//   guestInfo: GuestInfoType | null;
+//   selectedItems: { cartItemId: string; quantity: string }[] | null;
+// }) => {
+//   console.log('Cart checkout reached with Razorpay payment!');
+
+//   const accessToken = localStorage.getItem('accessToken');
+//   let isGuest = false;
+
+//   if (!accessToken) {
+//     isGuest = true;
+//     const guestOrderItems = localStorage.getItem('guestOrderItems');
+//     if (!guestOrderItems) {
+//       localStorage.setItem('guestOrderItems', JSON.stringify([]));
+//     }
+//   }
+
+//   const {
+//     cartId,
+//     cartItems,
+//     shippingDetails,
+//     paymentDetails,
+//     couponCode,
+//     pointsToUse,
+//     orderNotes,
+//     guestInfo,
+//     selectedItems
+//   } = details;
+
+//   try {
+//     const response = await fetch(`${apiUrl}/order/cart-checkout`, {
+//       method: 'POST',
+//       body: JSON.stringify({
+//         cartId,
+//         cartItems,
+//         guestInfo,
+//         shippingDetails,
+//         paymentDetails, // This now contains Razorpay payment details
+//         couponCode,
+//         pointsToUse,
+//         orderNotes,
+//         selectedItems
+//       }),
+//       headers: {
+//         'Content-Type': 'application/json',
+//         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+//       },
+//       credentials: 'include',
+//     });
+
+//     const data = await response.json();
+
+//     console.log('Cart checkout data from services:', data);
+
+//     if (!data.success) {
+//       throw new Error(data.message || 'Failed to place order');
+//     }
+
+//     if (isGuest) {
+//       return {
+//         data,
+//         cartId,
+//         cartItems,
+//         guestInfo,
+//         shippingDetails,
+//         couponCode,
+//         pointsToUse,
+//         orderNotes,
+//         selectedItems
+//       };
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error('Cart checkout error:', error);
+//     throw error;
+//   }
+// };
+
+
+export const verifyPaymentStatus = async (paymentId: string) => {
+  const accessToken = localStorage.getItem('accessToken');
+  
+  try {
+    const response = await fetch(`${apiUrl}/order/verify-payment-status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+      body: JSON.stringify({ paymentId }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Failed to verify payment status');
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Payment verification error:', error);
+    throw error;
+  }
+};
