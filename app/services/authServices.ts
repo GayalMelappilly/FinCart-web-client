@@ -727,64 +727,105 @@ export const productCheckout = async (details: {
   }
 };
 
+export interface PaymentDetailsType {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  payment_method: string;
+}
+
 type selectedItemsType = {
   cartItemId: string,
   quantity: string
 }
 
 // Cart checkout
-export const cartCheckout = async (details: { cartId: string | null, cartItems: CartItem[] | null, shippingDetails: ShippingDetailsType, couponCode: string | null, pointsToUse: string | null, orderNotes: string | null, guestInfo: GuestInfoType | null, selectedItems: selectedItemsType[] | null }) => {
+// Updated cart checkout function with Razorpay payment details
+export const cartCheckout = async (details: {
+  cartId: string | null;
+  cartItems: CartItem[] | null;
+  shippingDetails: ShippingDetailsType;
+  paymentDetails: PaymentDetailsType;
+  couponCode: string | null;
+  pointsToUse: number | null;
+  orderNotes: string | null;
+  guestInfo: GuestInfoType | null;
+  selectedItems: selectedItemsType[] | null;
+}) => {
+  console.log('Cart checkout reached with Razorpay payment!');
 
-  console.log('Product checkout reached bud!')
-
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem('accessToken');
   let isGuest = false;
 
   if (!accessToken) {
-    isGuest = true
-    const guestOrderItems = localStorage.getItem('guestOrderItems')
+    isGuest = true;
+    const guestOrderItems = localStorage.getItem('guestOrderItems');
     if (!guestOrderItems) {
-      localStorage.setItem('guestOrderItems', JSON.stringify([]))
+      localStorage.setItem('guestOrderItems', JSON.stringify([]));
     }
   }
 
-  // const orderItems = details.orderItems
-  const cartId = details.cartId
-  const cartItems = details.cartItems
-  const shippingDetails = details.shippingDetails
-  const couponCode = details.couponCode
-  const pointsToUse = details.pointsToUse
-  const orderNotes = details.orderNotes
-  const guestInfo = details.guestInfo
-  const selectedItems = details.selectedItems
+  const {
+    cartId,
+    cartItems,
+    shippingDetails,
+    paymentDetails,
+    couponCode,
+    pointsToUse,
+    orderNotes,
+    guestInfo,
+    selectedItems
+  } = details;
 
   try {
     const response = await fetch(`${apiUrl}/order/cart-checkout`, {
       method: 'POST',
-      body: JSON.stringify({ cartId, cartItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes, selectedItems }),
+      body: JSON.stringify({
+        cartId,
+        cartItems,
+        guestInfo,
+        shippingDetails,
+        paymentDetails, // This now contains Razorpay payment details
+        couponCode,
+        pointsToUse,
+        orderNotes,
+        selectedItems
+      }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
       credentials: 'include',
-    })
+    });
 
     const data = await response.json();
 
-    console.log("Order place data from services : ", data)
+    console.log('Cart checkout data from services:', data);
 
     if (!data.success) {
-      throw new Error('Failed to place order');
+      throw new Error(data.message || 'Failed to place order');
     }
-    if(isGuest){
-      return {data, cartId, cartItems, guestInfo, shippingDetails, couponCode, pointsToUse, orderNotes, selectedItems }
+
+    if (isGuest) {
+      return {
+        data,
+        cartId,
+        cartItems,
+        guestInfo,
+        shippingDetails,
+        couponCode,
+        pointsToUse,
+        orderNotes,
+        selectedItems
+      };
     }
+
     return data;
   } catch (error) {
-    console.error('Place order error:', error);
+    console.error('Cart checkout error:', error);
     throw error;
   }
-}
+};
 
 // export const cartCheckout = async (details: {
 //   cartId: string | null;

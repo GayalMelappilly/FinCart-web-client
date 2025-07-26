@@ -22,6 +22,8 @@ export const CartOrderSummary: FC<Props> = ({
     // const [isLoading, setIsLoading] = useState(false);
     const [totalProductPrice, setTotalProductPrice] = useState<number>(1)
 
+    const shippingCharge = 50
+
     // const url = useParams()
     // const decoded = decodeURIComponent(url?.id as string)
     // const valueAfterAmp = decoded.split('&')[1];
@@ -114,9 +116,13 @@ export const CartOrderSummary: FC<Props> = ({
                             <span className="text-gray-600">Total</span>
                             {cartItems && <span className={`font-medium text-black ${roboto.className}`}>₹{totalProductPrice.toFixed(2)}</span>}
                         </div>
+                        <div className="flex justify-between mb-2">
+                            <span className="text-gray-600">Shipping</span>
+                            {cartItems && <span className={`font-medium text-black ${roboto.className}`}>₹{shippingCharge}</span>}
+                        </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">To be paid</span>
-                            {cartItems && <span className={`font-medium text-black ${roboto.className}`}>₹{totalProductPrice.toFixed(2)}</span>}
+                            {cartItems && <span className={`font-medium text-black ${roboto.className}`}>₹{(totalProductPrice+shippingCharge).toFixed(2)}</span>}
                         </div>
                     </div>
                 </div>
