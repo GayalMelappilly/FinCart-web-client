@@ -9,10 +9,15 @@ import Categories from './components/Home/Categories';
 import Working from './components/Home/Working';
 import Join from './components/Home/Join';
 import { useEffect, useState } from 'react';
+import { getFeaturedCategories } from './services/authServices';
+import { useQuery } from '@tanstack/react-query';
+import Spinner from './components/LoadingSpinner/Spinner';
+import { FeaturedCategory } from './types/featuredCategories/types';
 
 export default function FincartHomepage() {
 
   const [accessToken, setAccessToken] = useState('');
+  const [categories, setCategories] = useState<FeaturedCategory[]>()
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -20,6 +25,18 @@ export default function FincartHomepage() {
     }
   }, []);
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['get-featured-categories'],
+    queryFn: getFeaturedCategories
+  });
+
+  useEffect(() => {
+    console.log("Data : ", data)
+    setCategories(data?.data)
+  }, [data])
+
+  if (isLoading) return <Spinner />
+  if (error) return error
 
   return (
     <div className="min-h-screen bg-zinc-100 text-gray-800 overflow-hidden">
@@ -27,10 +44,16 @@ export default function FincartHomepage() {
       <Hero />
       {/* Featured Fish moved above SearchBar */}
       <FeaturesFishSection title={'Featured Fish'} />
-      <FeaturesFishSection title={'Bettas'} />
+
+      {/* <FeaturesFishSection title={'Bettas'} />
       <FeaturesFishSection title={'Guppies'} />
       <FeaturesFishSection title={'Clownfish'} />
-      <FeaturesFishSection title={'Tetras'} />
+      <FeaturesFishSection title={'Tetras'} /> */}
+
+        {categories?.map((category: FeaturedCategory) => (
+          <FeaturesFishSection title={category.name} />
+        ))}
+
       <section className="pb-12 relative">
         <SearchBar />
       </section>

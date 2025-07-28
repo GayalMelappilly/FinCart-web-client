@@ -1,7 +1,7 @@
 'use client'
 
 import React, { FC } from 'react';
-import { Star, Package, TrendingDown, Building2 } from 'lucide-react';
+import { Star, Package, TrendingDown } from 'lucide-react';
 
 interface WholesaleProduct {
   id: number;

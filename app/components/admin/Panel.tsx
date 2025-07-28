@@ -410,6 +410,7 @@ const AdminPanel: React.FC = () => {
             <CategoryGrid 
             filteredCategories={filteredCategories} 
             categorySearchQuery={categorySearchQuery} 
+            setActiveTab={setActiveTab}
             // setShowCategoryModal={setShowCategoryModal} 
             />
         </div>

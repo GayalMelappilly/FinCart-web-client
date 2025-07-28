@@ -1,14 +1,50 @@
+'use client'
+
+import { useToast } from '@/app/providers/ToastProvider'
+import { setFeaturedCategories } from '@/app/services/adminServices'
 import { FishCategory } from '@/app/types/admin/types'
+import { useMutation } from '@tanstack/react-query'
 import { Edit, Eye, Grid3x3 } from 'lucide-react'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import LoadingAnimation from '../UploadingAnimation/UploadingAnimation'
 
 type Props = {
-    filteredCategories : FishCategory[],
+    filteredCategories: FishCategory[],
     categorySearchQuery: string,
     // setShowCategoryModal : (showCategoryModal: boolean) => void
+    setActiveTab: (activeTab: 'dashboard' | 'products' | 'categories') => void
 }
 
-const CategoryGrid:FC<Props> = React.memo(({ filteredCategories, categorySearchQuery }) => {
+const CategoryGrid: FC<Props> = React.memo(({ filteredCategories, categorySearchQuery, setActiveTab }) => {
+
+    const [isFeatured, setIsFeatured] = useState<boolean>()
+    const [loading, setLoading] = useState<boolean>(false)
+
+    const mutation = useMutation({
+        mutationFn: setFeaturedCategories,
+        onSuccess: (data) => {
+            console.log(data);
+            setLoading(false);
+            setActiveTab('categories')
+        },
+        onError: (err) => {
+            console.log('Delete item from cart error : ', err);
+        }
+    });
+
+    const HandleFeatureChange = (id: string, featured: boolean) =>{
+        const data = {
+            id: id, 
+            featured: !featured
+        }
+        setLoading(true)
+        mutation.mutate(data)
+    }
+
+    // if(loading){
+    //     return <LoadingAnimation />
+    // }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCategories.length > 0 ? (
@@ -40,10 +76,24 @@ const CategoryGrid:FC<Props> = React.memo(({ filteredCategories, categorySearchQ
 
                         {/* Category Info */}
                         <div className="space-y-3">
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg shadow-sm">
                                 <span className="text-sm font-medium text-gray-700">Featured</span>
-                                <div className={`w-2 h-2 rounded-full ${category.feature ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                                <label className="inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={category.feature}
+                                        onChange={() => {
+                                            HandleFeatureChange(category.id, category.feature)
+                                            category.feature = !category.feature
+                                        }} 
+                                    />
+                                    <div className="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:bg-green-500 relative transition-colors duration-300">
+                                        <div className={`absolute ${category.feature ? 'right-1' : 'left-1'} top-1 w-3 h-3 bg-white rounded-full shadow-md transition-transform duration-300`}></div>
+                                    </div>
+                                </label>
                             </div>
+
 
                             {category.parentCategory && (
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -58,7 +108,7 @@ const CategoryGrid:FC<Props> = React.memo(({ filteredCategories, categorySearchQ
                                         Subcategories ({category.childCategories.length})
                                     </span>
                                     <div className="flex flex-wrap gap-2">
-                                        {category.childCategories.slice(0, 3).map((child: {id: string, name: string}) => (
+                                        {category.childCategories.slice(0, 3).map((child: { id: string, name: string }) => (
                                             <span key={child.id} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
                                                 {child.name}
                                             </span>

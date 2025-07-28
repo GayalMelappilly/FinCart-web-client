@@ -739,8 +739,7 @@ type selectedItemsType = {
   quantity: string
 }
 
-// Cart checkout
-// Updated cart checkout function with Razorpay payment details
+// Cart checkout with Razorpay payment
 export const cartCheckout = async (details: {
   cartId: string | null;
   cartItems: CartItem[] | null;
@@ -827,93 +826,7 @@ export const cartCheckout = async (details: {
   }
 };
 
-// export const cartCheckout = async (details: {
-//   cartId: string | null;
-//   cartItems: any[] | null;
-//   shippingDetails: ShippingDetailsType;
-//   paymentDetails: PaymentDetailsType;
-//   couponCode: string | null;
-//   pointsToUse: number | null;
-//   orderNotes: string | null;
-//   guestInfo: GuestInfoType | null;
-//   selectedItems: { cartItemId: string; quantity: string }[] | null;
-// }) => {
-//   console.log('Cart checkout reached with Razorpay payment!');
-
-//   const accessToken = localStorage.getItem('accessToken');
-//   let isGuest = false;
-
-//   if (!accessToken) {
-//     isGuest = true;
-//     const guestOrderItems = localStorage.getItem('guestOrderItems');
-//     if (!guestOrderItems) {
-//       localStorage.setItem('guestOrderItems', JSON.stringify([]));
-//     }
-//   }
-
-//   const {
-//     cartId,
-//     cartItems,
-//     shippingDetails,
-//     paymentDetails,
-//     couponCode,
-//     pointsToUse,
-//     orderNotes,
-//     guestInfo,
-//     selectedItems
-//   } = details;
-
-//   try {
-//     const response = await fetch(`${apiUrl}/order/cart-checkout`, {
-//       method: 'POST',
-//       body: JSON.stringify({
-//         cartId,
-//         cartItems,
-//         guestInfo,
-//         shippingDetails,
-//         paymentDetails, // This now contains Razorpay payment details
-//         couponCode,
-//         pointsToUse,
-//         orderNotes,
-//         selectedItems
-//       }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-//       },
-//       credentials: 'include',
-//     });
-
-//     const data = await response.json();
-
-//     console.log('Cart checkout data from services:', data);
-
-//     if (!data.success) {
-//       throw new Error(data.message || 'Failed to place order');
-//     }
-
-//     if (isGuest) {
-//       return {
-//         data,
-//         cartId,
-//         cartItems,
-//         guestInfo,
-//         shippingDetails,
-//         couponCode,
-//         pointsToUse,
-//         orderNotes,
-//         selectedItems
-//       };
-//     }
-
-//     return data;
-//   } catch (error) {
-//     console.error('Cart checkout error:', error);
-//     throw error;
-//   }
-// };
-
-
+// Verify razorpay payment status
 export const verifyPaymentStatus = async (paymentId: string) => {
   const accessToken = localStorage.getItem('accessToken');
   
@@ -940,3 +853,27 @@ export const verifyPaymentStatus = async (paymentId: string) => {
     throw error;
   }
 };
+
+// Get featured categories
+export const getFeaturedCategories = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/get-featured-categories`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error('Failed to fetch featured categories');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Fetch featured categories error:', error);
+    throw error;
+  }
+}
+

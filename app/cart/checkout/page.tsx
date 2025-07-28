@@ -11,18 +11,63 @@ import { useMutation } from '@tanstack/react-query';
 import { cartCheckout, createRazorpayOrder } from '@/app/services/authServices';
 import { useToast } from '@/app/providers/ToastProvider';
 import { PostCartOrderDetails } from '@/app/types/types';
-import { GuestOrder } from '@/app/types/checkout/type';
+import { CartOrderData, GuestOrder } from '@/app/types/checkout/type';
 import { CartItem } from '@/app/types/user/type';
 import { CartOrderSummary } from '@/app/components/Checkout/CartOrderSummary';
 import CartOrderSuccessPage from '@/app/components/Checkout/CartOrderSuccessPage';
 import { useRazorpay } from '@/hooks/useRazorpay';
 
-// Declare Razorpay global type
-declare global {
-    interface Window {
-        Razorpay: any;
-    }
+// Razorpay types
+interface RazorpayResponse {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
 }
+
+interface RazorpayError {
+    code: string;
+    description: string;
+    source: string;
+    step: string;
+    reason: string;
+    metadata: {
+        order_id: string;
+        payment_id: string;
+    };
+}
+
+interface RazorpayOptions {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    description: string;
+    image?: string;
+    order_id: string;
+    prefill?: {
+        name?: string;
+        email?: string;
+        contact?: string;
+    };
+    notes?: {
+        [key: string]: string;
+    };
+    theme?: {
+        color?: string;
+    };
+    modal?: {
+        ondismiss?: () => void;
+    };
+    handler: (response: RazorpayResponse) => void;
+}
+
+interface RazorpayInstance {
+    open(): void;
+    on(event: 'payment.failed', handler: (response: { error: RazorpayError }) => void): void;
+}
+
+// Remove the global declaration since it's already declared in useRazorpay.tsx
+// We'll use type assertions instead
 
 const Page = () => {
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
@@ -190,7 +235,7 @@ const Page = () => {
     }
 
     // Handle Razorpay payment
-    const initiateRazorpayPayment = async (orderData: any) => {
+    const initiateRazorpayPayment = async (orderData: CartOrderData) => {
         if (!isRazorpayLoaded) {
             showToast('error', 'Payment system is loading. Please try again.')
             return
@@ -215,8 +260,8 @@ const Page = () => {
             const { data: razorpayOrder } = razorpayOrderResponse
 
             // Razorpay checkout options
-            const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            const options: RazorpayOptions = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
                 amount: razorpayOrder.amount,
                 currency: razorpayOrder.currency,
                 name: 'Fincarts',
@@ -241,7 +286,7 @@ const Page = () => {
                         console.log('Payment modal closed')
                     }
                 },
-                handler: async (response: any) => {
+                handler: async (response: RazorpayResponse) => {
                     try {
                         console.log('Payment successful:', response)
                         
@@ -268,9 +313,9 @@ const Page = () => {
                 }
             }
 
-            const rzp = new window.Razorpay(options)
+            const rzp = new (window.Razorpay as new (options: RazorpayOptions) => RazorpayInstance)(options)
             
-            rzp.on('payment.failed', (response: any) => {
+            rzp.on('payment.failed', (response: { error: RazorpayError }) => {
                 setPaymentProcessing(false)
                 setIsLoading(false)
                 console.error('Payment failed:', response.error)
@@ -403,7 +448,7 @@ const Page = () => {
                             <div className="bg-white rounded-lg shadow-sm p-6">
                                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h2>
                                 
-                                {/* <div className="flex items-center space-x-4 p-4 bg-blue-50 rounded-lg mb-4">
+                                <div className="flex items-center space-x-4 p-4 bg-blue-50 rounded-lg mb-4">
                                     <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                                         <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -415,7 +460,7 @@ const Page = () => {
                                             Pay securely with cards, UPI, net banking, and wallets
                                         </p>
                                     </div>
-                                </div> */}
+                                </div>
                                 
                                 {/* Order Notes */}
                                 <div className="mt-4">

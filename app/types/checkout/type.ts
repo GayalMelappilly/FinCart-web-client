@@ -1,3 +1,5 @@
+import { CartItem } from "../user/type";
+
 export type ShippingDetailsType = {
     fullName: string,
     address: string,
@@ -24,12 +26,6 @@ export type OrderItem = {
     };
 }
 
-export type PaymentDetailsType = {
-    cardNumber: string,
-    expDate: string,
-    nameOnCard: string
-}
-
 export type OrderDetailsType = {
     fishId: string | undefined,
     quantity: number
@@ -48,4 +44,27 @@ export type GuestOrder = {
     pointsToUse: number;
     orderNotes: string | null;
     createdAt: string;
+}
+
+export type PaymentDetailsType = {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  payment_method: string;
+};
+
+export interface CartOrderData {
+  cartId: string | null;
+  cartItems: CartItem[] | null;
+  shippingDetails: ShippingDetailsType;
+  paymentDetails: Partial<PaymentDetailsType>; // ✅ Fix here
+  couponCode: string | null;
+  pointsToUse: number | null;
+  orderNotes: string | null;
+  guestInfo: {
+    email: string;
+    fullName: string;
+    phoneNumber: string;
+  } | null;
+  selectedItems: null;
 }

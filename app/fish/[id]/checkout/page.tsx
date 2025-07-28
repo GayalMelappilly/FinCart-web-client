@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Header from '@/app/components/Header/Header';
 import BackButton from '@/app/components/BackButton/BackButton';
 import ShippingSection from '@/app/components/Checkout/ShippingSection';
-import PaymentSection from '@/app/components/Checkout/PaymentSection';
+// import PaymentSection from '@/app/components/Checkout/PaymentSection';
 import { OrderSummary } from '@/app/components/Checkout/OrderSummary';
 import Footer from '@/app/components/Footer/Footer';
 import { FishListing } from '@/app/types/list/fishList';
