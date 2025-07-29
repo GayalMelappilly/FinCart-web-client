@@ -46,7 +46,7 @@ export default function FincartHomepage() {
       <FeaturesFishSection title={'Featured Fish'} />
 
       {categories?.map((category: FeaturedCategory) => (
-        <FeaturesFishSection title={category.name} />
+        <FeaturesFishSection key={category.id} title={category.name} />
       ))}
 
       <section className="pb-12 relative">

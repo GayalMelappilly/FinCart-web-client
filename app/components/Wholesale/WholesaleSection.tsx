@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useRef, useState, useEffect, FC } from 'react';
 import { ChevronRight, ChevronLeft, Package, Truck, Shield, Award } from 'lucide-react';
-import WholesaleCard from './WholesaleCard';
+// import WholesaleCard from './WholesaleCard';
 import BackButton from '../BackButton/BackButton';
 
 // Mock service function - replace with your actual API call
@@ -294,7 +294,7 @@ const WholesaleSection: FC = () => {
               msOverflowStyle: 'none',
             }}
           >
-            <div className="grid grid-rows-2 grid-flow-col gap-4 md:gap-6 md:grid-rows-1 auto-cols-max px-4">
+            {/* <div className="grid grid-rows-2 grid-flow-col gap-4 md:gap-6 md:grid-rows-1 auto-cols-max px-4">
               {data.list.map((product: any) => (
                 <div
                   key={product.id}
@@ -304,7 +304,7 @@ const WholesaleSection: FC = () => {
                   <WholesaleCard product={product} />
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Navigation Buttons */}

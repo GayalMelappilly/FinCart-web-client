@@ -1,12 +1,10 @@
 'use client'
 
-import { useToast } from '@/app/providers/ToastProvider'
 import { setFeaturedCategories } from '@/app/services/adminServices'
 import { FishCategory } from '@/app/types/admin/types'
 import { useMutation } from '@tanstack/react-query'
 import { Edit, Eye, Grid3x3 } from 'lucide-react'
-import React, { FC, useState } from 'react'
-import LoadingAnimation from '../UploadingAnimation/UploadingAnimation'
+import React, { FC } from 'react'
 
 type Props = {
     filteredCategories: FishCategory[],
@@ -17,14 +15,10 @@ type Props = {
 
 const CategoryGrid: FC<Props> = React.memo(({ filteredCategories, categorySearchQuery, setActiveTab }) => {
 
-    const [isFeatured, setIsFeatured] = useState<boolean>()
-    const [loading, setLoading] = useState<boolean>(false)
-
     const mutation = useMutation({
         mutationFn: setFeaturedCategories,
         onSuccess: (data) => {
             console.log(data);
-            setLoading(false);
             setActiveTab('categories')
         },
         onError: (err) => {
@@ -37,13 +31,8 @@ const CategoryGrid: FC<Props> = React.memo(({ filteredCategories, categorySearch
             id: id, 
             featured: !featured
         }
-        setLoading(true)
         mutation.mutate(data)
     }
-
-    // if(loading){
-    //     return <LoadingAnimation />
-    // }
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

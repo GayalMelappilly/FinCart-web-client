@@ -99,7 +99,7 @@ const Page = () => {
     // Mutation for creating Razorpay order
     const createOrderMutation = useMutation({
         mutationFn: createRazorpayOrder,
-        onError: (err: any) => {
+        onError: (err) => {
             setIsLoading(false)
             setPaymentProcessing(false)
             showToast('error', 'Failed to create payment order')

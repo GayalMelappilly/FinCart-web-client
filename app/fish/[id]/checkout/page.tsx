@@ -17,13 +17,8 @@ import OrderSuccessPage from '@/app/components/Checkout/OrderSuccessPage';
 import { PostOrderDetails } from '@/app/types/types';
 import { GuestOrder } from '@/app/types/checkout/type';
 import { useRazorpay } from '@/hooks/useRazorpay';
-
-// Declare Razorpay global type
-declare global {
-    interface Window {
-        Razorpay: any;
-    }
-}
+import { ApiError, RazorpayFailureResponse, RazorpayResponse } from '@/app/types/razorpay/type';
+import { OrderData } from '@/app/types/order/types';
 
 const Page = () => {
     const [isOrderSummaryOpen, setIsOrderSummaryOpen] = useState(false);
@@ -48,8 +43,11 @@ const Page = () => {
     
     // Remove card payment details since we're using Razorpay
     const [orderNotes, setOrderNotes] = useState('')
-    const [couponCode, setCouponCode] = useState('')
-    const [pointsToUse, setPointsToUse] = useState(0)
+    // const [couponCode, setCouponCode] = useState('')
+    // const [pointsToUse, setPointsToUse] = useState(0)
+
+    const couponCode = ''
+    const pointsToUse = 0
 
     const { showToast } = useToast()
     const isRazorpayLoaded = useRazorpay()
@@ -57,7 +55,7 @@ const Page = () => {
     // Mutation for creating Razorpay order
     const createOrderMutation = useMutation({
         mutationFn: createRazorpayOrder,
-        onError: (err: any) => {
+        onError: (err: ApiError) => {
             setIsLoading(false)
             setPaymentProcessing(false)
             showToast('error', 'Failed to create payment order')
@@ -148,7 +146,7 @@ const Page = () => {
     }
 
     // Handle Razorpay payment
-    const initiateRazorpayPayment = async (orderData: any) => {
+    const initiateRazorpayPayment = async (orderData: OrderData) => {
         if (!isRazorpayLoaded) {
             showToast('error', 'Payment system is loading. Please try again.')
             return
@@ -199,7 +197,7 @@ const Page = () => {
                         console.log('Payment modal closed')
                     }
                 },
-                handler: async (response: any) => {
+                handler: async (response: RazorpayResponse) => {
                     try {
                         console.log('Payment successful:', response)
                         
@@ -228,7 +226,7 @@ const Page = () => {
 
             const rzp = new window.Razorpay(options)
             
-            rzp.on('payment.failed', (response: any) => {
+            rzp.on('payment.failed', (response: RazorpayFailureResponse) => {
                 setPaymentProcessing(false)
                 setIsLoading(false)
                 console.error('Payment failed:', response.error)

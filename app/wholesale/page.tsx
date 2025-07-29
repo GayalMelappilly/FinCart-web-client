@@ -18,7 +18,6 @@ import Spinner from '../components/LoadingSpinner/Spinner';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 // import BackButton from '../components/BackButton/BackButton';
-import { UserType } from '../types/user/type';
 import WholesaleSection from '../components/Wholesale/WholesaleSection';
 
 const Page = () => {
