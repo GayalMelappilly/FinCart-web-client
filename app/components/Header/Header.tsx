@@ -211,7 +211,7 @@ const Header = () => {
     }, [data])
 
     if (error) console.log("Error fetching user : ", error);
-    if ((isLoading &&  accessToken) || logoutMutation.isPending) return <ResponsiveHeaderSkeleton />
+    if ((isLoading && accessToken) || logoutMutation.isPending) return <ResponsiveHeaderSkeleton />
 
     const categories: string[] = [''];
 
@@ -278,6 +278,7 @@ const Header = () => {
                     {/* Right side actions */}
                     <div className="flex items-center space-x-2 sm:space-x-4">
                         {/* Desktop Search */}
+
                         <div className="relative hidden md:block w-48 lg:w-64" ref={searchRef}>
                             <div className="relative">
                                 <input
@@ -339,6 +340,11 @@ const Header = () => {
                         </div>
 
                         {/* <Link href={'/seller/dashboard'}> */}
+                        {/* <Link href={'/wholesale'}>
+                            <button className="hidden sm:block py-2 bg-gray-100 hover:bg-red-200 hover:text-red-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
+                                Wholesale
+                            </button>
+                        </Link> */}
                         <button onClick={handleSellClick} className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                             Sell
                         </button>
@@ -537,6 +543,12 @@ const Header = () => {
                                         <ShoppingBag size={16} />
                                     </button>
                                 </div>
+                                {/* <div className="px-4 mb-5">
+                                    <Link href={'/wholesale'} className="flex w-full items-center justify-center space-x-1 sm:space-x-2 bg-zinc-200 hover:bg-blue-300/40 font-medium hover:scale-105 duration-300 text-slate-800 text-sm sm:text-base py-2 sm:py-3 px-4 sm:px-6 rounded-lg border border-slate-200 transition-all">
+                                        <span>Wholesale</span>
+                                        <ShoppingBag size={16} />
+                                    </Link>
+                                </div> */}
 
                                 {/* Navigation */}
                                 <div className="px-4">

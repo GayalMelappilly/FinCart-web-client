@@ -45,14 +45,9 @@ export default function FincartHomepage() {
       {/* Featured Fish moved above SearchBar */}
       <FeaturesFishSection title={'Featured Fish'} />
 
-      {/* <FeaturesFishSection title={'Bettas'} />
-      <FeaturesFishSection title={'Guppies'} />
-      <FeaturesFishSection title={'Clownfish'} />
-      <FeaturesFishSection title={'Tetras'} /> */}
-
-        {categories?.map((category: FeaturedCategory) => (
-          <FeaturesFishSection title={category.name} />
-        ))}
+      {categories?.map((category: FeaturedCategory) => (
+        <FeaturesFishSection title={category.name} />
+      ))}
 
       <section className="pb-12 relative">
         <SearchBar />
