@@ -71,8 +71,8 @@ export const OrderSummary:FC<Props> = ({orderSummary, setOrderSummary, quantity,
                 {/* Order Calculations */}
                 <div className="border-t border-zinc-300 pt-4 mt-4">
                     <div className="flex justify-between mb-2">
-                        <span className="text-gray-600">Subtotal : {price} x {quantity}</span>
-                        { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{price && price * quantity}</span> }
+                        <span className="text-gray-600">Subtotal : {price?.toFixed(2)} x {quantity}</span>
+                        { orderSummary && <span className={`font-medium text-black ${roboto.className}`}>₹{price && (price * quantity)?.toFixed(2)}</span> }
                     </div>
                     <div className="text-sm text-gray-500 mb-4">
                         Shipping calculated at checkout

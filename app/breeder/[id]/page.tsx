@@ -49,7 +49,7 @@ const BreederStore = () => {
                 <NavigationTab activeTab={activeTab} setActiveTab={setActiveTab} />
                 <main className="container mx-auto py-8 max-w-6xl mb-20">
                     {breederData && activeTab === 'listings' ? (
-                        <Listings fishListings={breederData?.listings} />
+                        <Listings breederInfo={breederData?.seller} fishListings={breederData?.listings} />
                     ) : (
                         <About />
                     )}

@@ -96,10 +96,10 @@ export const CartOrderSummary: FC<Props> = ({
                     <div className="flex justify-between mb-2">
                         <span className="text-gray-600">Subtotal : {cartItems?.map((item: CartItem, index: number, ) => (
                             <div className='ml-2' key={index}>
-                                <p>{item.fishListings.price} x {item.quantity} : {Number(item.fishListings.price) * item.quantity}</p>
+                                <p>{Number(item.fishListings.price).toFixed(2)} x {item.quantity} : {(Number(item.fishListings.price) * item.quantity).toFixed(2)}</p>
                             </div>
                         ))}</span>
-                        {cartItems && <span className={`font-medium text-black mt-auto ${roboto.className}`}>₹{totalProductPrice}</span>}
+                        {cartItems && <span className={`font-medium text-black mt-auto ${roboto.className}`}>₹{totalProductPrice.toFixed(2)}</span>}
                     </div>
                     <div className="text-sm text-gray-500 mb-4">
                         Shipping calculated at checkout

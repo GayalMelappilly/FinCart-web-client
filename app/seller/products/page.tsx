@@ -24,18 +24,20 @@ export default function Products() {
     const [sortBy, setSortBy] = useState<{ field: keyof FishProduct | ''; direction: 'asc' | 'desc' }>({ field: '', direction: 'asc' });
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
+    const [loading, setLoading] = useState<boolean>(false)
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['get-seller-product'],
         queryFn: getSellerProducts,
     })
 
     useEffect(() => {
         if (data) setProducts(data.data.products)
+        setLoading(false)
     }, [data])
 
     if (error) console.log("Seller list error : ", error)
-    if (isLoading) return <Spinner />
+    if (isLoading || loading) return <Spinner />
 
     // Function to handle filtering and sorting
     const filteredProducts = products && products
@@ -88,7 +90,7 @@ export default function Products() {
             description: '',
             price: 0,
             quantity_available: 0,
-            category: '', // Aquatic Snails
+            category: '', 
             images: [],
             is_featured: false,
             listing_status: 'active',
@@ -119,7 +121,7 @@ export default function Products() {
 
     // Function to handle editing a product
     const handleEditProduct = (product: FishProduct) => {
-        setEditableProduct({ ...product });
+        setEditableProduct({...product, category: product?.fish_categories?.name || null});
         setView('edit');
     };
 
@@ -191,7 +193,7 @@ export default function Products() {
                             Cancel
                         </button>
                     </div>
-                    <Form products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} categories={categories} />
+                    <Form refetch={refetch} setLoading={setLoading} products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} categories={categories} />
                 </div>
             )}
 

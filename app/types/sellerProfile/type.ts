@@ -31,6 +31,29 @@ export interface FishListing {
     average_rating: number;
 }
 
+export interface FishListingCamelCase {
+    id: string;
+    name: string;
+    description: string;
+    price: number | string; // Can be Decimal from DB
+    quantityAvailable: number;
+    images: string[];
+    age?: string | null;
+    size?: string | null;
+    color?: string | null;
+    breed?: string | null;
+    isFeatured?: boolean | null;
+    createdAt?: Date | null;
+    updatedAt?: Date | null;
+    listingStatus?: string | null;
+    careInstructions?: Record<string, string> | null;
+    dietaryRequirements?: Record<string, string> | null;
+    viewCount?: number | null;
+    fishCategories: FishCategory;
+    reviewCount: number;
+    averageRating: number;
+}
+
 // Seller location information
 export interface SellerLocation {
     city?: string | null;

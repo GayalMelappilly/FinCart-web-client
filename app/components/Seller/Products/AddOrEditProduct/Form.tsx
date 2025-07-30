@@ -2,7 +2,7 @@
 
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { IndianRupee, FileImage, Info, X } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -13,7 +13,7 @@ export interface FishProduct {
     description: string;
     price: number;
     quantity_available: number;
-    category: string;
+    category: string | null;
     images: string[];
     is_featured: boolean;
     listing_status: 'active' | 'draft' | 'out_of_stock';
@@ -26,7 +26,7 @@ export interface FishProduct {
     care_instructions: Record<string, string>;
     dietary_requirements: Record<string, string>;
     view_count?: number;
-    fish_categories?: {id: string, name: string}
+    fish_categories?: { id: string, name: string }
 }
 
 export type FishProductView = 'list' | 'add' | 'edit' | 'view';
@@ -39,6 +39,8 @@ type Props = {
     view: FishProductView;
     setView: (view: FishProductView) => void;
     categories: { id: number; name: string }[];
+    refetch: UseQueryResult['refetch'];
+    setLoading: (loading: boolean) => void
 }
 
 const Form: FC<Props> = ({
@@ -48,14 +50,16 @@ const Form: FC<Props> = ({
     setEditableProduct,
     view,
     setView,
-    categories
+    categories,
+    refetch,
+    setLoading
 }) => {
 
     const [uploading, setUploading] = useState<boolean>(false)
 
-    useEffect(()=>{
-        console.log('Edit products while editing : ',editableProduct)
-    },[editableProduct])
+    useEffect(() => {
+        console.log('Edit products while editing : ', editableProduct)
+    }, [])
 
     const addMutation = useMutation({
         mutationFn: addProduct,
@@ -70,10 +74,12 @@ const Form: FC<Props> = ({
     const editMutation = useMutation({
         mutationFn: editProduct,
         onSuccess: (data) => {
+            refetch()
             console.log(data)
+            // setLoading(false)
         },
         onError: (err) => {
-            console.log('Edit product error : ',err)
+            console.log('Edit product error : ', err)
         }
     })
 
@@ -89,11 +95,12 @@ const Form: FC<Props> = ({
             console.log('reached')
             if (products && products?.length > 0) {
                 setProducts([...products, editableProduct]);
-            }else{
+            } else {
                 setProducts([editableProduct])
             }
             addMutation.mutate(editableProduct)
         } else {
+            setLoading(true)
             setProducts([editableProduct])
             editMutation.mutate(editableProduct)
         }
@@ -343,7 +350,7 @@ const Form: FC<Props> = ({
                                                 value={editableProduct?.category || ''}
                                                 onChange={handleInputChange}
                                             >
-                                                <option value="">{editableProduct?.fish_categories?.name || 'Select the category'}</option>
+                                                <option value={editableProduct?.category || ''}>{editableProduct?.category || 'Select the category'}</option>
                                                 {categories.map((category) => (
                                                     <option key={category.id} value={category.name}>
                                                         {category.name}

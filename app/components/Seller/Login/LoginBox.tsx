@@ -37,6 +37,7 @@ const LoginBox = () => {
                     setProfileUrl(data.profileUrl)
                     setIsLoggedIn(true)
                     router.push('/seller/dashboard');
+                    window.location.reload();
                 }
             }
         },

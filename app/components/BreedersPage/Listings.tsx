@@ -1,19 +1,41 @@
-import { FishListing } from '@/app/types/sellerProfile/type'
+import { FishListing, SellerInfo } from '@/app/types/sellerProfile/type'
+import { convertKeysToCamelCase } from '@/app/utils/convertKeysToCamelCase'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { FC } from 'react'
 
 type Props = {
     fishListings: FishListing[]
+    breederInfo: SellerInfo
 }
 
-const Listings: FC<Props> = ({ fishListings }) => {
+const Listings: FC<Props> = ({ fishListings, breederInfo }) => {
 
     const router = useRouter()
 
     const HandleClick = (fish: FishListing) => {
+        const info = convertKeysToCamelCase(fish)
+        const fishDetails = {
+            ...info,
+            users: {
+                businessName: breederInfo.business_name,
+                displayName: breederInfo.display_name,
+                id: breederInfo.id,
+                logoUrl: breederInfo.logo_url,
+                sellerAddresses: {
+                    sellerLocations: {
+                        city: breederInfo.location?.city,
+                        state: breederInfo.location?.state,
+                        country: breederInfo.location?.country
+                    }
+                },
+                sellerRating: breederInfo.seller_rating,
+                status: breederInfo.status
+            }
+        }
+        console.log("Breeder selected fish : ", fishDetails)
         if (typeof window !== 'undefined') {
-            localStorage.setItem('selectedFish', JSON.stringify(fish))
+            localStorage.setItem('selectedFish', JSON.stringify(fishDetails))
         }
         router.push(`/fish/${fish.id}`);
     }
