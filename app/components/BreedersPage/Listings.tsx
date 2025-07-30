@@ -1,4 +1,4 @@
-import { FishListing, SellerInfo } from '@/app/types/sellerProfile/type'
+import { FishListing, FishListingCamelCase, SellerInfo } from '@/app/types/sellerProfile/type'
 import { convertKeysToCamelCase } from '@/app/utils/convertKeysToCamelCase'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -14,7 +14,7 @@ const Listings: FC<Props> = ({ fishListings, breederInfo }) => {
     const router = useRouter()
 
     const HandleClick = (fish: FishListing) => {
-        const info = convertKeysToCamelCase(fish)
+        const info = convertKeysToCamelCase<FishListingCamelCase>(fish)
         const fishDetails = {
             ...info,
             users: {
