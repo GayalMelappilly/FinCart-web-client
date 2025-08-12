@@ -79,11 +79,13 @@ const AdminPanel: React.FC = () => {
     //     return matchesSearch && matchesFilter;
     // });
 
-    const filteredCategories = useMemo(() => {
-        return categories.filter((cat) =>
-            cat.name.toLowerCase().includes(categorySearchQuery.toLowerCase())
-        );
-    }, [categories, searchQuery]);
+    // const filteredCategories = useMemo(() => {
+    //     return categories.filter((cat) =>
+    //         cat.name.toLowerCase().includes(categorySearchQuery.toLowerCase())
+    //     );
+    // }, [categories, searchQuery]);
+
+    const filteredCategories = categories
 
     const getStatusColor = (status: string) => {
         switch (status) {

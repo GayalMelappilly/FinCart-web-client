@@ -877,3 +877,26 @@ export const getFeaturedCategories = async () => {
   }
 }
 
+// Get matching fishes by search
+export const getFishByName = async (keyword: string) => {
+  try {
+    const response = await fetch(`${apiUrl}/product/search-fishes/${keyword}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error('Failed to fetch featured categories');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Fetch featured categories error:', error);
+    throw error;
+  }
+}
+

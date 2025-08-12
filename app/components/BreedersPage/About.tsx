@@ -19,7 +19,7 @@ const About = () => {
                     <li>Orders are shipped Monday through Wednesday to ensure weekday delivery</li>
                     <li>Fish are packed with care using insulated boxes and heat packs when necessary</li>
                     <li>Live arrival guarantee on all shipments</li>
-                    <li>Free shipping on orders over $100</li>
+                    <li>Free shipping on orders over ₹2000</li>
                 </ul>
 
                 <h3 className="text-lg font-semibold mt-6 mb-2">Contact Information</h3>
@@ -28,7 +28,7 @@ const About = () => {
                 </p>
 
                 <div className="flex items-center mt-4 text-gray-600">
-                    <span>Member since January 2018</span>
+                    <span>Member since July 2025</span>
                     <span className="mx-2">•</span>
                     <span>Usually responds within 24 hours</span>
                 </div>

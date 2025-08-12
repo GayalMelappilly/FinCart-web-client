@@ -1,13 +1,13 @@
 'use client'
 
-import { Compass, ShoppingBag, Package } from 'lucide-react'
+import { Compass, ShoppingBag, Package, ChevronRight, ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 
 const Hero = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
-    const totalSlides = 1
+    const totalSlides = 2
 
     // Auto-slide functionality
     useEffect(() => {
@@ -18,17 +18,17 @@ const Hero = () => {
         return () => clearInterval(interval)
     }, [])
 
-    // const nextSlide = () => {
-    //     setCurrentSlide((prev) => (prev + 1) % totalSlides)
-    // }
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % totalSlides)
+    }
 
-    // const prevSlide = () => {
-    //     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
-    // }
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
+    }
 
-    // const goToSlide = (index: number) => {
-    //     setCurrentSlide(index)
-    // }
+    const goToSlide = (index: number) => {
+        setCurrentSlide(index)
+    }
 
     return (
         <section className="relative h-4/6 px-4 sm:px-4 md:px-10 mt-10 overflow-hidden">
@@ -329,7 +329,7 @@ const Hero = () => {
             </div>
 
             {/* Navigation Controls */}
-            {/* <div className="absolute inset-y-0 left-2 sm:left-4 flex items-center">
+            <div className="absolute inset-y-0 left-2 sm:left-4 flex items-center">
                 <button
                     onClick={prevSlide}
                     className="p-2 rounded-full bg-white/80 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-white/20"
@@ -347,7 +347,7 @@ const Hero = () => {
                 >
                     <ChevronRight size={20} className="text-slate-700" />
                 </button>
-            </div> */}
+            </div>
 
             {/* Slide Indicators */}
             {/* <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">

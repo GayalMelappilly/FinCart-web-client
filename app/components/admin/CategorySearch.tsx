@@ -11,16 +11,9 @@ type Props = {
 
 const CategorySearch: FC<Props> = ({ categorySearchQuery, setCategorySearchQuery }) => {
 
-    const debouncedSetQuery = useMemo(() => {
-    return debounce((val: string) => {
-      setCategorySearchQuery(val);
-    }, 300); // waits 300ms after last keystroke
-  }, [setCategorySearchQuery]);
-
     useEffect(() => {
-        debouncedSetQuery(categorySearchQuery);
-        return () => debouncedSetQuery.cancel(); // Cleanup on unmount
-    }, [categorySearchQuery, debouncedSetQuery]);
+        console.log(categorySearchQuery)
+    }, [categorySearchQuery]);
 
     return (
         <div className="relative">

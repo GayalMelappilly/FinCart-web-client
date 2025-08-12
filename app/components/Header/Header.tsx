@@ -10,84 +10,37 @@ import { useRouter } from 'next/navigation';
 import CartIcon from './CartIcon';
 import { ResponsiveHeaderSkeleton } from './Loading/HeaderSkeleton';
 import { useUserData } from '@/app/context/userDataContext';
-
-const fishCategories = [
-    "Freshwater Fish",
-    "Saltwater Fish",
-    "Tropical Fish",
-    "Cold Water Fish",
-    "Game Fish",
-    "Aquarium Fish",
-    "Commercial Fish",
-    "Endangered Fish",
-    "Cichlids",
-    "Tetras",
-    "Gouramis",
-    "Catfish",
-    "Livebearers",
-    "Barbs",
-    "Rainbowfish",
-    "Killifish",
-    "Pufferfish",
-    "Sturgeon",
-    "Reef Fish",
-    "Pelagic Fish",
-    "Bottom Dwellers",
-    "Sharks & Rays",
-    "Eels",
-    "Groupers",
-    "Snappers",
-    "Tuna",
-    "Marlin",
-    "Seahorses",
-    "Angelfish",
-    "Bettas",
-    "Discus",
-    "Guppies",
-    "Mollies",
-    "Platies",
-    "Swordtails",
-    "Rasboras",
-    "Loaches",
-    "Plecos",
-    "Goldfish",
-    "Koi",
-    "Trout",
-    "Salmon",
-    "Whitefish",
-    "Sticklebacks",
-    "Bitterling",
-    "African Cichlids",
-    "South American Cichlids",
-    "Dwarf Cichlids",
-    "Oscars",
-    "Clownfish",
-    "Tangs",
-    "Butterflyfish",
-    "Angelfish (Marine)",
-    "Wrasses",
-    "Bass",
-    "Trout (Game)",
-    "Salmon (Game)",
-    "Pike",
-    "Tarpon",
-    "Bonefish"
-];
+import { fishCategories } from '@/app/utils/categories';
+import { getAllCategoriesWithCount } from '@/app/services/adminServices';
+import { FishCategory } from '@/app/types/admin/types';
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<string[]>([]);
+    const [searchResults, setSearchResults] = useState<FishCategory[]>();
     const [showSearchDropdown, setShowSearchDropdown] = useState<boolean>(false);
     const [accessToken, setAccessToken] = useState('');
     const [isGuest, setIsGuest] = useState(true)
+    const [allCategories, setAllCategories] = useState<FishCategory[]>()
 
     const { userData, setUserData } = useUserData()
 
     const searchRef = useRef<HTMLDivElement>(null);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
     const router = useRouter()
+
+    const categoryData = useQuery({
+        queryKey: ['get-categories-with-count'],
+        queryFn: getAllCategoriesWithCount
+    });
+
+    useEffect(() => {
+        if (categoryData.data?.list) {
+            setAllCategories(categoryData.data.list);
+            console.log("Categories : ",categoryData.data.list)
+        }
+    }, [categoryData.data]);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -115,8 +68,8 @@ const Header = () => {
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase().trim();
 
-            const filtered = fishCategories.filter(category => {
-                const categoryLower = category.toLowerCase();
+            const filtered = allCategories?.filter((category: FishCategory) => {
+                const categoryLower = category?.name?.toLowerCase();
 
                 // Direct substring match
                 if (categoryLower.includes(query)) {
@@ -138,7 +91,7 @@ const Header = () => {
 
                 // Check if every query word has a match in category words
                 const allWordsMatch = queryWords.every(queryWord =>
-                    categoryWords.some(categoryWord =>
+                    categoryWords.some((categoryWord: string) =>
                         categoryWord.includes(queryWord) || queryWord.includes(categoryWord)
                     )
                 );
@@ -147,9 +100,9 @@ const Header = () => {
             });
 
             // Sort results by relevance (exact matches first, then partial matches)
-            const sortedResults = filtered.sort((a, b) => {
-                const aLower = a.toLowerCase();
-                const bLower = b.toLowerCase();
+            const sortedResults = filtered?.sort((a, b) => {
+                const aLower = a.name.toLowerCase();
+                const bLower = b.name.toLowerCase();
                 const queryLower = query.toLowerCase();
 
                 // Exact match gets highest priority
@@ -164,7 +117,9 @@ const Header = () => {
                 return 0;
             });
 
-            setSearchResults(sortedResults.slice(0, 8)); // Limit to 8 results
+            console.log('sorted result : ',sortedResults)
+
+            setSearchResults(sortedResults?.slice(0, 8)); // Limit to 8 results
             setShowSearchDropdown(true);
         } else {
             setSearchResults([]);
@@ -300,7 +255,7 @@ const Header = () => {
                             </div>
 
                             {/* Desktop Search Dropdown */}
-                            {showSearchDropdown && searchResults.length > 0 && (
+                            {showSearchDropdown && searchResults && searchResults.length > 0 && (
                                 <div className="absolute top-full mt-1 w-full bg-white rounded-xl p-2 shadow-lg border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
                                     <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
                                         Fish Categories ({searchResults.length})
@@ -308,12 +263,12 @@ const Header = () => {
                                     {searchResults.map((category, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => handleSearchSelect(category)}
+                                            onClick={() => handleSearchSelect(category.name)}
                                             className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group"
                                         >
                                             <div className="w-2 h-2 rounded-full bg-blue-200 group-hover:bg-blue-400 transition-colors duration-150"></div>
                                             <span className="text-sm text-gray-700 group-hover:text-blue-700 font-medium">
-                                                {category}
+                                                {category.name}
                                             </span>
                                         </button>
                                     ))}
@@ -326,7 +281,7 @@ const Header = () => {
                             )}
 
                             {/* No results message */}
-                            {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+                            {showSearchDropdown && searchQuery && searchResults && searchResults.length === 0 && (
                                 <div className="absolute top-full mt-1 w-full p-10 bg-white rounded-xl shadow-lg border border-gray-100 py-4 z-50">
                                     <div className="text-center">
                                         <div className="text-gray-400 mb-2">
@@ -340,11 +295,11 @@ const Header = () => {
                         </div>
 
                         {/* <Link href={'/seller/dashboard'}> */}
-                        {/* <Link href={'/wholesale'}>
+                        <Link href={'/wholesale'}>
                             <button className="hidden sm:block py-2 bg-gray-100 hover:bg-red-200 hover:text-red-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                                 Wholesale
                             </button>
-                        </Link> */}
+                        </Link>
                         <button onClick={handleSellClick} className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                             Sell
                         </button>
@@ -460,7 +415,7 @@ const Header = () => {
                                         </div>
 
                                         {/* Mobile Search Dropdown */}
-                                        {showSearchDropdown && searchResults.length > 0 && (
+                                        {showSearchDropdown && searchResults && searchResults.length > 0 && (
                                             <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 max-h-60 overflow-y-auto">
                                                 <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
                                                     Categories ({searchResults.length})
@@ -468,12 +423,12 @@ const Header = () => {
                                                 {searchResults.map((category, index) => (
                                                     <button
                                                         key={index}
-                                                        onClick={() => handleSearchSelect(category)}
+                                                        onClick={() => handleSearchSelect(category.name)}
                                                         className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group"
                                                     >
                                                         <div className="w-2 h-2 rounded-full bg-blue-200 group-hover:bg-blue-400 transition-colors duration-150"></div>
                                                         <span className="text-sm text-gray-700 group-hover:text-blue-700 font-medium">
-                                                            {category}
+                                                            {category.name}
                                                         </span>
                                                     </button>
                                                 ))}
@@ -481,7 +436,7 @@ const Header = () => {
                                         )}
 
                                         {/* Mobile No results message */}
-                                        {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+                                        {showSearchDropdown && searchQuery && searchResults && searchResults.length === 0 && (
                                             <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-100 py-4 z-50">
                                                 <div className="text-center">
                                                     <div className="text-gray-400 mb-2">

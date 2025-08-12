@@ -2,6 +2,7 @@ import { SellerInfo } from '@/app/types/sellerProfile/type'
 import Image from 'next/image'
 import React, { FC, useState } from 'react'
 import { MapPin, Calendar, Mail, Globe, Award, Shield, Truck, Package, Users, Star, ChevronDown } from 'lucide-react'
+import { roboto } from '../Fonts/Fonts'
 
 type Props = {
     breeder: SellerInfo
@@ -39,9 +40,12 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                         <div className="ml-4 pb-4">
                             <h1 className="text-white text-2xl font-bold">{breeder.display_name}</h1>
                             <div className="flex items-center text-white/90 text-sm">
-                                <div className="flex items-center">
-                                    <Star className="w-4 h-4 text-yellow-300 fill-yellow-300" />
-                                    <span className="ml-1 font-medium">{breeder.seller_rating || '4.9'}</span>
+                                <div className="flex items-center gap-1">
+                                    {Array.from({ length: 5}).map((_, index) => (
+                                        <>
+                                            <Star className="w-4 h-4 text-yellow-500 fill-yellow-300" />
+                                        </>
+                                    ))}
                                 </div>
                                 <span className="mx-2">•</span>
                                 <span>{breeder.metrics?.total_orders || '1,000'} orders</span>
@@ -70,7 +74,7 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex gap-3">
+                        {/* <div className="flex gap-3">
                             <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition flex items-center gap-2">
                                 <Users className="w-4 h-4" />
                                 Follow
@@ -79,7 +83,7 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                                 <Mail className="w-4 h-4" />
                                 Message
                             </button>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* About section */}
@@ -175,7 +179,7 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                                 <Truck className="w-5 h-5" />
                                 <span className="ml-2 font-medium text-sm">Total Sales</span>
                             </div>
-                            <p className="text-2xl font-bold text-gray-800">${breeder.metrics.total_sales}</p>
+                            <p className="text-2xl font-bold text-gray-800"><span className={roboto.className}>₹</span>{breeder.metrics.total_sales}</p>
                             <p className="text-sm text-gray-600">{breeder.metrics.total_orders} orders</p>
                         </div>
 
@@ -185,10 +189,13 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                                 <span className="ml-2 font-medium text-sm">Average Rating</span>
                             </div>
                             <div className="flex items-center">
-                                <p className="text-2xl font-bold text-gray-800">{breeder.metrics.avg_rating}</p>
+                                <p className="text-2xl font-bold text-gray-800">
+                                    {/* {breeder.metrics.avg_rating} */}
+                                    5
+                                </p>
                                 <div className="ml-3 flex">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`w-4 h-4 ${i < Math.floor(Number(breeder.metrics.avg_rating)) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} />
+                                        <Star key={i} className={`w-4 h-4 text-yellow-500 fill-yellow-300`} />
                                     ))}
                                 </div>
                             </div>
@@ -230,7 +237,7 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                             <Package className="w-5 h-5 text-blue-500" />
                             <span className="ml-2 font-medium">Min. Order Value</span>
                         </div>
-                        <p className="text-gray-600">${breeder.policies.min_order_value}</p>
+                        <p className="text-gray-600">₹{breeder.policies.min_order_value}</p>
                     </div>
 
                     <div className="flex flex-col">
