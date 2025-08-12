@@ -98,7 +98,7 @@ const SearchResultsPage = () => {
 
   const totalResults = sortedFishes?.length
   const categories = ['Bettas', 'Tetras', 'Arowana', 'Angelfish', 'Discus', 'Cichlid', 'Shrimp']
-  const sizes = ['Small', 'Medium', 'Large']
+  // const sizes = ['Small', 'Medium', 'Large']
   const priceRanges = ['Under ₹20', '₹20 - ₹50', '₹50 - ₹100', 'Above ₹100']
 
   const sortOptions = [
@@ -287,7 +287,7 @@ const SearchResultsPage = () => {
                     >
                       <div className="p-4 text-center">
                         <Search size={24} className="text-slate-400 mx-auto mb-2" />
-                        <p className="text-sm text-slate-600">No fish found for "{debouncedQuery}"</p>
+                        <p className="text-sm text-slate-600">No fish found for &quot;{debouncedQuery}&quot;</p>
                         <p className="text-xs text-slate-500 mt-1">Try a different search term</p>
                       </div>
                     </motion.div>
@@ -373,7 +373,7 @@ const SearchResultsPage = () => {
             <div className="text-slate-600">
               Showing <span className="font-semibold text-blue-600">{totalResults}</span> results
               {searchQuery && (
-                <span> for "<span className="font-medium text-slate-800">{searchQuery}</span>"</span>
+                <span> for &quot;<span className="font-medium text-slate-800">{searchQuery}</span>&quot;</span>
               )}
             </div>
             <div className="text-slate-500">

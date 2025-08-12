@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import CartIcon from './CartIcon';
 import { ResponsiveHeaderSkeleton } from './Loading/HeaderSkeleton';
 import { useUserData } from '@/app/context/userDataContext';
-import { fishCategories } from '@/app/utils/categories';
 import { getAllCategoriesWithCount } from '@/app/services/adminServices';
 import { FishCategory } from '@/app/types/admin/types';
 

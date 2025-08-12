@@ -1,7 +1,7 @@
 import { SellerInfo } from '@/app/types/sellerProfile/type'
 import Image from 'next/image'
 import React, { FC, useState } from 'react'
-import { MapPin, Calendar, Mail, Globe, Award, Shield, Truck, Package, Users, Star, ChevronDown } from 'lucide-react'
+import { MapPin, Calendar, Globe, Award, Shield, Truck, Package, Star, ChevronDown } from 'lucide-react'
 import { roboto } from '../Fonts/Fonts'
 
 type Props = {
@@ -43,7 +43,7 @@ const BreedersProfile: FC<Props> = ({ breeder }) => {
                                 <div className="flex items-center gap-1">
                                     {Array.from({ length: 5}).map((_, index) => (
                                         <>
-                                            <Star className="w-4 h-4 text-yellow-500 fill-yellow-300" />
+                                            <Star key={index+'+'+_} className="w-4 h-4 text-yellow-500 fill-yellow-300" />
                                         </>
                                     ))}
                                 </div>

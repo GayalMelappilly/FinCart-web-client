@@ -1,8 +1,7 @@
 'use client'
 
 import { Search } from 'lucide-react'
-import React, { FC, useEffect, useMemo } from 'react'
-import debounce from 'lodash.debounce';
+import React, { FC, useEffect } from 'react'
 
 type Props = {
     categorySearchQuery: string;

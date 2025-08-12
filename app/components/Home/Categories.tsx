@@ -17,7 +17,7 @@ const Categories = () => {
                         { name: 'Guppies', color: 'from-blue-400 to-teal-500', image: '/api/placeholder/200/200' },
                         { name: 'Marine', color: 'from-indigo-500 to-blue-600', image: '/api/placeholder/200/200' },
                     ].map((category, index) => (
-                        <Link href={`/list/${category.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                        <Link key={index} href={`/list/${category.name.toLowerCase().replace(/\s+/g, '-')}`}>
                             <div key={index} className="group relative w-full h-32 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer">
                                 <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-80 group-hover:opacity-90 transition-opacity`}></div>
                                 {/* <Image src={category.image} alt={category.name} className="w-full h-32 object-cover mix-blend-overlay" height={1000} width={1000} /> */}

@@ -26,9 +26,9 @@ const Hero = () => {
         setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
     }
 
-    const goToSlide = (index: number) => {
-        setCurrentSlide(index)
-    }
+    // const goToSlide = (index: number) => {
+    //     setCurrentSlide(index)
+    // }
 
     return (
         <section className="relative h-4/6 px-4 sm:px-4 md:px-10 mt-10 overflow-hidden">
