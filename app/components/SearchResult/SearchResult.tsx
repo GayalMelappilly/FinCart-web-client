@@ -11,6 +11,7 @@ import SearchResultsSkeleton from './Loading/SearchResultsSkeleton'
 import _ from 'lodash'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { convertKeysToCamelCase } from '@/app/utils/convertKeysToCamelCase'
 
 // Main SearchResults Component
 const SearchResultsPage = () => {
@@ -149,8 +150,10 @@ const SearchResultsPage = () => {
   }
 
   const handleResultClick = (data: FishListing) => {
+    const convertedData =  convertKeysToCamelCase(data)
+    console.log("Selected fish data : ", convertedData)
     if (typeof window !== 'undefined') {
-      localStorage.setItem('selectedFish', JSON.stringify(data))
+      localStorage.setItem('selectedFish', JSON.stringify(convertedData))
     }
     router.push(`/fish/${data.id}`)
     setIsSearchFocused(false)

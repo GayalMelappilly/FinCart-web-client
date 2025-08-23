@@ -19,6 +19,7 @@ export default async function handler(
       // Upload image to Cloudinary
       const result = await cloudinary.v2.uploader.upload(image, {
         folder: 'fincarts-user-profile', 
+        // resource_type: 'video' if uploading video 
       });
 
       // Return the image URL
