@@ -99,10 +99,6 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
     // Y-axis scale
     const maxSales = Math.max(...salesData.map((i) => i.sales), 100);
 
-    // Metrics
-    const totalSales = sellerData?.metrics?.totalSales || 0;
-    const totalOrders = sellerData?.metrics?.totalOrders || 0;
-
     // Tooltip handling
     const chartRef = useRef<HTMLDivElement>(null);
 
