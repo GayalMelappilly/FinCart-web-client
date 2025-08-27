@@ -33,7 +33,7 @@ export default function Dashboard() {
                 <AvgOrderValue data={seller?.metrics.dashboard.avgOrderValue} />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <SalesChart />
+                <SalesChart sellerData={seller} />
                 <TopSellingProducts data={seller?.topSellingProducts} />
             </div>
             <RecentOrders recentOrder={seller?.recentOrders} />

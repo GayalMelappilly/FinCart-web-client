@@ -46,7 +46,8 @@ export default function Products() {
                 product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 product.id.toLowerCase().includes(searchTerm.toLowerCase());
 
-            const matchesCategory = selectedCategory === 'All Categories' || product.category === selectedCategory;
+            const matchesCategory = selectedCategory === 'All Categories' || product?.fish_categories?.name === selectedCategory;
+            console.log('product categories : ', selectedCategory, product?.fish_categories?.name)
 
             const matchesStatus = statusFilter === 'All' ||
                 (statusFilter === 'Active' && product.listing_status === 'active') ||

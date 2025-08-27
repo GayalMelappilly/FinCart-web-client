@@ -252,3 +252,11 @@ module.exports = {
   },
 }
 */
+
+/* select:focus {
+  max-height: 50px;
+}
+
+select option {
+  height: auto;
+} */
