@@ -102,11 +102,6 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
     // Metrics
     const totalSales = sellerData?.metrics?.totalSales || 0;
     const totalOrders = sellerData?.metrics?.totalOrders || 0;
-    const avgOrderValue = totalOrders > 0 ? Math.floor(totalSales / totalOrders) : 0;
-    const revenueChange = sellerData?.metrics?.dashboard?.revenue?.percentChange || 0;
-    const revenueTrend = sellerData?.metrics?.dashboard?.revenue?.trend || 'up';
-    const ordersChange = sellerData?.metrics?.dashboard?.orders?.percentChange || 0;
-    const ordersTrend = sellerData?.metrics?.dashboard?.orders?.trend || 'up';
 
     // Tooltip handling
     const chartRef = useRef<HTMLDivElement>(null);
