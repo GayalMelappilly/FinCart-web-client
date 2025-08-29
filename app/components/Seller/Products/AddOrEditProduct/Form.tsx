@@ -3,7 +3,7 @@
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
-import { IndianRupee, FileImage, Info, X, FileVideo } from 'lucide-react';
+import { IndianRupee, Info, X, FileVideo } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
 
 // Updated types based on fish_listings schema

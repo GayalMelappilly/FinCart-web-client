@@ -1,5 +1,5 @@
 'use client'
-import { AlertCircle, Package, Tag, Play, Pause, Volume2, VolumeX } from 'lucide-react'
+import { AlertCircle, Package, Tag, Play, Pause } from 'lucide-react'
 import React, { FC, useState, useRef, useEffect } from 'react'
 import { FishProduct } from '../AddOrEditProduct/Form'
 import formatCareInstructions from '@/app/utils/formatCareInstructions'
@@ -26,7 +26,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
     const [selectedMedia, setSelectedMedia] = useState<MediaItem>(mediaItems[0] || { type: 'image', src: '' })
     const [activeTab, setActiveTab] = useState('specifications')
     const [isPlaying, setIsPlaying] = useState(false)
-    const [isMuted, setIsMuted] = useState(true)
+    // const [isMuted, setIsMuted] = useState(true)
     const videoRef = useRef<HTMLVideoElement>(null)
 
     const formattedInstruction = formatCareInstructions(product.care_instructions)
@@ -45,12 +45,12 @@ const ProductDetails: FC<Props> = ({ product }) => {
         setIsPlaying(!isPlaying)
     }
 
-    const handleMuteToggle = () => {
-        if (videoRef.current) {
-            videoRef.current.muted = !isMuted
-            setIsMuted(!isMuted)
-        }
-    }
+    // const handleMuteToggle = () => {
+    //     if (videoRef.current) {
+    //         videoRef.current.muted = !isMuted
+    //         setIsMuted(!isMuted)
+    //     }
+    // }
 
     const tabs = [
         { id: 'specifications', label: 'Specifications' },
@@ -87,7 +87,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                                     ref={videoRef}
                                                     className="w-full h-full object-cover"
                                                     src={selectedMedia.src}
-                                                    muted={isMuted}
+                                                    // muted={isMuted}
                                                     loop
                                                     playsInline
                                                 />

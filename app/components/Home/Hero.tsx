@@ -1,13 +1,13 @@
 'use client'
 
-import { Compass, ShoppingBag, Package, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Compass, ShoppingBag, Package } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 const Hero = () => {
-    const [currentSlide, setCurrentSlide] = useState(0)
-    const totalSlides = 1 // change this to 2 for two slides
+    const [currentSlide] = useState(0)
+    // const totalSlides = 1 // change this to 2 for two slides
 
     // Auto-slide functionality
     // useEffect(() => {
