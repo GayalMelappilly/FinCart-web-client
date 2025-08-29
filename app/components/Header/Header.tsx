@@ -294,11 +294,11 @@ const Header = () => {
                         </div>
 
                         {/* <Link href={'/seller/dashboard'}> */}
-                        <Link href={'/wholesale'}>
+                        {/* <Link href={'/wholesale'}>
                             <button className="hidden sm:block py-2 bg-gray-100 hover:bg-red-200 hover:text-red-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                                 Wholesale
                             </button>
-                        </Link>
+                        </Link> */}
                         <button onClick={handleSellClick} className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
                             Sell
                         </button>

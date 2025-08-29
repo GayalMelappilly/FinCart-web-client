@@ -3,7 +3,7 @@
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
-import { IndianRupee, FileImage, Info, X } from 'lucide-react';
+import { IndianRupee, FileImage, Info, X, FileVideo } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
 
 // Updated types based on fish_listings schema
@@ -15,6 +15,7 @@ export interface FishProduct {
     quantity_available: number;
     category: string | null;
     images: string[];
+    videos: string[];
     is_featured: boolean;
     listing_status: 'active' | 'draft' | 'out_of_stock';
     created_at: string;
@@ -188,39 +189,74 @@ const Form: FC<Props> = ({
         });
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(editableProduct)
+    const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!editableProduct || !e.target.files || e.target.files.length === 0) return;
-        const file = e.target.files?.[0];
+
+        const file = e.target.files[0];
         if (!file) return;
 
+        const isVideo = file.type.startsWith('video/');
+        const isImage = file.type.startsWith('image/');
+
+        if (!isImage && !isVideo) {
+            console.error('Unsupported file type');
+            return;
+        }
+
+        // Check file size limits
+        const maxImageSize = 5 * 1024 * 1024; // 5MB for images
+        const maxVideoSize = 50 * 1024 * 1024; // 50MB for videos
+
+        if (isImage && file.size > maxImageSize) {
+            alert('Image file is too large. Maximum size is 5MB.');
+            return;
+        }
+
+        if (isVideo && file.size > maxVideoSize) {
+            alert('Video file is too large. Maximum size is 50MB.');
+            return;
+        }
+
+        // Proceed with upload...
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = async () => {
-            const base64Image = reader.result as string;
-            // setImagePreview(base64Image as string);
+            const base64Data = reader.result as string;
             setUploading(true);
-            // setIsFormFilled(false)
+
             try {
                 const response = await fetch('/api/image-upload/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image: base64Image }),
+                    body: JSON.stringify({
+                        [isImage ? 'image' : 'video']: base64Data
+                    }),
                 });
 
                 const data = await response.json();
+
                 if (data.url) {
-                    const imageUrl = data.url as string
-                    setEditableProduct({
-                        ...editableProduct,
-                        images: [...editableProduct.images, imageUrl]
-                    });
+                    const mediaUrl = data.url as string;
+
+                    if (isImage) {
+                        setEditableProduct({
+                            ...editableProduct,
+                            images: [...editableProduct.images, mediaUrl]
+                        });
+                    } else if (isVideo) {
+                        setEditableProduct({
+                            ...editableProduct,
+                            videos: [...(editableProduct.videos || []), mediaUrl]
+                        });
+                    }
                 }
             } catch (error) {
-                console.error('Error uploading image:', error);
+                console.error(`Error uploading ${isImage ? 'image' : 'video'}:`, error);
+                if (error instanceof Error && error.message.includes('413')) {
+                    alert('File is too large. Please try a smaller file.');
+                }
             } finally {
                 setUploading(false);
-                // setIsFormFilled(true)
             }
         };
     };
@@ -530,6 +566,40 @@ const Form: FC<Props> = ({
                                                 </button>
                                             </div>
                                         ))}
+                                        {editableProduct?.videos?.map((video, index) => (
+                                            <div key={`video-${index}`} className="relative h-32 bg-gray-100 rounded-lg overflow-hidden group">
+                                                <video
+                                                    className="w-full h-full object-cover"
+                                                    muted
+                                                    loop
+                                                    preload="metadata"
+                                                    onMouseEnter={(e) => e.currentTarget.play()}
+                                                    onMouseLeave={(e) => e.currentTarget.pause()}
+                                                >
+                                                    <source src={video} type="video/mp4" />
+                                                </video>
+
+                                                <div className="absolute top-2 left-2 px-2 py-1 bg-black bg-opacity-60 text-white text-xs rounded">
+                                                    Video
+                                                </div>
+
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:opacity-0 transition-opacity pointer-events-none">
+                                                    <div className="w-8 h-8 bg-white bg-opacity-80 rounded-full flex items-center justify-center">
+                                                        <svg className="w-4 h-4 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    // onClick={() => handleRemoveVideo(index)}
+                                                    className="absolute top-2 right-2 p-1 bg-red-500 rounded-full text-white hover:bg-red-600 z-10"
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        ))}
 
                                         {uploading && (
                                             <ImageUploading />
@@ -541,18 +611,18 @@ const Form: FC<Props> = ({
                                                 type="file"
                                                 id="imageUpload"
                                                 className="hidden"
-                                                accept="image/*"
-                                                onChange={handleImageUpload}
+                                                accept="image/*,video/*"
+                                                onChange={handleMediaUpload}
                                             />
                                             <label htmlFor="imageUpload" className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                                                <FileImage className="h-8 w-8 text-gray-400" />
-                                                <span className="mt-2 text-sm text-gray-500">Add Image</span>
+                                                <FileVideo className="h-8 w-8 text-gray-400" />
+                                                <span className="mt-2 text-sm text-gray-500">Add Image/Video</span>
                                             </label>
                                         </div>
                                     </div>
 
                                     <p className="mt-2 text-xs text-gray-500">
-                                        Upload high-quality images. First image will be the main fish image.
+                                        Upload high-quality images/videos. First image will be the main fish image.
                                     </p>
                                 </div>
 

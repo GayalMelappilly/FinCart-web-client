@@ -14,21 +14,44 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     try {
-      const { image } = req.body;
+      const { image, video, media } = req.body;
+      
+      // Get the media data (could be image, video, or generic media)
+      const mediaData = image || video || media;
+      
+      if (!mediaData) {
+        return res.status(400).json({ error: 'No media data provided' });
+      }
 
-      // Upload image to Cloudinary
-      const result = await cloudinary.v2.uploader.upload(image, {
-        folder: 'fincarts-user-profile', 
-        // resource_type: 'video' if uploading video 
+      // Determine if it's a video based on the data URL prefix
+      const isVideo = mediaData.startsWith('data:video/');
+      
+      // Upload to Cloudinary with appropriate resource type
+      const result = await cloudinary.v2.uploader.upload(mediaData, {
+        folder: 'fincarts-user-profile',
+        resource_type: isVideo ? 'video' : 'image',
       });
 
-      // Return the image URL
-      res.status(200).json({ url: result.secure_url });
+      // Return the media URL
+      res.status(200).json({ 
+        url: result.secure_url,
+        type: isVideo ? 'video' : 'image',
+        resource_type: result.resource_type
+      });
     } catch (error) {
-      console.error('Error uploading image:', error);
-      res.status(500).json({ error: 'Failed to upload image' });
+      console.error('Error uploading media:', error);
+      res.status(500).json({ error: 'Failed to upload media' });
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
+
+// ADD THIS CONFIG EXPORT AT THE END OF THE FILE
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb', // Increase body size limit to 10MB
+    },
+  },
+};

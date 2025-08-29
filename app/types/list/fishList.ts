@@ -24,6 +24,7 @@ export interface FishCategory {
     price: number;
     quantityAvailable: number;
     images: string[];
+    videos: string[];
     age: string | null;
     size: string | null;
     color: string | null;

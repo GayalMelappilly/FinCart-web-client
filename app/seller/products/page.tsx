@@ -93,6 +93,7 @@ export default function Products() {
             quantity_available: 0,
             category: '', 
             images: [],
+            videos: [],
             is_featured: false,
             listing_status: 'active',
             created_at: '',
