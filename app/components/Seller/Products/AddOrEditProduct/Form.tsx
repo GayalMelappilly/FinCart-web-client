@@ -3,7 +3,7 @@
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
-import { IndianRupee, Info, X, FileVideo } from 'lucide-react';
+import { IndianRupee, X, FileVideo } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
 
 // Updated types based on fish_listings schema
@@ -112,82 +112,82 @@ const Form: FC<Props> = ({
     };
 
     // Function to handle care instructions field changes
-    const handleCareInstructionChange = (key: string, value: string) => {
-        if (!editableProduct) return;
+    // const handleCareInstructionChange = (key: string, value: string) => {
+    //     if (!editableProduct) return;
 
-        setEditableProduct({
-            ...editableProduct,
-            care_instructions: {
-                ...editableProduct.care_instructions,
-                [key]: value
-            }
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         care_instructions: {
+    //             ...editableProduct.care_instructions,
+    //             [key]: value
+    //         }
+    //     });
+    // };
 
     // Function to remove a care instruction
-    const handleRemoveCareInstruction = (key: string) => {
-        if (!editableProduct) return;
+    // const handleRemoveCareInstruction = (key: string) => {
+    //     if (!editableProduct) return;
 
-        const newCareInstructions = { ...editableProduct.care_instructions };
-        delete newCareInstructions[key];
+    //     const newCareInstructions = { ...editableProduct.care_instructions };
+    //     delete newCareInstructions[key];
 
-        setEditableProduct({
-            ...editableProduct,
-            care_instructions: newCareInstructions
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         care_instructions: newCareInstructions
+    //     });
+    // };
 
     // Function to add a care instruction field
-    const handleAddCareInstruction = () => {
-        if (!editableProduct) return;
+    // const handleAddCareInstruction = () => {
+    //     if (!editableProduct) return;
 
-        setEditableProduct({
-            ...editableProduct,
-            care_instructions: {
-                ...editableProduct.care_instructions,
-                '': ''
-            }
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         care_instructions: {
+    //             ...editableProduct.care_instructions,
+    //             '': ''
+    //         }
+    //     });
+    // };
 
     // Function to handle dietary requirements field changes
-    const handleDietaryRequirementChange = (key: string, value: string) => {
-        if (!editableProduct) return;
+    // const handleDietaryRequirementChange = (key: string, value: string) => {
+    //     if (!editableProduct) return;
 
-        setEditableProduct({
-            ...editableProduct,
-            dietary_requirements: {
-                ...editableProduct.dietary_requirements,
-                [key]: value
-            }
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         dietary_requirements: {
+    //             ...editableProduct.dietary_requirements,
+    //             [key]: value
+    //         }
+    //     });
+    // };
 
     // Function to remove a dietary requirement
-    const handleRemoveDietaryRequirement = (key: string) => {
-        if (!editableProduct) return;
+    // const handleRemoveDietaryRequirement = (key: string) => {
+    //     if (!editableProduct) return;
 
-        const newDietaryRequirements = { ...editableProduct.dietary_requirements };
-        delete newDietaryRequirements[key];
+    //     const newDietaryRequirements = { ...editableProduct.dietary_requirements };
+    //     delete newDietaryRequirements[key];
 
-        setEditableProduct({
-            ...editableProduct,
-            dietary_requirements: newDietaryRequirements
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         dietary_requirements: newDietaryRequirements
+    //     });
+    // };
 
     // Function to add a dietary requirement field
-    const handleAddDietaryRequirement = () => {
-        if (!editableProduct) return;
+    // const handleAddDietaryRequirement = () => {
+    //     if (!editableProduct) return;
 
-        setEditableProduct({
-            ...editableProduct,
-            dietary_requirements: {
-                ...editableProduct.dietary_requirements,
-                '': ''
-            }
-        });
-    };
+    //     setEditableProduct({
+    //         ...editableProduct,
+    //         dietary_requirements: {
+    //             ...editableProduct.dietary_requirements,
+    //             '': ''
+    //         }
+    //     });
+    // };
 
     const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!editableProduct || !e.target.files || e.target.files.length === 0) return;

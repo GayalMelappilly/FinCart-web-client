@@ -3,7 +3,6 @@ import { ArrowDown, ArrowUp, ShoppingBag } from 'lucide-react'
 import React, { FC, useEffect } from 'react'
 import { roboto } from '../../Fonts/Fonts'
 import { useQuery } from '@tanstack/react-query'
-import { getAllCategoriesWithCount } from '@/app/services/adminServices'
 import { getAllOrders } from '@/app/services/sellerAuthServices'
 
 type Props = {

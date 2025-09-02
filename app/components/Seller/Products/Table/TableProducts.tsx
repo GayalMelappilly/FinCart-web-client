@@ -1,6 +1,6 @@
 'use client'
 
-import { Edit, Eye, Package, Trash2 } from 'lucide-react'
+import { Package } from 'lucide-react'
 import React, { FC } from 'react'
 import { FishProduct } from '../AddOrEditProduct/Form'
 import Image from 'next/image'

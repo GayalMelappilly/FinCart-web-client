@@ -4,15 +4,12 @@ import Footer from '@/app/components/Footer/Footer';
 import Header from '@/app/components/Header/Header';
 import BackButton from '@/app/components/BackButton/BackButton';
 import Preview from '@/app/components/FishDetails/Preview';
-import CareInfo from '@/app/components/FishDetails/CareInfo';
 import FishInfo from '@/app/components/FishDetails/FishInfo';
-import FAQ from '@/app/components/FishDetails/FAQ';
 // import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 import BreederInfo from '@/app/components/FishDetails/BreederInfo';
 import { useEffect, useState } from 'react';
 import { FishListing } from '@/app/types/list/fishList';
 import Spinner from '@/app/components/LoadingSpinner/Spinner';
-import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 
 export default function Page() {
   

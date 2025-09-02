@@ -323,8 +323,8 @@ const FeaturesFishSection: FC<Props> = ({ title }) => {
           >
             {/* Two rows on small screens, one row on large screens */}
             <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4 md:gap-5 lg:gap-6 md:grid-rows-1 auto-cols-max pl-5 sm:pl-0 sm:px-8 sm:py-4">
-              {data.list.map((fish: FishListing, index: number) => {
-                const isLast = index === data.list.length - 1;
+              {data.list.map((fish: FishListing) => {
+                // const isLast = index === data.list.length - 1;
                 return (
                   <>
                     <div

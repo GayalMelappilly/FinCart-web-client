@@ -9,7 +9,6 @@ import {
     ShoppingBag,
     User
 } from 'lucide-react';
-import Footer from '../components/Footer/Footer';
 import { getFormattedPathname } from '../utils/pathnameExtraction';
 import SideBar from '../components/Seller/SideBar/SideBar';
 import MobileSideBar from '../components/Seller/MobileSideBar/MobileSideBar';
