@@ -406,7 +406,6 @@ const Form: FC<Props> = ({
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="active">Active</option>
-                                                <option value="draft">Draft</option>
                                                 <option value="out_of_stock">Out of Stock</option>
                                             </select>
                                         </div>

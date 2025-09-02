@@ -40,7 +40,6 @@ const FilterProduct: FC<Props> = ({ selectedCategory, setSelectedCategory, statu
         >
           <option value="All">All Status</option>
           <option value="Active">Active</option>
-          <option value="Draft">Draft</option>
           <option value="Out of Stock">Out of Stock</option>
         </select>
         <Filter className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />

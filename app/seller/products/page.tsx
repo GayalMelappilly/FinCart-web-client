@@ -51,7 +51,7 @@ export default function Products() {
 
             const matchesStatus = statusFilter === 'All' ||
                 (statusFilter === 'Active' && product.listing_status === 'active') ||
-                (statusFilter === 'Draft' && product.listing_status === 'draft') ||
+                // (statusFilter === 'Draft' && product.listing_status === 'draft') ||
                 (statusFilter === 'Out of Stock' && product.listing_status === 'out_of_stock');
 
             return matchesSearch && matchesCategory && matchesStatus;

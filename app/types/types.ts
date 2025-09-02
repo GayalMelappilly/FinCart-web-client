@@ -76,7 +76,7 @@ export interface Product {
     category: string;
     images: string[];
     featured: boolean;
-    status: 'active' | 'draft' | 'out_of_stock';
+    status: 'active' | 'out_of_stock';
     createdAt: string;
     updatedAt: string;
     specifications: {

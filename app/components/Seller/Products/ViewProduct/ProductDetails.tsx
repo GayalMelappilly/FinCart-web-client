@@ -182,12 +182,9 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                         <div className="flex-shrink-0">
                                             <span className={`px-4 py-2 rounded-full text-sm font-semibold shadow-lg ${product.listing_status === 'active'
                                                 ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' :
-                                                product.listing_status === 'draft'
-                                                    ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white' :
                                                     'bg-gradient-to-r from-red-400 to-red-500 text-white'
                                                 }`}>
                                                 {product.listing_status === 'active' ? '✓ Active' :
-                                                    product.listing_status === 'draft' ? '📝 Draft' :
                                                         '❌ Out of Stock'}
                                             </span>
                                         </div>

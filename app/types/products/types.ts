@@ -23,7 +23,7 @@ export interface FishCategory {
     is_featured?: boolean;
     created_at?: string;
     updated_at?: string;
-    listing_status?: 'active' | 'draft' | 'out_of_stock';
+    listing_status?: 'active' | 'out_of_stock';
     care_instructions: Record<string, string>;
     dietary_requirements: Record<string, string>;
     view_count?: number;
