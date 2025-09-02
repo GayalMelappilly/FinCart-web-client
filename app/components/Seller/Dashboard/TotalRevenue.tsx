@@ -8,6 +8,9 @@ type Props = {
 }
 
 const TotalRevenue:FC<Props> = ({data}) => {
+
+    console.log("DATA : ",data)
+
     return (
         <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center">
@@ -25,7 +28,6 @@ const TotalRevenue:FC<Props> = ({data}) => {
                                 <span className="text-gray-400 ml-1">vs last month</span>
                             </>
                         ) : (
-                            
                             <>
                                 <ArrowDown className="h-3 w-3 text-red-500 mr-1" />
                                 <span className="text-red-500">{data?.percentChange}%</span>

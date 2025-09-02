@@ -1,13 +1,28 @@
 import { MetricWithTrend } from '@/app/types/seller/sellerDetails/types'
 import { ArrowDown, ArrowUp, ShoppingBag } from 'lucide-react'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { roboto } from '../../Fonts/Fonts'
+import { useQuery } from '@tanstack/react-query'
+import { getAllCategoriesWithCount } from '@/app/services/adminServices'
+import { getAllOrders } from '@/app/services/sellerAuthServices'
 
 type Props = {
     data: MetricWithTrend | undefined
 }
 
 const Orders:FC<Props> = ({data}) => {
+
+    console.log("Order data : ",data)
+
+    const orderData = useQuery({
+        queryKey: ['get-all-orders'],
+        queryFn: getAllOrders
+    });
+
+    useEffect(()=>{
+        console.log("Order data : ",orderData.data)
+    }, [orderData.data])
+
     return (
         <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center">

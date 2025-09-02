@@ -21,7 +21,7 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
     const [isWishlisted, setIsWishListed] = useState<boolean>(false)
     const router = useRouter();
 
-    const {userData} = useUserData()
+    const { userData } = useUserData()
 
     const isFeatureFish = isFeatured || fish.isFeatured;
 
@@ -29,9 +29,10 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
         if (typeof window !== 'undefined') {
             setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
         }
+        console.log("FISH :", fish)
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         const wishList = userData?.wishlists[0]?.wishlistItems
         const idSet = new Set(wishList?.map(item => item.fishListings.id));
         console.log(wishList, idSet, fish.id)
@@ -154,8 +155,8 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
 
     const PlaceholderImage = () => (
         <div className={`flex items-center justify-center w-full h-full rounded-t-xl ${isFeatureFish
-                ? 'bg-gradient-to-br from-amber-50 to-yellow-50'
-                : 'bg-gray-100'
+            ? 'bg-gradient-to-br from-amber-50 to-yellow-50'
+            : 'bg-gray-100'
             }`}>
             <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -180,8 +181,8 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
 
             {/* Main Card Container */}
             <div className={`relative rounded-xl overflow-hidden transition-all duration-300 h-full flex flex-col ${isFeatureFish
-                    ? 'bg-gradient-to-br from-white via-amber-50/30 to-white'
-                    : 'bg-white shadow hover:shadow-lg border border-gray-100'
+                ? 'bg-gradient-to-br from-white via-amber-50/30 to-white'
+                : 'bg-white shadow hover:shadow-lg border border-gray-100'
                 }`}>
 
                 {/* Image container with improved mobile optimization */}
@@ -193,8 +194,8 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                             {!isGuest && (
                                 <button
                                     className={`absolute top-2 right-2 backdrop-blur-sm transition-all duration-200 rounded-full p-1.5 z-20 shadow-sm transform ${isFeatureFish
-                                            ? 'bg-amber-100/90 text-amber-700 hover:text-red-500 hover:bg-white/90'
-                                            : 'bg-white/90 text-gray-700 hover:text-red-500'
+                                        ? 'bg-amber-100/90 text-amber-700 hover:text-red-500 hover:bg-white/90'
+                                        : 'bg-white/90 text-gray-700 hover:text-red-500'
                                         } ${isHovered ? 'opacity-100 scale-105' : 'opacity-90'}`}
                                     aria-label="Add to favorites"
                                     onClick={HandleAddToWishlist}
@@ -227,9 +228,12 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                                     }
                                 }}
                             />
-
                             {/* Enhanced gradient overlay for better text visibility */}
                             <div className={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 transition-opacity duration-300`}></div>
+                            { fish.size && <span className='absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-md px-2 py-1 z-10'>
+                                <h1 className='text-xs sm:text-md text-white font-bold'>{fish.size}</h1>
+                            </span>}
+
                         </div>
                     ) : (
                         <PlaceholderImage />
@@ -250,27 +254,24 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                                 <Star
                                     key={i}
                                     className={`w-3 h-3 ${i < Math.round(5)
-                                            ? 'text-yellow-400 fill-yellow-400'
-                                            : 'text-gray-400 fill-gray-400'
+                                        ? 'text-yellow-400 fill-yellow-400'
+                                        : 'text-gray-400 fill-gray-400'
                                         }`}
                                 />
                             ))}
                         </div>
-                        <span className="text-white text-xs font-medium ml-0.5">
-                            {/* {fish.avgRating.toFixed(1)} */}
-                        </span>
                     </div>
                 </div>
 
                 {/* Content section - optimized for mobile */}
                 <div className={`p-3 flex flex-col flex-grow ${isFeatureFish ? 'bg-gradient-to-br from-white via-amber-50/20 to-white' : ''
                     }`}>
-                    
+
                     {/* Product info - improved mobile typography */}
                     <div className="mb-1 sm:mb-2">
                         <h3 className={`font-semibold text-sm sm:text-base line-clamp-1 transition-colors ${isFeatureFish
-                                ? 'text-gray-900 group-hover:text-amber-800'
-                                : 'text-gray-800'
+                            ? 'text-gray-900 group-hover:text-amber-800'
+                            : 'text-gray-800'
                             }`}>
                             {fish.name}
                         </h3>
@@ -289,8 +290,8 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                                     <Star
                                         key={i}
                                         className={`w-3.5 h-3.5 ${i < Math.round(5)
-                                                ? (isFeatureFish ? 'text-amber-400 fill-amber-400' : 'text-yellow-400 fill-yellow-400')
-                                                : 'text-gray-200 fill-gray-200'
+                                            ? (isFeatureFish ? 'text-amber-400 fill-amber-400' : 'text-yellow-400 fill-yellow-400')
+                                            : 'text-gray-200 fill-gray-200'
                                             }`}
                                     />
                                 ))}
@@ -299,8 +300,8 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
 
                         {/* Price - desktop */}
                         <div className={`font-bold text-lg pl-1 sm:pl-0 transition-colors ${roboto.className} ${isFeatureFish
-                                ? 'text-amber-800'
-                                : 'text-gray-800'
+                            ? 'text-amber-800'
+                            : 'text-gray-800'
                             }`}>
                             ₹{Number(fish.price).toFixed(2)}
                         </div>

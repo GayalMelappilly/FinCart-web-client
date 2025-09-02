@@ -378,3 +378,26 @@ export const changeSellerPassword = async (passwordData: changePasswordType) => 
     throw error;
   }
 }
+
+export const getAllOrders = async () => {
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+    
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/order/get-orders`, {
+            method: 'GET',
+        },accessToken, 'seller')
+
+        console.log("RESPONSE : ",response)
+
+        const data = await response
+
+        if (!data.success) {
+            throw new Error('Password update error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error updating password : ', error);
+        throw error;
+    }
+}

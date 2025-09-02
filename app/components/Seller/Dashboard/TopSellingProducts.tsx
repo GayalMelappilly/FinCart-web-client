@@ -1,5 +1,6 @@
 import { TopSellingProduct } from '@/app/types/seller/sellerDetails/types';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { FC } from 'react'
 
 type Props = {
@@ -12,7 +13,9 @@ const TopSellingProducts:FC<Props> = ({data}) => {
         <div className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">Top Selling Fish</h2>
+                <Link href={'/seller/products'}>
                 <button className="text-sm text-blue-600 hover:text-blue-800">View All</button>
+                </Link>
             </div>
             <div className="space-y-4">
                 {data?.map((fish) => (

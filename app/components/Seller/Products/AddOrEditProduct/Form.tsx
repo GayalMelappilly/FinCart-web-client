@@ -17,7 +17,7 @@ export interface FishProduct {
     images: string[];
     videos: string[];
     is_featured: boolean;
-    listing_status: 'active' | 'draft' | 'out_of_stock';
+    listing_status: 'active' | 'out_of_stock';
     created_at: string;
     updated_at: string;
     age?: string;
@@ -411,7 +411,7 @@ const Form: FC<Props> = ({
                                             </select>
                                         </div>
 
-                                        <div className="flex items-center">
+                                        {/* <div className="flex items-center">
                                             <input
                                                 type="checkbox"
                                                 id="is_featured"
@@ -430,7 +430,7 @@ const Form: FC<Props> = ({
                                             <label htmlFor="is_featured" className="ml-2 block text-sm text-gray-700">
                                                 Feature this fish on homepage
                                             </label>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
 
@@ -438,7 +438,7 @@ const Form: FC<Props> = ({
                                 <div>
                                     <h2 className="text-lg font-medium mb-4 text-gray-700">Fish Characteristics</h2>
                                     <div className="grid grid-cols-2 gap-4">
-                                        <div>
+                                        {/* <div>
                                             <label htmlFor="breed" className="block text-sm font-medium text-gray-700 mb-1">Breed/Species</label>
                                             <input
                                                 type="text"
@@ -460,35 +460,25 @@ const Form: FC<Props> = ({
                                                 onChange={handleInputChange}
                                                 placeholder="e.g. 6 months"
                                             />
-                                        </div>
+                                        </div> */}
                                         <div>
-                                            <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-1">Size</label>
+                                            <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-1">Size*</label>
                                             <input
                                                 type="text"
                                                 id="size"
                                                 name="size"
+                                                required
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
                                                 value={editableProduct?.size || ''}
                                                 onChange={handleInputChange}
                                                 placeholder="e.g. 2 inches"
                                             />
                                         </div>
-                                        <div>
-                                            <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-1">Color</label>
-                                            <input
-                                                type="text"
-                                                id="color"
-                                                name="color"
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 text-gray-500 focus:ring-blue-500 focus:border-blue-500"
-                                                value={editableProduct?.color || ''}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
                                     </div>
                                 </div>
 
                                 {/* Dietary Requirements */}
-                                <div>
+                                {/* <div>
                                     <div className="flex justify-between items-center mb-4">
                                         <h2 className="text-lg font-medium text-gray-700">Dietary Requirements</h2>
                                         <button
@@ -538,7 +528,7 @@ const Form: FC<Props> = ({
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -627,7 +617,7 @@ const Form: FC<Props> = ({
                                 </div>
 
                                 {/* Care Instructions */}
-                                <div>
+                                {/* <div>
                                     <div className="flex justify-between items-center mb-4">
                                         <h2 className="text-lg font-medium text-gray-700">Care Instructions</h2>
                                         <button
@@ -677,10 +667,10 @@ const Form: FC<Props> = ({
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Advanced Info with help icon */}
-                                <div>
+                                {/* <div>
                                     <div className="flex items-center mb-4">
                                         <h2 className="text-lg font-medium text-gray-700">Additional Information</h2>
                                         <div className="ml-2 group relative">
@@ -743,7 +733,7 @@ const Form: FC<Props> = ({
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

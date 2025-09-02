@@ -51,7 +51,7 @@ const TableProducts:FC<Props> = ({products, setProducts, product, handleViewProd
                     </div>
                     <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                        <div className="text-xs text-gray-500">{product.id}</div>
+                        {/* <div className="text-xs text-gray-500">{product.id}</div> */}
                     </div>
                 </div>
             </td>
@@ -65,12 +65,10 @@ const TableProducts:FC<Props> = ({products, setProducts, product, handleViewProd
                 <div className="text-sm text-gray-900">{product.fish_categories?.name}</div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.listing_status === 'active' ? 'bg-green-100 text-green-800' :
-                    product.listing_status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
+                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.listing_status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}>
                     {product.listing_status === 'active' ? 'Active' :
-                        product.listing_status === 'draft' ? 'Draft' :
+                        // product.listing_status === 'draft' ? 'Draft' :
                             'Out of Stock'}
                 </span>
             </td>
@@ -81,24 +79,27 @@ const TableProducts:FC<Props> = ({products, setProducts, product, handleViewProd
                 <div className="flex justify-end space-x-2">
                     <button
                         onClick={() => handleViewProduct(product)}
-                        className="text-gray-600 hover:text-gray-900"
+                        className="text-gray-600 hover:text-gray-900 border-2 p-2 rounded-md bg-zinc-700/10 hover:scale"
                         title="View"
                     >
-                        <Eye className="h-5 w-5" />
+                        {/* <Eye className="h-5 w-5" /> */}
+                        View
                     </button>
                     <button
                         onClick={() => handleEditProduct(product)}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-blue-600 hover:text-blue-900 border-2 p-2 rounded-md bg-zinc-700/10 hover:scale"
                         title="Edit"
                     >
-                        <Edit className="h-5 w-5" />
+                        {/* <Edit className="h-5 w-5" /> */}
+                        Edit
                     </button>
                     <button
                         onClick={() => handleDeleteProduct(product.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-red-600 hover:text-red-900 border-2 p-2 rounded-md bg-zinc-700/10 hover:scale"
                         title="Delete"
                     >
-                        <Trash2 className="h-5 w-5" />
+                        {/* <Trash2 className="h-5 w-5" /> */}
+                        Delete
                     </button>
                 </div>
             </td>

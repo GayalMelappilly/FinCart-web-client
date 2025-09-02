@@ -79,7 +79,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                                 // fill
                                                 width={800}
                                                 height={0}
-                                                // priority
+                                            // priority
                                             />
                                         ) : (
                                             <div className="relative w-full h-full">
@@ -124,8 +124,8 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                             <div
                                                 key={index}
                                                 className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${selectedMedia.src === media.src
-                                                        ? 'ring-3 ring-blue-500 ring-offset-2 scale-105 shadow-lg'
-                                                        : 'hover:scale-105 hover:shadow-md'
+                                                    ? 'ring-3 ring-blue-500 ring-offset-2 scale-105 shadow-lg'
+                                                    : 'hover:scale-105 hover:shadow-md'
                                                     }`}
                                                 onClick={() => setSelectedMedia(media)}
                                             >
@@ -165,8 +165,11 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                                 {product.name}
                                             </h1>
                                             <div className="flex flex-wrap items-center gap-3">
-                                                <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                                                    SKU: {product.id}
+                                                <span className="text-sm text-gray-500 bg-gray-100 px-3 mt-2 py-1 rounded-full">
+                                                    <div className="flex items-center gap-2 text-lg">
+                                                        <Tag className="h-5 w-5 text-blue-500" />
+                                                        <span className="text-gray-700 font-medium">{product.fish_categories?.name}</span>
+                                                    </div>
                                                 </span>
                                                 {product.is_featured && (
                                                     <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-semibold rounded-full shadow-lg">
@@ -178,10 +181,10 @@ const ProductDetails: FC<Props> = ({ product }) => {
 
                                         <div className="flex-shrink-0">
                                             <span className={`px-4 py-2 rounded-full text-sm font-semibold shadow-lg ${product.listing_status === 'active'
-                                                    ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' :
-                                                    product.listing_status === 'draft'
-                                                        ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white' :
-                                                        'bg-gradient-to-r from-red-400 to-red-500 text-white'
+                                                ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' :
+                                                product.listing_status === 'draft'
+                                                    ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white' :
+                                                    'bg-gradient-to-r from-red-400 to-red-500 text-white'
                                                 }`}>
                                                 {product.listing_status === 'active' ? '✓ Active' :
                                                     product.listing_status === 'draft' ? '📝 Draft' :
@@ -195,18 +198,13 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                         <div className={`text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent ${roboto.className}`}>
                                             ₹{Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                         </div>
-
-                                        <div className="flex items-center gap-2 text-lg">
-                                            <Tag className="h-5 w-5 text-blue-500" />
-                                            <span className="text-gray-700 font-medium">{product.fish_categories?.name}</span>
-                                        </div>
                                     </div>
 
                                     {/* Stock Status */}
                                     <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
                                         <div className={`h-4 w-4 rounded-full shadow-lg ${product.quantity_available > 10 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
-                                                product.quantity_available > 0 ? 'bg-gradient-to-r from-yellow-400 to-orange-400' :
-                                                    'bg-gradient-to-r from-red-400 to-red-500'
+                                            product.quantity_available > 0 ? 'bg-gradient-to-r from-yellow-400 to-orange-400' :
+                                                'bg-gradient-to-r from-red-400 to-red-500'
                                             }`} />
                                         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                                             <span className="font-semibold text-gray-800">
@@ -240,8 +238,8 @@ const ProductDetails: FC<Props> = ({ product }) => {
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
                                         className={`py-4 px-6 font-semibold text-sm transition-all duration-300 whitespace-nowrap ${activeTab === tab.id
-                                                ? 'border-b-3 border-blue-500 text-blue-600 bg-blue-50/50'
-                                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50/50 border-b-3 border-transparent'
+                                            ? 'border-b-3 border-blue-500 text-blue-600 bg-blue-50/50'
+                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50/50 border-b-3 border-transparent'
                                             }`}
                                     >
                                         {tab.label}

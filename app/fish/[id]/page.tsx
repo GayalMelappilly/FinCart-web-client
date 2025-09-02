@@ -12,6 +12,7 @@ import BreederInfo from '@/app/components/FishDetails/BreederInfo';
 import { useEffect, useState } from 'react';
 import { FishListing } from '@/app/types/list/fishList';
 import Spinner from '@/app/components/LoadingSpinner/Spinner';
+import RelatedFishRecommendation from '@/app/components/FishDetails/RelatedFish';
 
 export default function Page() {
   
@@ -55,16 +56,16 @@ export default function Page() {
             <div className="sm:hidden">
               <BreederInfo breeder={fishData?.users} />
             </div>
-            <CareInfo />
+            {/* <CareInfo /> */}
           </div>
         </div>
         
-        <div className="mt-8 sm:mt-12">
-          {/* <RelatedFishRecommendation relatedFish={fish.relatedFish} /> */}
-        </div>
-        <div className="mt-8 sm:mt-12">
+        {/* <div className="mt-8 sm:mt-12">
+          <RelatedFishRecommendation relatedFish={fishData?.relatedFish} />
+        </div> */}
+        {/* <div className="mt-8 sm:mt-12">
           <FAQ />
-        </div>
+        </div> */}
       </main>
       <Footer />
     </div>

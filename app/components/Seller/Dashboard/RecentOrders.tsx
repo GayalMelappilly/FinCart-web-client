@@ -1,5 +1,6 @@
 import { RecentOrder } from '@/app/types/seller/sellerDetails/types';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import React, { FC } from 'react'
 
 // const recentOrders = [
@@ -13,15 +14,17 @@ type Props = {
     recentOrder: RecentOrder[] | undefined
 }
 
-const RecentOrders:FC<Props> = ({ recentOrder }) => {
+const RecentOrders: FC<Props> = ({ recentOrder }) => {
     console.log("Recent orders : ", recentOrder)
     return (
         <div className="mt-6 bg-white rounded-lg shadow overflow-hidden">
             <div className="flex justify-between items-center p-6">
                 <h2 className="text-lg font-semibold text-gray-900">Recent Orders</h2>
-                <button className="text-sm text-blue-600 hover:text-blue-800 flex items-center">
-                    View All <ChevronRight className="h-4 w-4 ml-1" />
-                </button>
+                <Link href={'/seller/orders'}>
+                    <button className="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                        View All <ChevronRight className="h-4 w-4 ml-1" />
+                    </button>
+                </Link>
             </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
