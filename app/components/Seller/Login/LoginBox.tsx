@@ -36,8 +36,8 @@ const LoginBox = () => {
                     localStorage.setItem('seller-loggedIn', 'true')
                     setProfileUrl(data.profileUrl)
                     setIsLoggedIn(true)
-                    router.push('/seller/dashboard');
                     window.location.reload();
+                    router.push('/seller/dashboard');
                 }
             }
         },
