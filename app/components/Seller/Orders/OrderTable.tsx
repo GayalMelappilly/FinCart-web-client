@@ -2,10 +2,10 @@
 
 import { getAllOrders, orderAction } from '@/app/services/sellerAuthServices'
 import { useQuery, keepPreviousData, useMutation } from '@tanstack/react-query'
-import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, Eye, TruckIcon, ChevronLeft, ChevronRight, X, User, CreditCard, Package, Calendar, Phone, Mail, FileVideo } from 'lucide-react'
+import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, Eye, TruckIcon, ChevronLeft, ChevronRight, X, User, CreditCard, Package, Calendar, Phone, Mail } from 'lucide-react'
 import React, { FC, useEffect, useState } from 'react'
 import Spinner from '../../LoadingSpinner/Spinner'
-import { Orders } from '@/app/types/seller/orders/types'
+import { Order, OrderItem, Orders } from '@/app/types/seller/orders/types'
 import { useToast } from '@/app/providers/ToastProvider'
 import StatusSpinner from '../../LoadingSpinner/StatusSpinner'
 
@@ -22,7 +22,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0)
     const [totalOrders, setTotalOrders] = useState(0)
-    const [selectedOrder, setSelectedOrder] = useState<any>(null)
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [showModal, setShowModal] = useState(false)
     const ordersPerPage: number = 10;
 
@@ -67,7 +67,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
     }, [activeTab, searchTerm]);
 
     // Handle modal
-    const handleViewOrder = (order: any) => {
+    const handleViewOrder = (order: Order) => {
         setSelectedOrder(order);
         setShowModal(true);
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
@@ -108,12 +108,12 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
         orderActionMutation.mutate({ action, orderId })
     }
 
-    const HandleOrderReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>, action: string, orderId: string) => {
-        // setStatusLoading(orderId)
-    }
+    // const HandleOrderReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>, action: string, orderId: string) => {
+    //     // setStatusLoading(orderId)
+    // }
 
     // Filter orders client-side
-    const filteredOrders = orders?.filter((order: any) => {
+    const filteredOrders = orders?.filter((order: Order) => {
         if (activeTab !== 'All' && order.status !== activeTab) {
             return false;
         }
@@ -483,7 +483,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                                 Order Items
                                             </h4>
                                             <div className="space-y-4">
-                                                {selectedOrder.order_items.map((item: any, index: number) => (
+                                                {selectedOrder.order_items.map((item: OrderItem, index: number) => (
                                                     <div key={index} className="bg-white rounded-lg p-4 border border-gray-200">
                                                         <div className="flex items-start space-x-4">
                                                             <div className="flex-shrink-0">
