@@ -44,60 +44,137 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
         data?: ChartDataItem;
     }>({ visible: false, x: 0, y: 0 });
 
+    // Helper function to get recent weeks
+    const getRecentWeeks = (count: number = 8) => {
+        const weeks = [];
+        const today = new Date();
+        
+        for (let i = count - 1; i >= 0; i--) {
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - (i * 7));
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            
+            weeks.push({
+                label: `${weekStart.getDate()}/${weekStart.getMonth() + 1}-${weekEnd.getDate()}/${weekEnd.getMonth() + 1}`,
+                shortLabel: `W${count - i}`,
+                weekStart,
+                weekEnd
+            });
+        }
+        return weeks;
+    };
+
+    // Helper function to get recent months
+    const getRecentMonths = (count: number = 8) => {
+        const months = [];
+        const today = new Date();
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        for (let i = count - 1; i >= 0; i--) {
+            const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            months.push({
+                label: monthNames[date.getMonth()],
+                fullLabel: `${monthNames[date.getMonth()]} ${date.getFullYear()}`,
+                year: date.getFullYear(),
+                month: date.getMonth()
+            });
+        }
+        return months;
+    };
+
     // Generate sales data
     useEffect(() => {
         if (!sellerData) return;
+        console.log("Seller Data : ", sellerData)
         let chartData: ChartDataItem[] = [];
         
         if (timeRange === 'monthly') {
             if (sellerData.salesChartData && sellerData.salesChartData.length > 0) {
-                chartData = sellerData.salesChartData.map((item) => ({
-                    period: item.month,
-                    sales: Math.max(item.sales || 0, 10),
-                    type: 'actual',
+                // Use actual data but limit to recent months
+                const recentMonths = getRecentMonths(8);
+                const dataMap = new Map(sellerData.salesChartData.map(item => [item.month, item.sales]));
+                
+                chartData = recentMonths.map((month) => ({
+                    period: month.label,
+                    sales: Math.max(dataMap.get(month.label) || 0),
+                    type: dataMap.has(month.label) ? 'actual' : 'placeholder',
                 }));
             } else {
-                // Fallback: generate 8 months with variety in sales & type
-                const totalSales = Math.max(sellerData.metrics?.totalSales || 0, 1200);
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-                chartData = months.map((m, i) => ({
-                    period: m,
-                    sales: Math.round(totalSales / 8 + Math.random() * totalSales * 0.15),
-                    type: (i < 5 ? 'actual' : i < 7 ? 'estimated' : 'placeholder') as ChartDataItem['type'],
-                }));
+                // Fallback: generate recent 8 months with variety
+                const totalSales = Math.max(sellerData.metrics?.totalSales || 0);
+                const recentMonths = getRecentMonths(8);
+                
+                chartData = recentMonths.map((month, i) => {
+                    const baseAmount = totalSales / 8;
+                    const variation = (Math.random() - 0.5) * baseAmount * 0.4;
+                    const seasonalMultiplier = 0.8 + (Math.sin((month.month / 12) * Math.PI * 2) * 0.2);
+                    
+                    return {
+                        period: month.label,
+                        sales: Math.round(Math.max((baseAmount + variation) * seasonalMultiplier)),
+                        type: (i < 5 ? 'actual' : i < 7 ? 'estimated' : 'placeholder') as ChartDataItem['type'],
+                    };
+                });
             }
         } else if (timeRange === 'weekly') {
             if (sellerData.recentSales && sellerData.recentSales.length > 0) {
-                chartData = sellerData.recentSales
-                    .slice(-4)
-                    .map((sale, i) => ({
-                        period: `W${i + 1}`,
-                        sales: Math.max(sale.dailySales || 0, 10),
-                        type: 'actual' as ChartDataItem['type'],
-                    }));
+                const recentWeeks = getRecentWeeks(Math.min(sellerData.recentSales.length, 8));
+                
+                chartData = recentWeeks.map((week, i) => {
+                    const saleData = sellerData.recentSales?.[i];
+                    return {
+                        period: week.shortLabel,
+                        sales: Math.max(saleData?.dailySales || 0),
+                        type: saleData ? 'actual' : 'placeholder',
+                    };
+                });
             } else {
-                const totalSales = Math.max(sellerData.metrics?.totalSales || 0, 400);
-                chartData = [
-                    { period: 'W1', sales: Math.floor(totalSales * 0.2), type: 'actual' },
-                    { period: 'W2', sales: Math.floor(totalSales * 0.22), type: 'actual' },
-                    { period: 'W3', sales: Math.floor(totalSales * 0.21), type: 'estimated' },
-                    { period: 'W4', sales: Math.floor(totalSales * 0.13), type: 'placeholder' },
-                ];
+                // Fallback: generate recent weeks
+                const totalSales = Math.max(sellerData.metrics?.totalSales || 0);
+                const recentWeeks = getRecentWeeks(8);
+                
+                chartData = recentWeeks.map((week, i) => {
+                    const baseAmount = totalSales / 8;
+                    const variation = (Math.random() - 0.5) * baseAmount * 0.3;
+                    
+                    return {
+                        period: week.shortLabel,
+                        sales: Math.round(Math.max(baseAmount + variation)),
+                        type: (i < 5 ? 'actual' : i < 7 ? 'estimated' : 'placeholder') as ChartDataItem['type'],
+                    };
+                });
             }
         } else if (timeRange === 'yearly') {
-            const year = new Date().getFullYear();
-            const totalSales = Math.max(sellerData.metrics?.totalSales || 0, 1500);
+            const currentYear = new Date().getFullYear();
+            const totalSales = Math.max(sellerData.metrics?.totalSales || 0);
+            
+            // Generate last 3 years of data
             chartData = [
-                { period: `${year - 2}`, sales: Math.floor(totalSales * 0.64), type: 'estimated' },
-                { period: `${year - 1}`, sales: Math.floor(totalSales * 0.79), type: 'estimated' },
-                { period: `${year}`, sales: totalSales, type: 'actual' },
+                { 
+                    period: `${currentYear - 2}`, 
+                    sales: Math.floor(totalSales * (0.6 + Math.random() * 0.2)), 
+                    type: 'estimated' 
+                },
+                { 
+                    period: `${currentYear - 1}`, 
+                    sales: Math.floor(totalSales * (0.7 + Math.random() * 0.2)), 
+                    type: 'estimated' 
+                },
+                { 
+                    period: `${currentYear}`, 
+                    sales: totalSales, 
+                    type: 'actual' 
+                },
             ];
         }
-        setSalesData(chartData);
+        
+        setSalesData(chartData.filter(item => item.sales > 0)); // Remove zero sales entries
     }, [sellerData, timeRange]);
 
-    // Y-axis scale
+    // Y-axis scale with better scaling
     const maxSales = Math.max(...salesData.map((i) => i.sales), 100);
+    const niceMaxSales = Math.ceil(maxSales * 1.1); // Add 10% padding
 
     // Tooltip handling
     const chartRef = useRef<HTMLDivElement>(null);
@@ -115,6 +192,11 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
     }
 
     function handleBarMouseLeave() {
+        setTooltip((prev) => ({ ...prev, visible: false }));
+    }
+
+    // Handle mouse leave from chart area
+    function handleChartMouseLeave() {
         setTooltip((prev) => ({ ...prev, visible: false }));
     }
 
@@ -139,56 +221,6 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
                         <h2 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3">
                             Sales Overview
                         </h2>
-                        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
-                            <div className="flex flex-col">
-                                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
-                                    Total Sales
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-lg lg:text-xl font-bold text-slate-900">
-                                        ₹{totalSales.toLocaleString()}
-                                    </span>
-                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                                        revenueTrend === 'up' 
-                                            ? 'bg-emerald-100 text-emerald-700' 
-                                            : 'bg-red-100 text-red-700'
-                                    }`}>
-                                        <span className="text-xs">
-                                            {revenueTrend === 'up' ? '↗' : '↘'}
-                                        </span>
-                                        {Math.abs(Number(revenueChange))}%
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
-                                    Orders
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-lg lg:text-xl font-bold text-slate-900">
-                                        {totalOrders.toLocaleString()}
-                                    </span>
-                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                                        ordersTrend === 'up' 
-                                            ? 'bg-emerald-100 text-emerald-700' 
-                                            : 'bg-red-100 text-red-700'
-                                    }`}>
-                                        <span className="text-xs">
-                                            {ordersTrend === 'up' ? '↗' : '↘'}
-                                        </span>
-                                        {Math.abs(Number(ordersChange))}%
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
-                                    Avg Order Value
-                                </span>
-                                <span className="text-lg lg:text-xl font-bold text-slate-900">
-                                    ₹{avgOrderValue.toLocaleString()}
-                                </span>
-                            </div>
-                        </div> */}
                     </div>
 
                     {/* Time Range Selector */}
@@ -215,15 +247,19 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
 
             {/* Chart Container */}
             <div className="px-6 pb-6">
-                <div ref={chartRef} className="relative h-64 sm:h-72 lg:h-80 w-full">
+                <div 
+                    ref={chartRef} 
+                    className="relative h-64 sm:h-72 lg:h-80 w-full"
+                    onMouseLeave={handleChartMouseLeave}
+                >
                     {/* Chart Area */}
                     <div className="absolute inset-0 pl-12 pr-4 mx-10 pb-1 pt-4">
                         <div className="h-full flex items-end justify-between gap-2">
                             {salesData.map((d, i) => {
-                                const chartHeight = 240; // Fixed height in pixels for calculation (h-64 = 256px - padding)
-                                const barHeight = Math.max(Math.round((d.sales / maxSales) * chartHeight * 0.85), 16); // pixel based height
+                                const chartHeight = 240; // Fixed height in pixels for calculation
+                                const barHeight = Math.max(Math.round((d.sales / niceMaxSales) * chartHeight * 0.85), 8);
                                 return (
-                                    <div key={`${d.period}-${i}`} className="flex flex-col items-center flex-1 max-w-[80px]">
+                                    <div key={`${d.period}-${i}-${timeRange}`} className="flex flex-col items-center flex-1 max-w-[80px]">
                                         <div
                                             className={`
                                                 w-full transition-all duration-300 cursor-pointer rounded-t-lg
@@ -234,6 +270,7 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
                                             `}
                                             style={{
                                                 height: `${barHeight}px`,
+                                                minHeight: '8px'
                                             }}
                                             onMouseEnter={(e) => handleBarMouseEnter(e, d)}
                                             onMouseMove={(e) => handleBarMouseEnter(e, d)}
@@ -250,19 +287,18 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
 
                     {/* Y-axis labels */}
                     <div className="absolute left-0 top-4 bottom-8 w-12 flex flex-col justify-between">
-                        <span className="text-xs text-slate-500 text-right pr-2">
-                            ₹{maxSales >= 1000 ? `${(maxSales / 1000).toFixed(0)}k` : maxSales.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-500 text-right pr-2">
-                            ₹{maxSales * 0.75 >= 1000 ? `${(maxSales * 0.75 / 1000).toFixed(0)}k` : Math.round(maxSales * 0.75).toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-500 text-right pr-2">
-                            ₹{maxSales * 0.5 >= 1000 ? `${(maxSales * 0.5 / 1000).toFixed(0)}k` : Math.round(maxSales * 0.5).toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-500 text-right pr-2">
-                            ₹{maxSales * 0.25 >= 1000 ? `${(maxSales * 0.25 / 1000).toFixed(0)}k` : Math.round(maxSales * 0.25).toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-500 text-right pr-2">₹0</span>
+                        {[1, 0.75, 0.5, 0.25, 0].map((multiplier, i) => {
+                            const value = Math.round(niceMaxSales * multiplier);
+                            const formattedValue = value >= 1000 
+                                ? `₹${(value / 1000).toFixed(value >= 10000 ? 0 : 1)}k` 
+                                : `₹${value.toLocaleString()}`;
+                            
+                            return (
+                                <span key={i} className="text-xs text-slate-500 text-right pr-2">
+                                    {formattedValue}
+                                </span>
+                            );
+                        })}
                     </div>
 
                     {/* Grid lines */}
@@ -280,7 +316,7 @@ const SalesChart: React.FC<Props> = ({ sellerData }) => {
                         <div
                             style={{
                                 position: 'absolute',
-                                left: Math.min(Math.max(tooltip.x - 70, 10), chartRef.current?.clientWidth ? chartRef.current.clientWidth - 150 : 0),
+                                left: Math.min(Math.max(tooltip.x - 70, 10), (chartRef.current?.clientWidth || 300) - 150),
                                 top: Math.max(tooltip.y - 90, 10),
                                 zIndex: 50,
                                 pointerEvents: 'none'

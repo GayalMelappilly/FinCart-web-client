@@ -92,56 +92,56 @@ export const loginSeller = async (formData: FormData) => {
 
 // Verify seller email
 export const verifySellerEmail = async (email: string) => {
-  const res = await fetch(`${apiUrl}/seller/verify-email`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email }),
-    credentials: "include"
-  })
+    const res = await fetch(`${apiUrl}/seller/verify-email`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email }),
+        credentials: "include"
+    })
 
-  const response = await res.json()
-  console.log(response)
-  return response
+    const response = await res.json()
+    console.log(response)
+    return response
 }
 
 type OtpDataType = {
-  code: string,
-  type: string
+    code: string,
+    type: string
 }
 
 // Confirm seller OTP
 export const confirmSellerOtp = async (data: OtpDataType) => {
 
-  const code = data.code
+    const code = data.code
 
-  let token;
-  if (data.type === 'auth') {
-    token = typeof window !== 'undefined' ? localStorage.getItem('svt') : null
-  } else if (data.type === 'forgotPassword') {
-    token = typeof window !== 'undefined' ? localStorage.getItem('fpvt') : null
-  }
+    let token;
+    if (data.type === 'auth') {
+        token = typeof window !== 'undefined' ? localStorage.getItem('svt') : null
+    } else if (data.type === 'forgotPassword') {
+        token = typeof window !== 'undefined' ? localStorage.getItem('fpvt') : null
+    }
 
-  console.log("tokken : ",token)
+    console.log("tokken : ", token)
 
-  if (!token) {
-    console.log("No token found")
-    return
-  }
+    if (!token) {
+        console.log("No token found")
+        return
+    }
 
-  const res = await fetch(`${apiUrl}/seller/confirm-verification-code`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ code, token }),
-    credentials: "include"
-  })
+    const res = await fetch(`${apiUrl}/seller/confirm-verification-code`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code, token }),
+        credentials: "include"
+    })
 
-  const response = await res.json()
-  console.log(response)
-  return response
+    const response = await res.json()
+    console.log(response)
+    return response
 }
 
 // Logout seller
@@ -173,7 +173,7 @@ export const logoutSeller = async (accessToken: string) => {
 // Add product
 export const addProduct = async (productData: FishProduct) => {
 
-    console.log("Product details : ",productData)
+    console.log("Product details : ", productData)
 
 
     const accessToken = localStorage.getItem('sellerAccessToken') as string
@@ -181,13 +181,13 @@ export const addProduct = async (productData: FishProduct) => {
         const response = await fetchWithAuth(`${apiUrl}/seller/product/add-product`, {
             method: 'POST',
             body: JSON.stringify(productData)
-        },accessToken, 'seller')
+        }, accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+        console.log("RESPONSE : ", response)
 
         const data = await response
 
-        console.log("DATA : ",data)
+        console.log("DATA : ", data)
 
         if (!data.success) {
             throw new Error('Failed to fetch user profile');
@@ -204,20 +204,20 @@ export const addProduct = async (productData: FishProduct) => {
 // Edit product
 export const editProduct = async (productData: FishProduct) => {
 
-    console.log("Product details : ",productData)
+    console.log("Product details : ", productData)
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/product/edit-product/${productData.id}`, {
             method: 'PUT',
             body: JSON.stringify(productData)
-        },accessToken, 'seller')
+        }, accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+        console.log("RESPONSE : ", response)
 
         const data = await response
 
-        console.log("DATA : ",data)
+        console.log("DATA : ", data)
 
         if (!data.success) {
             throw new Error('Product edit error');
@@ -238,13 +238,13 @@ export const deleteProduct = async (productId: string) => {
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/product/delete-product/${productId}`, {
             method: 'DELETE',
-        },accessToken, 'seller')
+        }, accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+        console.log("RESPONSE : ", response)
 
         const data = await response
 
-        console.log("DATA : ",data)
+        console.log("DATA : ", data)
 
         if (!data.success) {
             throw new Error('Product edit error');
@@ -287,20 +287,20 @@ export const getSellerProducts = async () => {
 
 // Update seller profile
 export const updateSellerProfile = async (updatedData: SellerData) => {
-    console.log("Product details : ",updatedData)
+    console.log("Product details : ", updatedData)
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/update-profile`, {
             method: 'PUT',
             body: JSON.stringify(updatedData)
-        },accessToken, 'seller')
+        }, accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+        console.log("RESPONSE : ", response)
 
         const data = await response
 
-        console.log("DATA : ",data)
+        console.log("DATA : ", data)
 
         if (!data.success) {
             throw new Error('Profile update error');
@@ -314,23 +314,23 @@ export const updateSellerProfile = async (updatedData: SellerData) => {
 }
 
 export interface PasswordForm {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
 }
 
 // Update seller password
 export const updateSellerPassword = async (form: PasswordForm) => {
-    console.log('passwords : ',form.currentPassword, form.confirmPassword)
+    console.log('passwords : ', form.currentPassword, form.confirmPassword)
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/update-password`, {
             method: 'PUT',
             body: JSON.stringify(form)
-        },accessToken, 'seller')
+        }, accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+        console.log("RESPONSE : ", response)
 
         const data = await response
 
@@ -346,58 +346,108 @@ export const updateSellerPassword = async (form: PasswordForm) => {
 }
 
 type changePasswordType = {
-  newPassword: string,
-  confirmPassword: string
+    newPassword: string,
+    confirmPassword: string
 }
 // Change seller password (Forgot password)
 export const changeSellerPassword = async (passwordData: changePasswordType) => {
     if (!passwordData.newPassword || !passwordData.confirmPassword) {
-    return Error('Password must be provided')
-  }
+        return Error('Password must be provided')
+    }
 
-  let verificationToken;
-  if (typeof window !== 'undefined') {
-    verificationToken = localStorage.getItem('fpvt')
-  }
+    let verificationToken;
+    if (typeof window !== 'undefined') {
+        verificationToken = localStorage.getItem('fpvt')
+    }
 
-  try {
-    const response = await fetch(`${apiUrl}/seller/change-password/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify({verificationToken, newPassword: passwordData.newPassword})
-    })
+    try {
+        const response = await fetch(`${apiUrl}/seller/change-password/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ verificationToken, newPassword: passwordData.newPassword })
+        })
 
-    const data = await response.json()
-    console.log("data :", data)
-    return data
-  } catch (error) {
-    console.error('Change seller password error : ', error)
-    throw error;
-  }
+        const data = await response.json()
+        console.log("data :", data)
+        return data
+    } catch (error) {
+        console.error('Change seller password error : ', error)
+        throw error;
+    }
 }
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (page: number, limit: number) => {
     const accessToken = localStorage.getItem('sellerAccessToken') as string
-    
-    try {
-        const response = await fetchWithAuth(`${apiUrl}/seller/order/get-orders`, {
-            method: 'GET',
-        },accessToken, 'seller')
 
-        console.log("RESPONSE : ",response)
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/order/get-orders?page=${page}&limit=${limit}`, {
+            method: 'GET',
+        }, accessToken, 'seller')
 
         const data = await response
 
         if (!data.success) {
-            throw new Error('Password update error');
+            throw new Error('Get all orders error');
         }
         return data;
 
     } catch (error) {
-        console.error('Error updating password : ', error);
+        console.error('Error fetching all orders : ', error);
+        throw error;
+    }
+}
+
+type actionData = {
+    action: string,
+    orderId: string
+}
+
+export const orderAction = async ({ action, orderId }: actionData) => {
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+    if (!action || !orderId) {
+        return Error('Action and orderId must be provided')
+    }
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/order/order-action`, {
+            method: 'POST',
+            body: JSON.stringify({action, orderId})
+        }, accessToken, 'seller')
+
+        const data = await response
+
+        console.log("ORDER ACTION RESPONSE : ",data)
+
+        if (!data.success) {
+            throw new Error('Get all orders error');
+        }
+        return data;
+    } catch (error) {
+        console.error('Order action error : ', error)
+        throw error;
+    }
+}
+
+export const orderStatistics = async () => {
+    const accessToken = localStorage.getItem('sellerAccessToken') as string
+
+    try {
+        const response = await fetchWithAuth(`${apiUrl}/seller/order/order-statistics`, {
+            method: 'GET',
+        }, accessToken, 'seller')
+
+        const data = await response
+
+        if (!data.success) {
+            throw new Error('Get order statistics error');
+        }
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching order statistics : ', error);
         throw error;
     }
 }

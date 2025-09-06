@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 // import Link from 'next/link';
 import React, { useRef, useState, useEffect, FC } from 'react';
 import { getFeaturedFishes, getFishCategoryByName } from '@/app/services/authServices';
-import FishCard from './FIshCard';
 import { FishListing } from '@/app/types/list/fishList';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import FishCard from './FIshCard';
 
 // Professional Fish Card Skeleton Component
 const FishCardSkeleton = ({ isFeatured = false }) => {

@@ -29,7 +29,6 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
         if (typeof window !== 'undefined') {
             setIsGuest(localStorage.getItem('guest') == 'true' ? true : false)
         }
-        console.log("FISH :", fish)
     }, []);
 
     useEffect(() => {
@@ -204,36 +203,56 @@ const FishCard: FC<Props> = ({ fish, isFeatured }) => {
                                 </button>
                             )}
 
-                            <Image
-                                src={fish.images[0]}
-                                alt={fish.name}
-                                fill
-                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                                className={`object-cover object-center transition-transform duration-500 ease-out ${isHovered ? 'scale-110' : 'scale-100'
-                                    }`}
-                                onError={(e) => {
-                                    const target = e.target;
-                                    if (target instanceof HTMLImageElement) {
-                                        target.onerror = null;
-                                        target.style.display = 'none';
-                                        if (target.parentElement) {
-                                            target.parentElement.classList.add(isFeatureFish ? 'bg-gradient-to-br from-amber-50 to-yellow-50' : 'bg-gray-100');
-                                            const placeholder = document.createElement('div');
-                                            placeholder.className = "flex items-center justify-center w-full h-full";
-                                            placeholder.innerHTML = `<svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>`;
-                                            target.parentElement.appendChild(placeholder);
+                            {/* Video element - shown on hover if available */}
+                            {isHovered && fish.videos && fish.videos.length > 0 ? (
+                                <video
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    className="w-full h-full object-cover object-center"
+                                    onError={(e) => {
+                                        console.error('Video failed to load:', e);
+                                        // Fall back to image on video error
+                                        setIsHovered(false);
+                                    }}
+                                >
+                                    <source src={fish.videos[0]} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <Image
+                                    src={fish.images[0]}
+                                    alt={fish.name}
+                                    fill
+                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                                    className={`object-cover object-center transition-transform duration-500 ease-out ${isHovered ? 'scale-110' : 'scale-100'
+                                        }`}
+                                    onError={(e) => {
+                                        const target = e.target;
+                                        if (target instanceof HTMLImageElement) {
+                                            target.onerror = null;
+                                            target.style.display = 'none';
+                                            if (target.parentElement) {
+                                                target.parentElement.classList.add(isFeatureFish ? 'bg-gradient-to-br from-amber-50 to-yellow-50' : 'bg-gray-100');
+                                                const placeholder = document.createElement('div');
+                                                placeholder.className = "flex items-center justify-center w-full h-full";
+                                                placeholder.innerHTML = `<svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>`;
+                                                target.parentElement.appendChild(placeholder);
+                                            }
                                         }
-                                    }
-                                }}
-                            />
+                                    }}
+                                />
+                            )}
+
                             {/* Enhanced gradient overlay for better text visibility */}
                             <div className={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 transition-opacity duration-300`}></div>
-                            { fish.size && <span className='absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-md px-2 py-1 z-10'>
+
+                            {fish.size && <span className='absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-md px-2 py-1 z-10'>
                                 <h1 className='text-xs sm:text-md text-white font-bold'>{fish.size}</h1>
                             </span>}
-
                         </div>
                     ) : (
                         <PlaceholderImage />
