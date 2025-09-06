@@ -6,9 +6,9 @@ import React, { useRef, useState, useEffect, FC } from 'react';
 import { getFeaturedFishes, getFishCategoryByName } from '@/app/services/authServices';
 import { FishListing } from '@/app/types/list/fishList';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
-import FishCard from './FIshCard';
+import FishCard from './FishCard';
 
-// Professional Fish Card Skeleton Component
+// Fish Card Skeleton Component
 const FishCardSkeleton = ({ isFeatured = false }) => {
   return (
     <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 ${isFeatured ? 'ring-2 ring-amber-100' : ''

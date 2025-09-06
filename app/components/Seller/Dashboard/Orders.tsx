@@ -15,7 +15,7 @@ const Orders:FC<Props> = ({data}) => {
 
     const orderData = useQuery({
         queryKey: ['get-all-orders'],
-        queryFn: getAllOrders
+        queryFn: () => getAllOrders(1, 10)
     });
 
     useEffect(()=>{
