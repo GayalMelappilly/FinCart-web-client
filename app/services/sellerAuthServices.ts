@@ -379,11 +379,11 @@ export const changeSellerPassword = async (passwordData: changePasswordType) => 
     }
 }
 
-export const getAllOrders = async (page: number, limit: number) => {
+export const getAllOrders = async (page: number, limit: number, activeTab: string) => {
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
     try {
-        const response = await fetchWithAuth(`${apiUrl}/seller/order/get-orders?page=${page}&limit=${limit}`, {
+        const response = await fetchWithAuth(`${apiUrl}/seller/order/get-orders?page=${page}&limit=${limit}&status=${activeTab}`, {
             method: 'GET',
         }, accessToken, 'seller')
 
@@ -402,19 +402,22 @@ export const getAllOrders = async (page: number, limit: number) => {
 
 type actionData = {
     action: string,
-    orderId: string
+    orderId: string,
+    receipt: string | null  
 }
 
-export const orderAction = async ({ action, orderId }: actionData) => {
+export const orderAction = async ({ action, orderId, receipt }: actionData) => {
     const accessToken = localStorage.getItem('sellerAccessToken') as string
     if (!action || !orderId) {
         return Error('Action and orderId must be provided')
     }
 
+    
+
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/order/order-action`, {
             method: 'POST',
-            body: JSON.stringify({action, orderId})
+            body: JSON.stringify({action, orderId, receipt})
         }, accessToken, 'seller')
 
         const data = await response

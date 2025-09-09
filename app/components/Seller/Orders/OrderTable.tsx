@@ -2,12 +2,13 @@
 
 import { getAllOrders, orderAction } from '@/app/services/sellerAuthServices'
 import { useQuery, keepPreviousData, useMutation } from '@tanstack/react-query'
-import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, Eye, TruckIcon, ChevronLeft, ChevronRight, X, User, CreditCard, Package, Calendar, Phone, Mail } from 'lucide-react'
+import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, Clock, TruckIcon, ChevronLeft, ChevronRight, X, User, CreditCard, Package, Calendar, Phone, Mail, FileImage, FileText, ExternalLink } from 'lucide-react'
 import React, { FC, useEffect, useState } from 'react'
 import Spinner from '../../LoadingSpinner/Spinner'
 import { Order, OrderItem, Orders } from '@/app/types/seller/orders/types'
 import { useToast } from '@/app/providers/ToastProvider'
 import StatusSpinner from '../../LoadingSpinner/StatusSpinner'
+import Image from 'next/image'
 
 type Props = {
     activeTab: string,
@@ -30,8 +31,8 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
 
     // Use React Query v5 syntax with placeholderData
     const { data, isLoading, isFetching } = useQuery({
-        queryKey: ['get-all-orders-seller', currentPage, ordersPerPage, activeTab, searchTerm],
-        queryFn: () => getAllOrders(currentPage, ordersPerPage),
+        queryKey: ['get-all-orders-seller', currentPage, ordersPerPage, activeTab],
+        queryFn: () => getAllOrders(currentPage, ordersPerPage, activeTab),
         placeholderData: keepPreviousData,
         staleTime: 30000,
     });
@@ -39,7 +40,6 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
     const orderActionMutation = useMutation({
         mutationFn: orderAction,
         onSuccess: (data) => {
-            console.log(data)
             const updatedOrder = sortedOrders.find(item => item.id === data.data.order.id);
             if (updatedOrder) {
                 updatedOrder.status = data.data.order.status
@@ -48,7 +48,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
             setStatusLoading(null)
         },
         onError: (err) => {
-            console.log('Password update failed : ', err)
+            console.log('Status update failed : ', err)
             showToast('error', 'Failed to update status')
         }
     })
@@ -68,6 +68,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
 
     // Handle modal
     const handleViewOrder = (order: Order) => {
+        console.log("Clicked order : ", order)
         setSelectedOrder(order);
         setShowModal(true);
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
@@ -105,16 +106,43 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
 
     const HandleOrderAction = (action: string, orderId: string) => {
         setStatusLoading(orderId)
-        orderActionMutation.mutate({ action, orderId })
+        orderActionMutation.mutate({ action, orderId, receipt: null })
     }
 
-    // const HandleOrderReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>, action: string, orderId: string) => {
-    //     // setStatusLoading(orderId)
-    // }
+    const HandleOrderReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>, action: string, orderId: string) => {
+        setStatusLoading(orderId)
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = async () => {
+            const base64Image = reader.result as string;
+            //   setImagePreview(base64Image as string);
+            setStatusLoading(orderId);
+            try {
+                const response = await fetch('/api/image-upload/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image, temp: true }),
+                });
+
+                const data = await response.json();
+                console.log("Image upload : ", data)
+                if (data.url) {
+                    orderActionMutation.mutate({ action, orderId, receipt: data.url })
+                }
+            } catch (error) {
+                console.error('Error uploading receipt:', error);
+            } finally {
+                setStatusLoading(null);
+            }
+        };
+    }
 
     // Filter orders client-side
     const filteredOrders = orders?.filter((order: Order) => {
-        if (activeTab !== 'All' && order.status !== activeTab) {
+        if (activeTab !== 'All' && order.status.toLowerCase() !== activeTab.toLowerCase()) {
             return false;
         }
 
@@ -254,7 +282,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
-                                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     View
                                 </th>
                             </tr>
@@ -303,28 +331,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                             </div>
                                             :
                                             <div className='flex gap-2'>
-                                                {order.status === 'processing' ?
-                                                    // <div className="h-6 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center hover:bg-gray-100 cursor-pointer">
-                                                    //     <input
-                                                    //         type="file"
-                                                    //         id="imageUpload"
-                                                    //         className="hidden"
-                                                    //         accept="image/*"
-                                                    //         onChange={(e) => HandleOrderReceiptUpload(e, 'receipt', order.id)}
-                                                    //     />
-                                                    //     <label htmlFor="imageUpload" className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                                                    //         <FileVideo className="h-8 w-8 text-gray-400" />
-                                                    //         <span className="mt-2 text-sm text-gray-500">Add Image/Video</span>
-                                                    //     </label>
-                                                    // </div>
-                                                    <button
-                                                        disabled={isFetching}
-                                                        className='p-2 bg-blue-400 rounded-md text-sm text-white hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-                                                        // onClick={() => HandleOrderAction('accept', order.id)}
-                                                    >
-                                                        Upload Receipt
-                                                    </button>
-                                                    :
+                                                {order.status === 'pending' &&
                                                     <button
                                                         disabled={isFetching}
                                                         className='p-2 bg-green-400 rounded-md text-sm text-white hover:bg-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
@@ -333,13 +340,46 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                                         Accept
                                                     </button>
                                                 }
-                                                <button
-                                                    disabled={isFetching}
-                                                    className='p-2 bg-red-500/90 rounded-md text-sm text-white hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-                                                    onClick={() => HandleOrderAction('decline', order.id)}
-                                                >
-                                                    Decline
-                                                </button>
+                                                {order.status === 'processing' &&
+                                                    <div className="h-6 flex flex-col my-auto items-center justify-center cursor-pointer">
+                                                        <input
+                                                            type="file"
+                                                            id="imageUpload"
+                                                            className="hidden"
+                                                            accept="image/*"
+                                                            onChange={(e) => HandleOrderReceiptUpload(e, 'receipt', order.id)}
+                                                        />
+                                                        <label
+                                                            htmlFor="imageUpload"
+                                                            className='flex p-2 gap-1 bg-blue-400 rounded-md text-sm text-white hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                                                        >
+                                                            <FileImage className="h-4 w-4 text-white" />
+                                                            Upload Receipt
+                                                        </label>
+                                                    </div>
+                                                }
+                                                {order.status === 'shipped' &&
+                                                    <p
+                                                        className='p-2 text-slate-700 italic text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                                                    >
+                                                        Order Confirmed
+                                                    </p>
+                                                }
+                                                {order.status !== 'cancelled' ?
+                                                    <button
+                                                        disabled={isFetching}
+                                                        className='p-2 bg-red-500/90 rounded-md text-sm text-white hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                                                        onClick={() => HandleOrderAction('decline', order.id)}
+                                                    >
+                                                        Decline
+                                                    </button>
+                                                    :
+                                                    <p
+                                                        className='p-2 text-slate-700 italic text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                                                    >
+                                                        Order Cancelled
+                                                    </p>
+                                                }
                                             </div>
                                         }
                                     </td>
@@ -347,9 +387,10 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                         <button
                                             disabled={isFetching}
                                             onClick={() => handleViewOrder(order)}
-                                            className="text-blue-600 hover:text-blue-900 mr-3 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            className="text-white hover:scale-105 py-1 px-2 rounded-md bg-gray-600 flex mr-3 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                         >
-                                            <Eye className="h-5 w-5" />
+                                            {/* <Eye className="h-5 w-5" /> */}
+                                            View
                                         </button>
                                     </td>
                                 </tr>
@@ -519,6 +560,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                     </div>
 
                                     {/* Order Summary - Takes 1 column */}
+                                    {/* Order Summary - Takes 1 column */}
                                     <div className="space-y-6">
                                         {/* Customer Info */}
                                         <div className="bg-gray-50 rounded-lg p-4">
@@ -598,6 +640,41 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                             </div>
                                         </div>
 
+                                        {/* Receipt Section - Show only if receipt exists */}
+                                        {selectedOrder.shipping_details?.receipt && selectedOrder.shipping_details.receipt[0] && (
+                                            <div className="bg-gray-50 rounded-lg p-4">
+                                                <h4 className="text-md font-semibold text-gray-900 mb-4 flex items-center">
+                                                    <FileText className="h-5 w-5 mr-2" />
+                                                    Shipping Receipt
+                                                </h4>
+                                                <div className="space-y-3">
+                                                    {/* Receipt Image */}
+                                                    <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-gray-200 bg-white">
+                                                        <Image
+                                                            src={selectedOrder.shipping_details.receipt[0]}
+                                                            alt="Shipping Receipt"
+                                                            fill
+                                                            className="object-contain"
+                                                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                            priority
+                                                        />
+                                                    </div>
+                                                    {/* Receipt Actions */}
+                                                    <div className="flex flex-col sm:flex-row gap-2">
+                                                        <a
+                                                            href={selectedOrder?.shipping_details?.receipt?.[0]}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                        >
+                                                            <ExternalLink className="h-4 w-4 mr-2" />
+                                                            View Full Size
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {/* Order Total */}
                                         <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                                             <h4 className="text-md font-semibold text-gray-900 mb-4">
@@ -625,6 +702,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -638,6 +716,7 @@ const OrderTable: FC<Props> = ({ activeTab, searchTerm }) => {
                                     >
                                         Close
                                     </button>
+
                                     <button
                                         type="button"
                                         className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-500"

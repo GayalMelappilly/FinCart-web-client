@@ -27,6 +27,7 @@ export interface ShippingDetails {
   id: string;
   shipping_method: string;
   carrier: string | null;
+  receipt: string[];
   tracking_number: string | null;
   estimated_delivery: string | null;
   actual_delivery: string | null;
