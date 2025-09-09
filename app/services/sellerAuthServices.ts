@@ -379,7 +379,7 @@ export const changeSellerPassword = async (passwordData: changePasswordType) => 
     }
 }
 
-export const getAllOrders = async (page: number, limit: number, activeTab: string) => {
+export const getAllOrders = async (page: number, limit: number, activeTab: string | null) => {
     const accessToken = localStorage.getItem('sellerAccessToken') as string
 
     try {
