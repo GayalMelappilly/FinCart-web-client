@@ -1,8 +1,9 @@
 'use client'
 
 import ImageUploading from '@/app/components/LazyLoading/ImageUploading';
+import { getAllCategoriesWithCount } from '@/app/services/adminServices';
 import { addProduct, editProduct } from '@/app/services/sellerAuthServices';
-import { useMutation, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { IndianRupee, X, FileVideo } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -39,9 +40,13 @@ type Props = {
     setEditableProduct: (editableProduct: FishProduct | null) => void;
     view: FishProductView;
     setView: (view: FishProductView) => void;
-    categories: { id: number; name: string }[];
     refetch: UseQueryResult['refetch'];
     setLoading: (loading: boolean) => void
+}
+
+type CategoryType = {
+    id: string;
+    name: string
 }
 
 const Form: FC<Props> = ({
@@ -51,16 +56,22 @@ const Form: FC<Props> = ({
     setEditableProduct,
     view,
     setView,
-    categories,
     refetch,
     setLoading
 }) => {
 
     const [uploading, setUploading] = useState<boolean>(false)
+    const [categories, setCategories] = useState<CategoryType[]>([])
+
+    const { data } = useQuery({
+        queryKey: ['get-all-categories'],
+        queryFn: getAllCategoriesWithCount,
+    })
 
     useEffect(() => {
-        console.log('Edit products while editing : ', editableProduct)
-    }, [])
+        console.log('Categories : ', data)
+        setCategories(data?.list)
+    }, [data])
 
     const addMutation = useMutation({
         mutationFn: addProduct,
@@ -387,7 +398,7 @@ const Form: FC<Props> = ({
                                                 onChange={handleInputChange}
                                             >
                                                 <option value={editableProduct?.category || ''}>{editableProduct?.category || 'Select the category'}</option>
-                                                {categories.map((category) => (
+                                                {categories?.map((category) => (
                                                     <option key={category.id} value={category.name}>
                                                         {category.name}
                                                     </option>

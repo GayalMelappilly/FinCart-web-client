@@ -98,7 +98,7 @@ const AccountStep: FC<Props> = ({ formData, handleChange, errors, error }) => {
                         </div>
                         <div className="ml-3 text-sm">
                             <label htmlFor="agreeToTerms" className="font-medium text-gray-700">
-                                I agree to the <Link href="/terms" className="text-blue-600 hover:text-blue-500">Terms and Conditions</Link> and <Link href="/privacy" className="text-blue-600 hover:text-blue-500">Privacy Policy</Link>
+                                I agree to the <Link href="/help/terms" className="text-blue-600 hover:text-blue-500">Terms and Conditions</Link> and <Link href="/help/privacy-policy" className="text-blue-600 hover:text-blue-500">Privacy Policy</Link>
                             </label>
                             {errors.agreeToTerms && <p className="mt-1 text-sm text-red-600">{errors.agreeToTerms}</p>}
                         </div>

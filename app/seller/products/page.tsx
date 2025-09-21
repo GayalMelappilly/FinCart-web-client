@@ -8,7 +8,6 @@ import ProductDetails from '@/app/components/Seller/Products/ViewProduct/Product
 import Form, { FishProduct, FishProductView } from '@/app/components/Seller/Products/AddOrEditProduct/Form';
 import SearchProduct from '@/app/components/Seller/Products/SearchProduct';
 import FilterProduct from '@/app/components/Seller/Products/FilterProduct';
-import { categories } from '@/app/datasets/seller/categories';
 import { getSellerProducts } from '@/app/services/sellerAuthServices';
 import { useQuery } from '@tanstack/react-query';
 import Spinner from '@/app/components/LoadingSpinner/Spinner';
@@ -195,7 +194,7 @@ export default function Products() {
                             Cancel
                         </button>
                     </div>
-                    <Form refetch={refetch} setLoading={setLoading} products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} categories={categories} />
+                    <Form refetch={refetch} setLoading={setLoading} products={products} setProducts={setProducts} editableProduct={editableProduct} setEditableProduct={setEditableProduct} view={view} setView={setView} />
                 </div>
             )}
 

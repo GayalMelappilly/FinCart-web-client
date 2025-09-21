@@ -7,7 +7,7 @@ const apiUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.N
 
 // Get all categories
 export const getAllCategoriesWithCount = async () => {
-    try {
+  try {
     const response = await fetch(`${apiUrl}/admin/get-categories`, {
       method: 'GET',
       headers: {
@@ -37,21 +37,57 @@ type CategoryDataType = {
 // Update featured 
 export const setFeaturedCategories = async (categoryData: CategoryDataType) => {
 
-    const category = {
-      categoryId: categoryData.id,
-      feature: categoryData.featured
-    }
+  const category = {
+    categoryId: categoryData.id,
+    feature: categoryData.featured
+  }
 
-    try {
+  try {
     const response = await fetch(`${apiUrl}/admin/set-featured`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({category})
+      body: JSON.stringify({ category })
     })
 
     const data = await response.json();
+
+    return {
+      success: data.success,
+      list: data.data,
+      count: data.count
+    }
+
+  } catch (error) {
+    console.error('Fetch categories error:', error);
+    throw error;
+  }
+}
+
+interface CreateCategoryRequest {
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  parentCategory?: string; // Parent category name instead of ID
+  feature?: boolean;
+}
+
+// Add a new category
+export const addCategory = async (categoryData: CreateCategoryRequest) => {
+
+  try {
+    const response = await fetch(`${apiUrl}/admin/add-category`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ categoryData })
+    })
+
+    const data = await response.json();
+
+    console.log('new category response : ',data)
 
     return {
       success: data.success,

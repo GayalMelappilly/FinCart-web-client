@@ -28,6 +28,7 @@ import { getAllCategoriesWithCount } from '@/app/services/adminServices';
 import { FishCategory } from '@/app/types/admin/types';
 import CategorySearch from './CategorySearch';
 import CategoryGrid from './CategoryGrid';
+import AddCategoryModal from './AddCategory';
 
 // Types
 interface Product {
@@ -50,8 +51,8 @@ const AdminPanel: React.FC = () => {
     const [categorySearchQuery, setCategorySearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-    // const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['get-categories-with-count-admin'],
@@ -367,7 +368,7 @@ const AdminPanel: React.FC = () => {
                             setCategorySearchQuery={setCategorySearchQuery}
                         />
                         <button
-                            // onClick={() => setShowCategoryModal(true)}
+                            onClick={() => setShowCategoryModal(true)}
                             className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 font-medium"
                         >
                             <Plus className="h-4 w-4" />
@@ -571,6 +572,10 @@ const AdminPanel: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <AddCategoryModal 
+                isOpen={showCategoryModal} 
+                onClose={() => setShowCategoryModal(false)} 
+            />
         </div>
     );
 };
