@@ -87,7 +87,7 @@ export const addCategory = async (categoryData: CreateCategoryRequest) => {
 
     const data = await response.json();
 
-    console.log('new category response : ',data)
+    console.log('new category response : ', data)
 
     return {
       success: data.success,
@@ -97,6 +97,74 @@ export const addCategory = async (categoryData: CreateCategoryRequest) => {
 
   } catch (error) {
     console.error('Fetch categories error:', error);
+    throw error;
+  }
+}
+
+interface CategoryBody {
+  id: string,
+  categoryData: {
+    name: string,
+    description: string,
+    imageUrl: string,
+    parentCategory: string,
+    feature: boolean
+  }
+}
+
+// Edit category
+export const updateFishCategory = async(categoryData: CategoryBody) => {
+
+  const UpdatedData = categoryData.categoryData
+
+  try {
+    const response = await fetch(`${apiUrl}/admin/edit-product/${categoryData.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ UpdatedData })
+    })
+
+    const data = await response.json();
+
+    console.log("Data after update : ",data)
+
+    return {
+      success: data.success,
+      message: data.message,
+      data: data.data
+    }
+
+  } catch (error) {
+    console.error('Fetch categories error:', error);
+    throw error;
+  }
+}
+
+// Delete category
+export const deleteFishCategory = async(id: string) => {
+
+  try {
+    const response = await fetch(`${apiUrl}/admin/delete-product/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json();
+
+    console.log("Data after delete : ",data)
+
+    return {
+      success: data.success,
+      message: data.message,
+      data: data.data
+    }
+
+  } catch (error) {
+    console.error('Delete category error:', error);
     throw error;
   }
 }
