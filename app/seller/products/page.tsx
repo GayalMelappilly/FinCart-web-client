@@ -36,7 +36,11 @@ export default function Products() {
     }, [data])
 
     if (error) console.log("Seller list error : ", error)
-    if (isLoading || loading) return <Spinner />
+    if (isLoading || loading) return (
+        <div className="w-full h-full"> 
+            <Spinner />
+        </div>
+    )
 
     // Function to handle filtering and sorting
     const filteredProducts = products && products
@@ -90,7 +94,7 @@ export default function Products() {
             description: '',
             price: 0,
             quantity_available: 0,
-            category: '', 
+            category: '',
             images: [],
             videos: [],
             is_featured: false,
@@ -122,7 +126,7 @@ export default function Products() {
 
     // Function to handle editing a product
     const handleEditProduct = (product: FishProduct) => {
-        setEditableProduct({...product, category: product?.fish_categories?.name || null});
+        setEditableProduct({ ...product, category: product?.fish_categories?.name || null });
         setView('edit');
     };
 
@@ -220,7 +224,7 @@ export default function Products() {
                             </button>
                         </div>
                     </div>
-                     <ProductDetails product={selectedProduct} />
+                    <ProductDetails product={selectedProduct} />
                     {/* <RelatedProducts products={products} selectedProduct={selectedProduct} handleViewProduct={handleViewProduct} /> */}
                 </div>
             )}

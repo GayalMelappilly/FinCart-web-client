@@ -40,7 +40,7 @@ const Page = () => {
         email: '',
         phone: '',
     });
-    
+
     // Remove card payment details since we're using Razorpay
     const [orderNotes, setOrderNotes] = useState('')
     // const [couponCode, setCouponCode] = useState('')
@@ -69,15 +69,15 @@ const Page = () => {
         onSuccess: (data) => {
             showToast('success', 'Order placed successfully')
             console.log(data)
-            if(isGuest){
+            if (isGuest) {
                 setSucessData(data.data.data)
-            }else{
+            } else {
                 setSucessData(data.data)
             }
             setIsLoading(false)
             setPaymentProcessing(false)
             setIsOrderSuccess(true)
-            
+
             if (isGuest) {
                 const orderData = {
                     orderId: data.data.data.orderId,
@@ -138,11 +138,13 @@ const Page = () => {
 
     // Calculate total amount
     const calculateTotal = () => {
-        if (!orderSummary) return 0
+        if (!orderSummary) return {total: 0, processingFee: 0}
         const itemTotal = orderSummary.price * quantity
-        const shippingCost = 50 // Add your shipping calculation logic
+        const shippingCost = 300 // Add your shipping calculation logic
         const discount = pointsToUse || 0
-        return itemTotal + shippingCost - discount
+        const subtotal = itemTotal + shippingCost - discount
+        const processingFee = subtotal * 0.02 // 2% processing fee
+        return {total: subtotal + processingFee, processingFee: processingFee}
     }
 
     // Handle Razorpay payment
@@ -155,8 +157,8 @@ const Page = () => {
         setPaymentProcessing(true)
 
         try {
-            const totalAmount = calculateTotal()
-            
+            const totalAmount = calculateTotal().total
+
             // Create Razorpay order
             const razorpayOrderResponse = await createOrderMutation.mutateAsync({
                 amount: totalAmount,
@@ -200,7 +202,7 @@ const Page = () => {
                 handler: async (response: RazorpayResponse) => {
                     try {
                         console.log('Payment successful:', response)
-                        
+
                         // Update order data with Razorpay payment details
                         const finalOrderData = {
                             ...orderData,
@@ -214,7 +216,7 @@ const Page = () => {
 
                         // Place the order with verified payment details
                         mutation.mutate(finalOrderData)
-                        
+
                     } catch (error) {
                         console.error('Payment processing error:', error)
                         setPaymentProcessing(false)
@@ -225,7 +227,7 @@ const Page = () => {
             }
 
             const rzp = new window.Razorpay(options)
-            
+
             rzp.on('payment.failed', (response: RazorpayFailureResponse) => {
                 setPaymentProcessing(false)
                 setIsLoading(false)
@@ -245,9 +247,9 @@ const Page = () => {
 
     const handleCheckout = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         // Validate required fields
-        if (!shippingDetails.fullName || !shippingDetails.address || !shippingDetails.city || 
+        if (!shippingDetails.fullName || !shippingDetails.address || !shippingDetails.city ||
             !shippingDetails.state || !shippingDetails.zip || !shippingDetails.email) {
             showToast('error', 'Please fill all required shipping details')
             return
@@ -264,7 +266,7 @@ const Page = () => {
             orderItems: [{ fishId: orderSummary?.id, quantity: quantity }],
             shippingDetails: {
                 ...shippingDetails,
-                shipping_cost: 50, // Add your shipping cost calculation
+                shipping_cost: 300, // Add your shipping cost calculation
                 shipping_method: 'standard'
             },
             couponCode: couponCode || null,
@@ -278,7 +280,7 @@ const Page = () => {
         }
 
         console.log('Order data prepared:', orderData)
-        
+
         // Initiate Razorpay payment
         await initiateRazorpayPayment(orderData)
     }
@@ -309,7 +311,7 @@ const Page = () => {
                     >
                         <div>
                             <span className="font-medium text-lg text-gray-500">Order Summary</span>
-                            <span className="ml-2 font-semibold text-gray-700">₹{calculateTotal().toFixed(2)}</span>
+                            <span className="ml-2 font-semibold text-gray-700">₹{calculateTotal().total.toFixed(2)}</span>
                         </div>
                         {isOrderSummaryOpen ? <ChevronUp size={20} className='text-gray-700' /> : <ChevronDown size={20} className='text-gray-700' />}
                     </button>
@@ -325,7 +327,7 @@ const Page = () => {
                     <div className="w-full lg:w-2/3">
                         <form onSubmit={handleCheckout} className="space-y-6">
                             <ShippingSection shippingDetails={shippingDetails} setshippingDetails={setShippingDetails} />
-                            
+
                             {/* Payment Information Section */}
                             <div className="bg-white rounded-lg shadow-sm p-6">
                                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h2>
@@ -345,7 +347,7 @@ const Page = () => {
                                         </p>
                                     </div>
                                 </div> */}
-                                
+
                                 {/* Order Notes */}
                                 <div className="mt-4">
                                     <label htmlFor="orderNotes" className="block text-sm font-medium text-gray-700 mb-2">
@@ -398,19 +400,18 @@ const Page = () => {
                             <button
                                 type="submit"
                                 disabled={isLoading || paymentProcessing || !isRazorpayLoaded}
-                                className={`w-full font-medium py-3 px-4 rounded-md transition-colors ${
-                                    isLoading || paymentProcessing || !isRazorpayLoaded
+                                className={`w-full font-medium py-3 px-4 rounded-md transition-colors ${isLoading || paymentProcessing || !isRazorpayLoaded
                                         ? 'bg-gray-400 cursor-not-allowed text-white'
                                         : 'bg-blue-500 hover:bg-blue-600 text-white'
-                                }`}
+                                    }`}
                             >
-                                {paymentProcessing 
-                                    ? 'Processing Payment...' 
-                                    : isLoading 
-                                        ? 'Please wait...' 
+                                {paymentProcessing
+                                    ? 'Processing Payment...'
+                                    : isLoading
+                                        ? 'Please wait...'
                                         : !isRazorpayLoaded
                                             ? 'Loading Payment System...'
-                                            : `Pay ₹${calculateTotal().toFixed(2)}`
+                                            : `Pay ₹${calculateTotal().total.toFixed(2)}`
                                 }
                             </button>
                         </form>
@@ -420,7 +421,7 @@ const Page = () => {
                     <div className="hidden lg:block lg:w-1/3">
                         <div className="sticky top-4">
                             <OrderSummary orderSummary={orderSummary} setOrderSummary={setOrderSummary} quantity={quantity} setQuantity={setQuantity} />
-                            
+
                             {/* Total Summary */}
                             <div className="mt-4 bg-white rounded-lg shadow-sm p-4">
                                 <div className="space-y-2">
@@ -430,7 +431,11 @@ const Page = () => {
                                     </div>
                                     <div className="flex justify-between text-sm">
                                         <span>Shipping:</span>
-                                        <span>₹50.00</span>
+                                        <span>₹300.00</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span>Processing fee (2%):</span>
+                                        <span>₹{calculateTotal().processingFee.toFixed(2)}</span>
                                     </div>
                                     {pointsToUse > 0 && (
                                         <div className="flex justify-between text-sm text-green-600">
@@ -441,7 +446,7 @@ const Page = () => {
                                     <hr />
                                     <div className="flex justify-between font-semibold">
                                         <span>Total:</span>
-                                        <span>₹{calculateTotal().toFixed(2)}</span>
+                                        <span>₹{calculateTotal().total.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

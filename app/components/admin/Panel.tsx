@@ -54,7 +54,7 @@ const AdminPanel: React.FC = () => {
         queryFn: getAllCategoriesWithCount
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         setCategories(data?.list)
     }, [data])
 

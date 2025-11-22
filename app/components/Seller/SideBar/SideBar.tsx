@@ -66,15 +66,13 @@ const SideBar: FC<Props> = ({ navigationItems, isActive }) => {
         <div className="hidden md:flex md:flex-shrink-0">
             <div className="flex flex-col w-64">
                 <div className="flex items-center shadow-sm z-10 border-r bg-white mb-8 justify-center h-16 px-4 border-b border-gray-200">
-                    <Link href="/" className="flex items-center space-x-2">
-                        <Image
-                            src="/splash.png"
-                            alt="Fincart Logo"
-                            className="h-6 object-contain"
-                            width={140}
-                            height={100}
-                        />
-                    </Link>
+                    <Image
+                        src="/splash.png"
+                        alt="Fincart Logo"
+                        className="h-6 object-contain"
+                        width={140}
+                        height={100}
+                    />
                 </div>
                 <div className="flex flex-col max-h-fit shadow-sm z-10 rounded-e-xl bg-white flex-grow px-4 py-4">
                     <nav className="flex-1 space-y-1">

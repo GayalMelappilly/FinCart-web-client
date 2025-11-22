@@ -100,7 +100,6 @@ const CategoryGrid: FC<Props> = React.memo(({ categorySearchQuery, allCategories
         }
     })
 
-
     useEffect(() => {
         if (selectedCategory) {
             setFormData({
@@ -169,11 +168,12 @@ const CategoryGrid: FC<Props> = React.memo(({ categorySearchQuery, allCategories
         updateMutation.mutate(updateData)
     }
 
-    const handleFeatureChange = (id: string, featured: boolean) => {
+    const handleFeatureChange = (category: FishCategory) => {
         const data = {
-            id: id,
-            featured: !featured
+            id: category.id,
+            featured: !category.feature
         }
+        category.feature = !category.feature
         featureMutation.mutate(data)
     }
 
@@ -225,7 +225,7 @@ const CategoryGrid: FC<Props> = React.memo(({ categorySearchQuery, allCategories
                                             type="checkbox"
                                             className="sr-only peer"
                                             checked={category.feature}
-                                            onChange={() => handleFeatureChange(category.id, category.feature)}
+                                            onChange={() => handleFeatureChange(category)}
                                         />
                                         <div className="w-10 h-5 bg-gray-300 rounded-full peer peer-checked:bg-green-500 relative transition-colors duration-300">
                                             <div className={`absolute ${category.feature ? 'right-1' : 'left-1'} top-1 w-3 h-3 bg-white rounded-full shadow-md transition-transform duration-300`}></div>

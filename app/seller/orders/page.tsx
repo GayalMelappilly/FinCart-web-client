@@ -21,15 +21,19 @@ export default function Orders() {
         queryFn: orderStatistics,
     });
 
-    useEffect(()=>{
-        console.log("Data in statistics : ",data)
-        if(data?.data){
+    useEffect(() => {
+        console.log("Data in statistics : ", data)
+        if (data?.data) {
             setOrderStatisticsData(data.data)
         }
-    }, [data])  
+    }, [data])
 
-    if(isLoading) return <Spinner />
-    if(error) return console.log("Error while fetching order statistcs", error)
+    if (isLoading) return (
+        <div className="w-full h-full"> 
+            <Spinner />
+        </div>
+    )
+    if (error) return console.log("Error while fetching order statistcs", error)
 
     return (
         <>

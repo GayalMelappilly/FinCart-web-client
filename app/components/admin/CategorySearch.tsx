@@ -1,5 +1,6 @@
 'use client'
 
+// import { FishCategory } from '@/app/types/admin/types';
 import { Search, X } from 'lucide-react'
 import React, { FC } from 'react'
 
@@ -9,8 +10,8 @@ type Props = {
 }
 
 const CategorySearch: FC<Props> = ({ categorySearchQuery, setCategorySearchQuery }) => {
+
   const handleClear = () => setCategorySearchQuery('');
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setCategorySearchQuery(e.target.value);
 
   return (
     <div className="relative">
@@ -20,7 +21,7 @@ const CategorySearch: FC<Props> = ({ categorySearchQuery, setCategorySearchQuery
         placeholder="Search categories..."
         className="pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 focus:bg-white transition-colors w-full sm:w-64"
         value={categorySearchQuery}
-        onChange={(e) => handleChange(e)}
+        onChange={(e) => setCategorySearchQuery(e.target.value)}
         autoComplete="off"
       />
       {!!categorySearchQuery && (

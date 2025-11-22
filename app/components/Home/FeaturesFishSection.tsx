@@ -326,15 +326,13 @@ const FeaturesFishSection: FC<Props> = ({ title }) => {
               {data.list.map((fish: FishListing) => {
                 // const isLast = index === data.list.length - 1;
                 return (
-                  <>
-                    <div
-                      key={fish.id}
-                      data-card
-                      className={`w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0`}
-                    >
-                      <FishCard fish={fish} isFeatured={isFeaturedFish} />
-                    </div>
-                  </>
+                  <div
+                    key={fish.id}
+                    data-card
+                    className={`w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 2xl:w-60 flex-shrink-0`}
+                  >
+                    <FishCard fish={fish} isFeatured={isFeaturedFish} />
+                  </div>
                 )
               })}
             </div>

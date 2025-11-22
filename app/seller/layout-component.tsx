@@ -80,7 +80,11 @@ export default function Layout({ children }: LayoutProps) {
         }
     }
 
-    if (isLoading) return <Spinner />
+    if (isLoading) return (
+        <div className="w-full h-screen">
+            <Spinner />
+        </div>
+    )
 
     const navigationItems: NavigationItem[] = [
         { name: 'Dashboard', path: '/seller/dashboard', icon: Home },

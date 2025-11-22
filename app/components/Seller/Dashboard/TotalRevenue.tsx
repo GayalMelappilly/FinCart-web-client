@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, DollarSign } from 'lucide-react'
+import { ArrowDown, ArrowUp, IndianRupeeIcon } from 'lucide-react'
 import React, { FC } from 'react'
 import { MetricWithTrend } from '@/app/types/seller/sellerDetails/types'
 import { roboto } from '../../Fonts/Fonts'
@@ -15,7 +15,7 @@ const TotalRevenue:FC<Props> = ({data}) => {
         <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center">
                 <div className="flex-shrink-0 p-3 rounded-lg bg-blue-100">
-                    <DollarSign className="h-6 w-6 text-blue-600" />
+                    <IndianRupeeIcon className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
                     <p className="text-sm font-medium text-gray-500">Total Revenue</p>

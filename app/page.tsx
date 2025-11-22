@@ -35,7 +35,12 @@ export default function FincartHomepage() {
     setCategories(data?.data)
   }, [data])
 
-  if (isLoading) return <Spinner />
+  if (isLoading) return (
+    <div className="w-full h-screen">
+      <Spinner />
+    </div>
+  )
+  
   if (error) return error
 
   return (

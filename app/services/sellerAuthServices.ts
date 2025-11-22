@@ -412,8 +412,6 @@ export const orderAction = async ({ action, orderId, receipt }: actionData) => {
         return Error('Action and orderId must be provided')
     }
 
-    
-
     try {
         const response = await fetchWithAuth(`${apiUrl}/seller/order/order-action`, {
             method: 'POST',
