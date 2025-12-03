@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Fish, ShoppingBag, Star, TrendingUp, Zap, ArrowRight, Utensils, Leaf, Filter, Lightbulb, Sparkles, Pill } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, ArrowRight, Utensils, Leaf, Filter, Lightbulb, Sparkles, Pill } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
