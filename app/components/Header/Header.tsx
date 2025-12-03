@@ -37,7 +37,7 @@ const Header = () => {
     useEffect(() => {
         if (categoryData.data?.list) {
             setAllCategories(categoryData.data.list);
-            console.log("Categories : ",categoryData.data.list)
+            console.log("Categories : ", categoryData.data.list)
         }
     }, [categoryData.data]);
 
@@ -116,7 +116,7 @@ const Header = () => {
                 return 0;
             });
 
-            console.log('sorted result : ',sortedResults)
+            console.log('sorted result : ', sortedResults)
 
             setSearchResults(sortedResults?.slice(0, 8)); // Limit to 8 results
             setShowSearchDropdown(true);
@@ -210,7 +210,7 @@ const Header = () => {
             <div className="container mx-auto py-3 lg:px-10">
                 <div className="flex items-center justify-between w-full px-5">
                     {/* Logo and optional menu button */}
-                    <div className="flex items-center">
+                    <div className="flex items-center w-auto lg:w-1/4">
                         <button
                             className="sm:hidden text-gray-600 mt-1"
                             onClick={toggleMobileMenu}
@@ -229,24 +229,22 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    {/* Right side actions */}
-                    <div className="flex items-center space-x-2 sm:space-x-4">
-                        {/* Desktop Search */}
-
-                        <div className="relative hidden md:block w-48 lg:w-64" ref={searchRef}>
+                    {/* Center Search Bar */}
+                    <div className="hidden md:flex flex-1 justify-center px-4 lg:px-8">
+                        <div className="relative w-full max-w-md lg:max-w-lg" ref={searchRef}>
                             <div className="relative">
                                 <input
                                     type="text"
                                     placeholder="Search fish categories..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-8 pr-8 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white text-black transition-all duration-200"
+                                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white text-black transition-all duration-200"
                                 />
-                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                                <Search className="absolute left-3.5 top-3 h-4 w-4 text-gray-400" />
                                 {searchQuery && (
                                     <button
                                         onClick={clearSearch}
-                                        className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors"
+                                        className="absolute right-3.5 top-3 h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors"
                                     >
                                         <X size={14} />
                                     </button>
@@ -255,7 +253,7 @@ const Header = () => {
 
                             {/* Desktop Search Dropdown */}
                             {showSearchDropdown && searchResults && searchResults.length > 0 && (
-                                <div className="absolute top-full mt-1 w-full bg-white rounded-xl p-2 shadow-lg border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
+                                <div className="absolute top-full mt-2 w-full bg-white rounded-2xl p-2 shadow-xl border border-gray-100 py-2 z-50 max-h-80 overflow-y-auto">
                                     <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
                                         Fish Categories ({searchResults.length})
                                     </div>
@@ -263,7 +261,7 @@ const Header = () => {
                                         <button
                                             key={index}
                                             onClick={() => handleSearchSelect(category.name)}
-                                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group"
+                                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 flex items-center space-x-3 group rounded-xl"
                                         >
                                             <div className="w-2 h-2 rounded-full bg-blue-200 group-hover:bg-blue-400 transition-colors duration-150"></div>
                                             <span className="text-sm text-gray-700 group-hover:text-blue-700 font-medium">
@@ -272,7 +270,7 @@ const Header = () => {
                                         </button>
                                     ))}
                                     {searchResults.length === 8 && (
-                                        <div className="px-4 py-2 text-xs text-gray-500 border-t border-gray-100 bg-gray-50">
+                                        <div className="px-4 py-2 text-xs text-gray-500 border-t border-gray-100 bg-gray-50 rounded-b-xl">
                                             Showing first 8 results. Refine your search for more specific results.
                                         </div>
                                     )}
@@ -281,7 +279,7 @@ const Header = () => {
 
                             {/* No results message */}
                             {showSearchDropdown && searchQuery && searchResults && searchResults.length === 0 && (
-                                <div className="absolute top-full mt-1 w-full p-10 bg-white rounded-xl shadow-lg border border-gray-100 py-4 z-50">
+                                <div className="absolute top-full mt-2 w-full p-8 bg-white rounded-2xl shadow-xl border border-gray-100 py-4 z-50">
                                     <div className="text-center">
                                         <div className="text-gray-400 mb-2">
                                             <Search size={24} className="mx-auto" />
@@ -292,7 +290,10 @@ const Header = () => {
                                 </div>
                             )}
                         </div>
+                    </div>
 
+                    {/* Right side actions */}
+                    <div className="flex items-center justify-end space-x-2 sm:space-x-4 w-auto lg:w-1/4">
                         {/* <Link href={'/seller/dashboard'}> */}
                         {/* <Link href={'/wholesale'}>
                             <button className="hidden sm:block py-2 bg-gray-100 hover:bg-red-200 hover:text-red-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
@@ -300,7 +301,7 @@ const Header = () => {
                             </button>
                         </Link> */}
                         <button onClick={handleSellClick} className="hidden sm:block py-2 bg-gray-100 hover:bg-blue-200 hover:text-blue-600 text-gray-800 rounded-lg transition-colors font-semibold px-4 md:px-6">
-                            Sell
+                            Become a Seller
                         </button>
                         {/* </Link> */}
 

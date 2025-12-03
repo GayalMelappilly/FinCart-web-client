@@ -13,6 +13,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      maxHeight: {
+        '4/6': '66.666667%',
+      },
     },
   },
   plugins: [],

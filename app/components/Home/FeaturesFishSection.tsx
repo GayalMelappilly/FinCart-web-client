@@ -272,7 +272,7 @@ const FeaturesFishSection: FC<Props> = ({ title }) => {
   }
 
   return (
-    <section id="featuredFish" className={`bg-gradient-to-b scroll-smooth from-white to-blue-50/30 sm:px-6 py-8 lg:pl-12 sm:py-12`}>
+    <section id="featuredFish" className={`bg-gradient-to-b scroll-smooth from-white to-blue-50/30 sm:px-6 py-2 lg:pl-12 sm:py-4`}>
       {isFeaturedFish && (
         <div className='mb-10 border w-3/5 flex mx-auto'>
           <hr />
